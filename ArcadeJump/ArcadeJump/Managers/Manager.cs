@@ -6,7 +6,7 @@ using System.Text;
 namespace ArcadeJump
 {
 
-    //To.do 
+    
     // Wait for platforms and player to try to manage
     class Manager
     {
