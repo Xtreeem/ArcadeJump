@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Media;
 
 namespace ArcadeJump
 {
+
+    //testing
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         #region Variables
