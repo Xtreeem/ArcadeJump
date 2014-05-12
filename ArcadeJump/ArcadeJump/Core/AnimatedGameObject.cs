@@ -15,7 +15,6 @@ namespace ArcadeJump
         private int maxNrFrame; 
         private double animationTimer;
         private double timePerFrame = 0.2;
-        private float rotation;
         protected int frameHeight;
         protected int frameWidht;
 
