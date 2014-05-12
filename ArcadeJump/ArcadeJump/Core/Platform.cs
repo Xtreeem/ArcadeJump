@@ -17,7 +17,7 @@ namespace ArcadeJump
         public Platform(Texture2D tex, Vector2 pos, float changeWidth) : base (tex, pos)
         {
             this.changeWidth = changeWidth;
-            surfaceHeight = tex.Height * 0.2f;
+            surfaceHeight = tex.Height;
             source = new Rectangle(0, 0, tex.Width * (int)changeWidth, tex.Height);
             Hitbox = source;
             SurfaceRectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)changeWidth *tex.Width, (int)surfaceHeight);
@@ -32,8 +32,8 @@ namespace ArcadeJump
 
         public override void Draw(SpriteBatch sB)
         {
-            //sB.Draw(texture, position, SurfaceRectangle, Color.Red);4
-            sB.Draw(texture,position,null, Color.Red);
+            sB.Draw(texture, SurfaceRectangle, Color.Red);
+            base.Draw(sB);
         }
 
 

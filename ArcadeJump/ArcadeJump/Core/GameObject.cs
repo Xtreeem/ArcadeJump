@@ -12,11 +12,11 @@ namespace ArcadeJump
     {
         public Texture2D texture;
         public Vector2 position;
-        public Vector2 origin;
+        public Vector2 origin = new Vector2();
         public bool isDead;
         public SpriteEffects spriteEffect;
-        public float scale;
-        public Color color;
+        public float scale = 1f;
+        public Color color = Color.White;
         public Rectangle source = new Rectangle();
         public float rotation;
 
