@@ -24,7 +24,7 @@ namespace ArcadeJump
             velocity = new Vector2(0, 4);
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             position += velocity;
         }
