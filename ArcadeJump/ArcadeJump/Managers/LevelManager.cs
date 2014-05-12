@@ -20,15 +20,21 @@ namespace ArcadeJump
             this.platformList = list;
             platformTex = content.Load<Texture2D>("Textures/plattform");
             random = new Random();
+
+            for (int i = 0; i < 10; i++)
+            {
+                CreateNewPlatform(platformTex, GetPosition(), GetLength());
+            }
         }
 
         
 
         public void Update(GameTime gameTime, double gameTimer)
         {
-            for (int i = 0; i < 10; i++)
+            foreach (Platform p in platformList)
             {
-                CreateNewPlatform(platformTex, GetPosition(), GetLength());
+                if (p.isDead)
+                    CreateNewPlatform(platformTex, GetPosition(), GetLength());
             }
         }
 
