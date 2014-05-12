@@ -19,6 +19,7 @@ namespace ArcadeJump
         public Color color = Color.White;
         public Rectangle source = new Rectangle();
         public float rotation;
+        public Rectangle Hitbox;
 
         public GameObject(Texture2D tex, Vector2 pos)
         {
@@ -33,7 +34,7 @@ namespace ArcadeJump
 
         public virtual void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(texture, position, null, color, rotation, origin, scale, spriteEffect, 1);
+            spritebatch.Draw(texture, Hitbox, null, color, rotation, origin, spriteEffect, 0);
         }
     }
 }
