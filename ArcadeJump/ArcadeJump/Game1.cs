@@ -30,7 +30,7 @@ namespace ArcadeJump
         public Game1()
         {
             Platforms = new List<Platform>();
-            LevelManager = new LevelManager(Platforms, Content);
+            LevelManager = new LevelManager(ref Platforms, Content);
             Manager = new Manager(ref Platforms, ref PowerUps, ref Players);
 
 
