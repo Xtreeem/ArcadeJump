@@ -33,7 +33,7 @@ namespace ArcadeJump
 
         public virtual void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(texture, position, source, color, rotation, origin, scale, spriteEffect, 1);
+            spritebatch.Draw(texture, position, null, color, rotation, origin, scale, spriteEffect, 1);
         }
     }
 }
