@@ -29,24 +29,30 @@ namespace ArcadeJump
         #region StartUp
         public Game1()
         {
+
+
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Platforms = new List<Platform>();
-            LevelManager = new LevelManager(ref Platforms, Content);
-            Manager = new Manager(ref Platforms, ref PowerUps, ref Players);
-
 
             //LevelManager = new LevelManager(
         }
 
         protected override void Initialize()
         {
+            PowerUps = new List<PowerUp>();
+            Players = new List<Player>();
+            Platforms = new List<Platform>();
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Manager = new Manager(ref Platforms, ref PowerUps, ref Players);
+            LevelManager = new LevelManager(ref Platforms, Content);
+            
         }
 
         protected override void UnloadContent()
