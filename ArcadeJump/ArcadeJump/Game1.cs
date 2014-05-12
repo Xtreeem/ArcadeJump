@@ -18,13 +18,25 @@ namespace ArcadeJump
         #region Variables
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        LevelManager LevelManager;
+        Manager Manager;
+
+        List<Platform> Platforms;
+        List<Player> Players;
+        List<PowerUp> PowerUps;
         #endregion
 
         #region StartUp
         public Game1()
         {
+            Platforms = new List<Platform>();
+            LevelManager = new LevelManager(Platforms, Content);
+            Manager = new Manager(ref Platforms, ref PowerUps, ref Players);
+
+
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            //LevelManager = new LevelManager(
         }
 
         protected override void Initialize()
@@ -53,6 +65,7 @@ namespace ArcadeJump
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            Manager.DrawStuff(spriteBatch);
             base.Draw(gameTime);
         }
         #endregion

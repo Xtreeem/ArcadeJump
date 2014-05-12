@@ -22,13 +22,40 @@ namespace ArcadeJump
         #endregion
 
         #region Public Methods
-        public Manager()
+        public Manager(ref List<Platform> Platforms, ref List<PowerUp> PowerUps, ref List<Player> Players)
         {
+            this.Players = Players;
+            this.PowerUps = PowerUps;
+            this.Platforms = Platforms;
             Rand = new Random();
         }
 
         public void Update(GameTime GameTime)
         {
+        }
+
+
+        /// <summary>
+        /// Function used to draw every single Player/Platform/Powerup
+        /// </summary>
+        public void DrawStuff(SpriteBatch SpriteBatch)
+        {
+            SpriteBatch.Begin();
+            foreach (Platform p in Platforms)
+            {
+                p.Draw(SpriteBatch);
+            }
+
+            foreach (Player p in Players)
+            {
+                p.Draw(SpriteBatch);
+            }
+
+            foreach (PowerUp p in PowerUps)
+            {
+                p.Draw(SpriteBatch);
+            }
+            SpriteBatch.End();
         }
 
         #endregion
@@ -113,28 +140,6 @@ namespace ArcadeJump
             }
         }
 
-        /// <summary>
-        /// Function used to draw every single Player/Platform/Powerup
-        /// </summary>
-        private void DrawStuff(SpriteBatch SpriteBatch)
-        {
-            SpriteBatch.Begin();
-            foreach (Platform p in Platforms)
-            {
-                p.Draw(SpriteBatch);
-            }
-
-            foreach (Player p in Players)
-            {
-                p.Draw(SpriteBatch);
-            }
-
-            foreach (PowerUp p in PowerUps)
-            {
-                p.Draw(SpriteBatch);
-            }
-            SpriteBatch.End();
-        }
     }
 }
 
