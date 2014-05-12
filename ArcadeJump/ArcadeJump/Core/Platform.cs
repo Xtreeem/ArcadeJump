@@ -32,7 +32,8 @@ namespace ArcadeJump
 
         public override void Draw(SpriteBatch sB)
         {
-            sB.Draw(texture, position, SurfaceRectangle, Color.Red);
+            //sB.Draw(texture, position, SurfaceRectangle, Color.Red);4
+            sB.Draw(texture,position,null, Color.Red);
         }
 
 

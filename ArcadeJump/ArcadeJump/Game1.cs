@@ -44,6 +44,12 @@ namespace ArcadeJump
             Players = new List<Player>();
             Platforms = new List<Platform>();
 
+
+
+            graphics.PreferMultiSampling = true;
+            graphics.PreferredBackBufferHeight = 1080;
+            graphics.PreferredBackBufferWidth = 1920;
+            graphics.ApplyChanges();
             base.Initialize();
         }
 
