@@ -18,6 +18,7 @@ namespace ArcadeJump
         List<Platform> Platforms;
         List<Player> Players;
         List<PowerUp> PowerUps;
+        List<GameObject> GameObjects;
         #endregion
 
         #region Public Methods
@@ -34,7 +35,17 @@ namespace ArcadeJump
 
         #region Private Methods
         #endregion
+        /// <summary>
+        /// Checks the Distance between two gameobjects to see if they are able to collide
+        /// </summary>
+        private void FirstCollisionCheck()
+        {
 
+        }
+
+        /// <summary>
+        /// Function that takes two game objects and checks if they are colliding
+        /// </summary>
         private void CollisionChecking(ref MovableGameObject ObjectA, ref MovableGameObject ObjectB)
         {
             if (ObjectA is Player)
@@ -80,6 +91,9 @@ namespace ArcadeJump
                 }
         }
 
+        /// <summary>
+        /// Function used to remove any dead gameobject from the game.
+        /// </summary>
         private void RemoveDeadStuff()
         {
             for (int i = 0; i < Platforms.Count; i++)
@@ -99,12 +113,27 @@ namespace ArcadeJump
             }
         }
 
+        /// <summary>
+        /// Function used to draw every single Player/Platform/Powerup
+        /// </summary>
         private void DrawStuff(SpriteBatch SpriteBatch)
         {
+            SpriteBatch.Begin();
             foreach (Platform p in Platforms)
             {
                 p.Draw(SpriteBatch);
             }
+
+            foreach (Player p in Players)
+            {
+                p.Draw(SpriteBatch);
+            }
+
+            foreach (PowerUp p in PowerUps)
+            {
+                p.Draw(SpriteBatch);
+            }
+            SpriteBatch.End();
         }
     }
 }
