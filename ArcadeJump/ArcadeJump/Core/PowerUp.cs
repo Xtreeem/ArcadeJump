@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ArcadeJump
 {
-    class PowerUp
+    class PowerUp : AnimatedGameObject
     {
     }
 }
