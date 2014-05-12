@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,10 @@ namespace ArcadeJump
         public Vector2 acceleration;
         public Rectangle collisionRectangle;
         private float gravity = 9.81f;
+
+        public MovableGameObject(Texture2D tex, Vector2 pos)
+            : base(tex, pos)
+        { }
 
         // thought that player class will call method when pressing buttons. and then it will move 
         // powerups will have call move function with a bool that is always true 

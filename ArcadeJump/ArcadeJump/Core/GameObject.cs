@@ -15,8 +15,16 @@ namespace ArcadeJump
         public Vector2 origin;
         public bool isDead;
         public SpriteEffects spriteEffect;
-        public double scale;
-        public Color color; 
+        public float scale;
+        public Color color;
+        public Rectangle source = new Rectangle();
+        public float rotation;
+
+        public GameObject(Texture2D tex, Vector2 pos)
+        {
+            this.texture = tex;
+            this.position = pos;
+        }
 
         public virtual void Update(GameTime gameTime)
         {
@@ -25,7 +33,7 @@ namespace ArcadeJump
 
         public virtual void Draw(SpriteBatch spritebatch)
         {
-        
+            spritebatch.Draw(texture, position, source, color, rotation, origin, scale, spriteEffect, 1);
         }
     }
 }

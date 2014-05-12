@@ -19,6 +19,9 @@ namespace ArcadeJump
         protected int frameHeight;
         protected int frameWidht;
 
+        public AnimatedGameObject(Texture2D tex, Vector2 pos)
+            : base(tex, pos)
+        { }
         public override void Update(GameTime gametime)
         {
             Animate(gametime);
