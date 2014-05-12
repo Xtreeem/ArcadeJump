@@ -59,6 +59,7 @@ namespace ArcadeJump
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            Manager.Update(gameTime);
             base.Update(gameTime);
         }
 

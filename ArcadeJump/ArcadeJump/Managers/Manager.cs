@@ -32,6 +32,8 @@ namespace ArcadeJump
 
         public void Update(GameTime GameTime)
         {
+            RemoveDeadStuff();
+            UpdateStuff(GameTime);
         }
 
 
@@ -137,6 +139,27 @@ namespace ArcadeJump
             {
                 if (Players[i].isDead)
                     Players.RemoveAt(i);
+            }
+        }
+
+        /// <summary>
+        /// Function used to draw every single Player/Platform/Powerup
+        /// </summary>
+        private void UpdateStuff(GameTime GameTime)
+        {
+            foreach (Platform p in Platforms)
+            {
+                p.Update(GameTime);
+            }
+
+            foreach (Player p in Players)
+            {
+                p.Update(GameTime);
+            }
+
+            foreach (PowerUp p in PowerUps)
+            {
+                p.Update(GameTime);
             }
         }
 
