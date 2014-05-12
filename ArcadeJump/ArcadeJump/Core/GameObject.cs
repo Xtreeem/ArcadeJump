@@ -19,9 +19,13 @@ namespace ArcadeJump
         public Color color; 
 
         public virtual void Update(GameTime gameTime)
-        {}
+        {
+        
+        }
 
         public virtual void Draw(SpriteBatch spritebatch)
-        {}
+        {
+        
+        }
     }
 }

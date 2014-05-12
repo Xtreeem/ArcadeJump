@@ -8,7 +8,7 @@ using System.Text;
 namespace ArcadeJump
 {
 
-    //To.do 
+    
     // Wait for platforms and player to try to manage
     // -Remember to swap surfaceRectangle to fullsized rectangle in the platform/platform cocllision.
     class Manager
