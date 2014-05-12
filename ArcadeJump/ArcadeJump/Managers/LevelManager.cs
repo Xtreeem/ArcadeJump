@@ -46,28 +46,34 @@ namespace ArcadeJump
             return length;
         }
 
+        #region GetPosition
         private Vector2 GetPosition()
         {
             int nr = random.Next(1,5);
             Vector2 pos = new Vector2();
             if (nr == 1)
             {
-                pos = new Vector2(100, startingHeight);
+                int randPos = random.Next(0, 230);
+                pos = new Vector2(randPos, startingHeight);
             }
             else if (nr == 2)
             {
-                pos = new Vector2(300, startingHeight);
+                int randPos = random.Next(231, 460);
+                pos = new Vector2(randPos, startingHeight);
             }
             else if (nr == 3)
             {
-                pos = new Vector2(600, startingHeight);
+                int randPos = random.Next(460, 690);
+                pos = new Vector2(randPos, startingHeight);
             }
             else if (nr == 4)
             {
-                pos = new Vector2(700, startingHeight);
+                int randPos = random.Next(690, 860);
+                pos = new Vector2(randPos, startingHeight);
             }
             return pos;
         }
+        #endregion
 
         public void CreateNewPlatform(Texture2D tex, Vector2 pos, float changeWidth)
         {
