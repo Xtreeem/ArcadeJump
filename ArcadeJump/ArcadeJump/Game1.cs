@@ -29,13 +29,13 @@ namespace ArcadeJump
         #region StartUp
         public Game1()
         {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
             Platforms = new List<Platform>();
             LevelManager = new LevelManager(ref Platforms, Content);
             Manager = new Manager(ref Platforms, ref PowerUps, ref Players);
 
 
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
             //LevelManager = new LevelManager(
         }
 
