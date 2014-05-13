@@ -17,7 +17,7 @@ namespace ArcadeJump
         public SpriteEffects spriteEffect;
         public float scale = 1f;
         public Color color = Color.White;
-        public Rectangle source = new Rectangle();
+        public Rectangle source;
         public float rotation;
         public Rectangle Hitbox;
 

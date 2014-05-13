@@ -10,8 +10,8 @@ namespace ArcadeJump.Features
 {
     class BouncyPlatform : Platform
     {
-        public BouncyPlatform(Vector2 pos, ContentManager Content)
-            : base(pos, Content)
+        public BouncyPlatform(Vector2 pos, ContentManager Content, double WidthAdjustment)
+            : base(pos, Content, WidthAdjustment)
         { }
     }
 }

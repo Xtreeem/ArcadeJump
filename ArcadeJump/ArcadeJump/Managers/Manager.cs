@@ -16,11 +16,12 @@ namespace ArcadeJump
     {
         #region Variables
         Random Rand;
+        double ElapsedGameTime = 0;
         LevelManager LevelManager;
         List<Platform> Platforms;
         List<Player> Players;
         List<PowerUp> PowerUps;
-        List<GameObject> GameObjects;
+        List<MovableGameObject> MovableGameObjects;
         #endregion
 
         #region Public Methods
@@ -29,14 +30,17 @@ namespace ArcadeJump
             this.Players = Players;
             this.PowerUps = PowerUps;
             this.Platforms = Platforms;
+            MovableGameObjects = new List<MovableGameObject>();
             Rand = new Random();
             LevelManager = new LevelManager(ref Platforms, Content);
+            UpdateGameObjectList();
         }
 
         public void Update(GameTime GameTime)
         {
             RemoveDeadStuff();
             UpdateStuff(GameTime);
+            CollisionManager();
         }
 
 
@@ -66,19 +70,49 @@ namespace ArcadeJump
         #endregion
 
         #region Private Methods
-        #endregion
+
+        private void UpdateGameObjectList()
+        {
+            MovableGameObjects.Clear();
+            MovableGameObjects.AddRange(Platforms);
+            MovableGameObjects.AddRange(Players);
+            MovableGameObjects.AddRange(PowerUps);
+        }
+
+
         /// <summary>
         /// Checks the Distance between two gameobjects to see if they are able to collide
         /// </summary>
-        private void FirstCollisionCheck()
+        private void CollisionManager()
         {
-
+            int adjuster = 0;
+            for (int a = 0; a < MovableGameObjects.Count; a++)
+            {
+                adjuster++;
+                for (int b = 0+ adjuster; b < MovableGameObjects.Count; b++)
+                {
+                    if (FirstCollisionCheck(MovableGameObjects[a], MovableGameObjects[b]))
+                    {
+                        CollisionChecking(MovableGameObjects[a], MovableGameObjects[b]);
+                    }
+                }
+            }
         }
+
+        private bool FirstCollisionCheck(GameObject ObjectA, GameObject ObjectB)
+        {
+            if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < 200)
+                return true;
+            else
+                return false;
+        }
+
+
 
         /// <summary>
         /// Function that takes two game objects and checks if they are colliding
         /// </summary>
-        private void CollisionChecking(ref MovableGameObject ObjectA, ref MovableGameObject ObjectB)
+        private void CollisionChecking(MovableGameObject ObjectA, MovableGameObject ObjectB)
         {
             if (ObjectA is Player)
             {
@@ -111,7 +145,8 @@ namespace ArcadeJump
                 }
                 else if (ObjectB is Platform)
                 {
-                    if ((ObjectA as Platform).SurfaceRectangle.Contains((ObjectB as Platform).SurfaceRectangle))
+                    //if ((ObjectA as Platform).Hitbox.Intersects((ObjectB as Platform).Hitbox))
+                    if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < ObjectA.Hitbox.Width)
                     {
                         if (Rand.Next(0, 2) > 0)
                         {
@@ -134,17 +169,24 @@ namespace ArcadeJump
                 {
                     Platforms.RemoveAt(i);
                     LevelManager.CreateNewPlatform();
+                    UpdateGameObjectList();
                 }
             }
             for (int i = 0; i < PowerUps.Count; i++)
             {
                 if (PowerUps[i].isDead)
+                {
                     PowerUps.RemoveAt(i);
+                    UpdateGameObjectList();
+                }
             }
             for (int i = 0; i < Players.Count; i++)
             {
                 if (Players[i].isDead)
+                {
                     Players.RemoveAt(i);
+                    UpdateGameObjectList();
+                }
             }
         }
 
@@ -153,6 +195,10 @@ namespace ArcadeJump
         /// </summary>
         private void UpdateStuff(GameTime GameTime)
         {
+            ElapsedGameTime += GameTime.ElapsedGameTime.TotalSeconds;
+            LevelManager.Update(ElapsedGameTime);
+
+
             foreach (Platform p in Platforms)
             {
                 p.Update(GameTime);
@@ -168,6 +214,13 @@ namespace ArcadeJump
                 p.Update(GameTime);
             }
         }
+
+        private Vector2 PointToVector2(Point Point)
+        {
+            return new Vector2(Point.X, Point.Y);
+        }
+        #endregion
+
 
     }
 }

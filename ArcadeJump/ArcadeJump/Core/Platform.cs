@@ -11,21 +11,29 @@ namespace ArcadeJump
     class Platform : MovableGameObject
     {
         public Rectangle SurfaceRectangle;
-        private double SurfaceHeight = 10;
+        private double SurfaceHeight = 6;
+        private int MinimumWidth = 10;
+        private int StartingWidth = 100;
+        private int PlatformHeight = 15;
         
 
-        public Platform(Vector2 pos, ContentManager Content) : base (pos, Content)
+        public Platform(Vector2 pos, ContentManager Content, double WidthAdjustment)
+            : base(pos, Content)
         {
-            source = new Rectangle(0, 0, texture.Width, texture.Height);
-            Hitbox = source;
-            SurfaceRectangle = new Rectangle((int)pos.X, (int)pos.Y, texture.Width, (int)SurfaceHeight);
             velocity = new Vector2(0, 4);
+            position = pos;
+            texture = Content.Load<Texture2D>("Textures/plattform");
+            Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
+            SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);
         }
+
+
+
 
         public override void Update(GameTime gameTime)
         {
             position += velocity;
-            Hitbox = new Rectangle((int)position.X, (int)position.Y, (int)(texture.Width), texture.Height);
+            Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
             SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);
             if (position.Y > 1080)
                 isDead = true; 
