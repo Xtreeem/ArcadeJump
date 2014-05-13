@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace ArcadeJump
     {
         #region Variables
         Random Rand;
+        LevelManager LevelManager;
         List<Platform> Platforms;
         List<Player> Players;
         List<PowerUp> PowerUps;
@@ -22,12 +24,13 @@ namespace ArcadeJump
         #endregion
 
         #region Public Methods
-        public Manager(ref List<Platform> Platforms, ref List<PowerUp> PowerUps, ref List<Player> Players)
+        public Manager(ref List<Platform> Platforms, ref List<PowerUp> PowerUps, ref List<Player> Players, ContentManager Content)
         {
             this.Players = Players;
             this.PowerUps = PowerUps;
             this.Platforms = Platforms;
             Rand = new Random();
+            LevelManager = new LevelManager(ref Platforms, Content);
         }
 
         public void Update(GameTime GameTime)
@@ -128,7 +131,10 @@ namespace ArcadeJump
             for (int i = 0; i < Platforms.Count; i++)
             {
                 if (Platforms[i].isDead)
+                {
                     Platforms.RemoveAt(i);
+                    LevelManager.CreateNewPlatform();
+                }
             }
             for (int i = 0; i < PowerUps.Count; i++)
             {

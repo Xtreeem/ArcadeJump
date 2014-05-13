@@ -21,9 +21,8 @@ namespace ArcadeJump
         public float rotation;
         public Rectangle Hitbox;
 
-        public GameObject(Texture2D tex, Vector2 pos)
+        public GameObject(Vector2 pos)
         {
-            this.texture = tex;
             this.position = pos;
         }
 

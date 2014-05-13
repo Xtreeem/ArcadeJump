@@ -18,7 +18,7 @@ namespace ArcadeJump
         #region Variables
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        LevelManager LevelManager;
+        
         Manager Manager;
 
         List<Platform> Platforms;
@@ -29,13 +29,8 @@ namespace ArcadeJump
         #region StartUp
         public Game1()
         {
-
-
-
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            //LevelManager = new LevelManager(
         }
 
         protected override void Initialize()
@@ -43,8 +38,6 @@ namespace ArcadeJump
             PowerUps = new List<PowerUp>();
             Players = new List<Player>();
             Platforms = new List<Platform>();
-
-
 
             graphics.PreferMultiSampling = true;
             graphics.PreferredBackBufferHeight = 1080;
@@ -56,8 +49,7 @@ namespace ArcadeJump
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Manager = new Manager(ref Platforms, ref PowerUps, ref Players);
-            LevelManager = new LevelManager(ref Platforms, Content);
+            Manager = new Manager(ref Platforms, ref PowerUps, ref Players, Content);
             
         }
 

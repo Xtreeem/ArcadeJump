@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 
 namespace ArcadeJump
 {
@@ -18,8 +19,8 @@ namespace ArcadeJump
         protected int frameHeight;
         protected int frameWidht;
 
-        public AnimatedGameObject(Texture2D tex, Vector2 pos)
-            : base(tex, pos)
+        public AnimatedGameObject(Vector2 pos, ContentManager Content)
+            : base(pos, Content)
         { }
         public override void Update(GameTime gametime)
         {

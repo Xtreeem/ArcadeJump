@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,8 @@ namespace ArcadeJump
         public Rectangle collisionRectangle;
         private float gravity = 9.81f;
 
-        public MovableGameObject(Texture2D tex, Vector2 pos)
-            : base(tex, pos)
+        public MovableGameObject(Vector2 pos, ContentManager Content)
+            : base(pos)
         { }
 
         // thought that player class will call method when pressing buttons. and then it will move 

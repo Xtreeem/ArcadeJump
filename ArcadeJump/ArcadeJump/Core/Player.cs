@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -9,8 +10,8 @@ namespace ArcadeJump
 {
     class Player : MovableGameObject
     {
-        public Player(Texture2D tex, Vector2 pos)
-            : base(tex, pos)
+        public Player(Vector2 pos, ContentManager Content)
+            : base(pos, Content)
         { }
     }
 }
