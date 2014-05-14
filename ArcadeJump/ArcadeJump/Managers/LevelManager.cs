@@ -14,7 +14,7 @@ namespace ArcadeJump
         int NumberOfColums = 5;
         int IntendedGameLength = 600;
         private int SpawnYInvetervall = 200;
-
+        private int NumberOfPlatforms = 30;
 
         int ColumWidth;
         ContentManager Content;
@@ -37,25 +37,9 @@ namespace ArcadeJump
         public void Update(double ElapsedGameTime)
         {
           WidthAdjustment = ElapsedGameTime / IntendedGameLength;
-
         }
 
-        public void InitateLevel()
-        {
-            Platforms.Add(new Platform(new Vector2(0, 0), Content, WidthAdjustment));
-            Platforms.Add(new Platform(new Vector2(1820, 0), Content, WidthAdjustment));
-            
-            Vector2 tempPosition;
-
-            for (int i = 0; i < 20; i++)
-            {
-                
-            int tempColumNumber = Random.Next(0, NumberOfColums);
-            tempPosition.Y = Random.Next(0, 1080);
-            tempPosition.X = (tempColumNumber * ColumWidth) + Random.Next(-ColumWidth / 2, ColumWidth / 2);
-            Platforms.Add(new Platform(tempPosition, Content, WidthAdjustment));
-            }
-        }
+        
             
 
         public void CreateNewPlatform()
@@ -73,6 +57,23 @@ namespace ArcadeJump
             tempPosition.Y = Random.Next(-100-SpawnYInvetervall, -100);
             tempPosition.X = (tempColumNumber * ColumWidth) + Random.Next(-ColumWidth / 2, ColumWidth / 2);
             return tempPosition;
+        }
+
+        private void InitateLevel()
+        {
+            Platforms.Add(new Platform(new Vector2(0, 0), Content, WidthAdjustment));
+            Platforms.Add(new Platform(new Vector2(1820, 0), Content, WidthAdjustment));
+
+            Vector2 tempPosition;
+
+            for (int i = 0; i < NumberOfPlatforms; i++)
+            {
+
+                int tempColumNumber = Random.Next(0, NumberOfColums);
+                tempPosition.Y = Random.Next(0, 1080);
+                tempPosition.X = (tempColumNumber * ColumWidth) + Random.Next(-ColumWidth / 2, ColumWidth / 2);
+                Platforms.Add(new Platform(tempPosition, Content, WidthAdjustment));
+            }
         }
         #endregion
 

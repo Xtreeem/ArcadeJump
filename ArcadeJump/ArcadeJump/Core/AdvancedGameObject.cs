@@ -14,6 +14,7 @@ namespace ArcadeJump
         //Collision Related
         public Rectangle BottomRectangle;
         private int FallOfGrace = 0;
+        protected double DroppingDownTimer;
         //Animation Related
         private Rectangle textureRectangle; 
         private int currentFrame;
@@ -37,8 +38,13 @@ namespace ArcadeJump
             OffTheSideChecker();
             Animate(gametime);
             base.Update(gametime);
-            BottomRectangle.X = Hitbox.X;
-            BottomRectangle.Y = Hitbox.Bottom;
+            if (DroppingDownTimer < 0)
+            {
+                BottomRectangle.X = Hitbox.X;
+                BottomRectangle.Y = Hitbox.Bottom;
+            }
+            else
+                DroppingDownTimer -= gametime.ElapsedGameTime.TotalSeconds;
         }
 
         public override void Draw(SpriteBatch spritebatch)
@@ -93,6 +99,13 @@ namespace ArcadeJump
                     currentFrame++;
                 }
             }
+        }
+
+        protected void DropDown()
+        {
+            DroppingDownTimer = 0.05;
+            SurfaceObject = null;
+            BottomRectangle = new Rectangle(-300, 0, BottomRectangle.Width, BottomRectangle.Height);
         }
         #endregion
 

@@ -33,7 +33,7 @@ namespace ArcadeJump
             position = pos;
             texture = Content.Load<Texture2D>("Textures/DummyPlayer");
             Hitbox = new Rectangle((int)position.X, (int)position.Y, 30, 70);
-            BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 10);
+            BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
 
             velocity.Y = 0.001f;
             frameHeight = 100;
@@ -77,6 +77,11 @@ namespace ArcadeJump
                 else if (velocity.X < 0)
                     velocity.X = MathHelper.Clamp(velocity.X + 0.4f, -100, 0);
 
+                if (NewState.IsKeyDown(Keys.S))
+                {
+                    DropDown();
+                }
+
                 if (NewState.IsKeyDown(Keys.D))
                     velocity.X += 0.2f;
                 else if (velocity.X > 0)
@@ -84,6 +89,7 @@ namespace ArcadeJump
 
                 if (NewState.IsKeyDown(Keys.W) && SurfaceObject != null && !OldState.IsKeyDown(Keys.W))
                     Jump();
+
             }
 
             else
@@ -98,12 +104,19 @@ namespace ArcadeJump
                 else if (velocity.X > 0)
                     velocity.X = MathHelper.Clamp(velocity.X - 0.4f, 0, 100);
 
+                if (NewState.IsKeyDown(Keys.NumPad2))
+                {
+                    DropDown();
+                }
+
                 if (NewState.IsKeyDown(Keys.NumPad5) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     Jump();
             }
 
             OldState = NewState;
         }
+
+
 
         #endregion
     }
