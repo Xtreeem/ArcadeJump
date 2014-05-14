@@ -12,10 +12,7 @@ namespace ArcadeJump
     {
         #region Variables
         public Vector2 velocity;
-        public Vector2 acceleration;
-        public Rectangle collisionRectangle;
         public MovableGameObject SurfaceObject;
-        private float gravity = 9.81f;
         #endregion
 
         #region Public Methods
