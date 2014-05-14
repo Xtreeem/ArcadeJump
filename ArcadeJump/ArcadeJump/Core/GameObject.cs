@@ -20,6 +20,7 @@ namespace ArcadeJump
         public Rectangle source;
         public float rotation;
         public Rectangle Hitbox;
+        protected Rectangle DrawRectangle;
 
         public GameObject(Vector2 pos)
         {

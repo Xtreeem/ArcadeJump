@@ -20,9 +20,11 @@ namespace ArcadeJump
         private int currentFrame;
         protected int maxNrFrame; 
         private double animationTimer;
-        private double timePerFrame = 0.2;
+        private double timePerFrame = 0.1;
         protected int frameHeight;
         protected int frameWidht;
+        protected int frameXOffset = 0;
+        protected int frameYOffset = 0;
         #endregion
 
         #region Public Methods
@@ -92,18 +94,20 @@ namespace ArcadeJump
                 {
                     currentFrame = 0;
                 }
-                else
-                {
-                    textureRectangle = new Rectangle(currentFrame * frameWidht, textureRectangle.Y, frameWidht, frameHeight);
+                //else
+                //{
+                float temp = currentFrame * frameXOffset;
+                temp = MathHelper.Clamp((int)temp, 0, frameXOffset);
+                    textureRectangle = new Rectangle((currentFrame * frameWidht) + frameXOffset, frameYOffset, frameWidht, frameHeight);
                     animationTimer = timePerFrame;
                     currentFrame++;
-                }
+                //}
             }
         }
 
         protected void DropDown()
         {
-            DroppingDownTimer = 0.05;
+            DroppingDownTimer = 0.07;
             SurfaceObject = null;
             BottomRectangle = new Rectangle(-300, 0, BottomRectangle.Width, BottomRectangle.Height);
         }

@@ -31,14 +31,16 @@ namespace ArcadeJump
         {
             this.PlayerNumber = PlayerNumber;
             position = pos;
-            texture = Content.Load<Texture2D>("Textures/DummyPlayer");
+            texture = Content.Load<Texture2D>("Textures/Idle");
             Hitbox = new Rectangle((int)position.X, (int)position.Y, 30, 70);
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
 
             velocity.Y = 0.001f;
-            frameHeight = 100;
-            frameWidht = 100;
-            maxNrFrame = 5;
+            frameHeight = 250;
+            frameWidht = 280;
+            frameXOffset = 0;
+            frameYOffset = 0;
+            maxNrFrame = 7;
         }
 
         public override void Update(GameTime gametime)
