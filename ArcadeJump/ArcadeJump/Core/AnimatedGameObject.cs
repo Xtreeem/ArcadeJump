@@ -13,7 +13,7 @@ namespace ArcadeJump
         private int numFrame;
         public Rectangle textureRectangle; 
         private int currentFrame;
-        private int maxNrFrame; 
+        protected int maxNrFrame; 
         private double animationTimer;
         private double timePerFrame = 0.2;
         protected int frameHeight;
@@ -38,11 +38,16 @@ namespace ArcadeJump
                 }
                 else
                 {
-                    currentFrame++;
-                    textureRectangle = new Rectangle(currentFrame*frameWidht,textureRectangle.Y,texture.Width,texture.Height);
+                    textureRectangle = new Rectangle(currentFrame * frameWidht, textureRectangle.Y, frameWidht, frameHeight);
                     animationTimer = timePerFrame;
+                    currentFrame++;
                 }
             }
+        }
+
+        public override void Draw(SpriteBatch spritebatch)
+        {
+            spritebatch.Draw(texture, Hitbox, textureRectangle, color, rotation, origin, spriteEffect, 0);
         }
     }
 }

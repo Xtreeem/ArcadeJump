@@ -31,7 +31,6 @@ namespace ArcadeJump
             ColumWidth = 1920 / NumberOfColums;
             Random = new Random();
             CreateNewPlatform();
-
             InitateLevel();
         }
 

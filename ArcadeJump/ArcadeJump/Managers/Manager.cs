@@ -34,6 +34,9 @@ namespace ArcadeJump
             Rand = new Random();
             LevelManager = new LevelManager(ref Platforms, Content);
             UpdateGameObjectList();
+            Players.Add(new Player(new Vector2(600, 600), Content));
+
+
         }
 
         public void Update(GameTime GameTime)
@@ -124,8 +127,7 @@ namespace ArcadeJump
                         (ObjectB as Platform).SurfaceRectangle.Contains(ObjectA.collisionRectangle.Center.X, ObjectA.collisionRectangle.Bottom)
                         )
                     {
-                        ObjectA.velocity.Y = 0;
-                        ObjectA.position.Y = (ObjectB as Platform).SurfaceRectangle.Top + 1;
+                        ObjectA.SurfaceObject = ObjectB;
                     }
                 }
                 else if (ObjectB is Player)

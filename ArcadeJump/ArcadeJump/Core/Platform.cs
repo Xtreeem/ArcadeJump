@@ -32,8 +32,9 @@ namespace ArcadeJump
 
         public override void Update(GameTime gameTime)
         {
-            position += velocity;
-            Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
+
+            base.Update(gameTime);
+            
             SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);
             if (position.Y > 1080)
                 isDead = true; 
