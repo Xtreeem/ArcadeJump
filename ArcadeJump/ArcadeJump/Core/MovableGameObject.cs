@@ -10,12 +10,15 @@ namespace ArcadeJump
 {
     abstract class MovableGameObject : GameObject
     {
+        #region Variables
         public Vector2 velocity;
         public Vector2 acceleration;
         public Rectangle collisionRectangle;
         public MovableGameObject SurfaceObject;
         private float gravity = 9.81f;
+        #endregion
 
+        #region Public Methods
         public MovableGameObject(Vector2 pos, ContentManager Content)
             : base(pos)
         { }
@@ -37,12 +40,10 @@ namespace ArcadeJump
             Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
             
         }
+        #endregion
 
-        public void Gravity(GameTime gameTime)
-        {
-            if (SurfaceObject == null)
-                velocity.Y = MathHelper.Clamp(velocity.Y + 0.7f, -100, 15);
-        }
+
+        
 
 
     }

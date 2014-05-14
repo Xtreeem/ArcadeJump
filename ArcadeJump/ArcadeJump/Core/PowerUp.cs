@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ArcadeJump
 {
-    class PowerUp : AnimatedGameObject
+    class PowerUp : AdvancedGameObject
     {
         public PowerUp(Vector2 pos, ContentManager Content)
             : base(pos, Content)

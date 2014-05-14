@@ -8,10 +8,13 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ArcadeJump
 {
-    class AnimatedGameObject : MovableGameObject
+    class AdvancedGameObject : MovableGameObject
     {
+        #region Variables
+        //Collision Related
         public Rectangle BottomRectangle;
-
+        private int FallOfGrace = 0;
+        //Animation Related
         private Rectangle textureRectangle; 
         private int currentFrame;
         protected int maxNrFrame; 
@@ -19,20 +22,49 @@ namespace ArcadeJump
         private double timePerFrame = 0.2;
         protected int frameHeight;
         protected int frameWidht;
+        #endregion
 
-        public AnimatedGameObject(Vector2 pos, ContentManager Content)
+        #region Public Methods
+        public AdvancedGameObject(Vector2 pos, ContentManager Content)
             : base(pos, Content)
         {
             
         }
         public override void Update(GameTime gametime)
         {
+            FallOfChecker();
+            Gravity(gametime);
             Animate(gametime);
             base.Update(gametime);
             BottomRectangle.X = Hitbox.X;
             BottomRectangle.Y = Hitbox.Bottom;
         }
-        public void Animate(GameTime gameTime)
+
+        public override void Draw(SpriteBatch spritebatch)
+        {
+            spritebatch.Draw(texture, Hitbox, textureRectangle, color, rotation, origin, spriteEffect, 0);
+        }
+        #endregion
+
+        #region Private Methods
+        private void FallOfChecker()
+        {
+            if (SurfaceObject != null)  //If it has a surfaceobject
+            {
+                if (Hitbox.Right - FallOfGrace < SurfaceObject.Hitbox.Left)
+                    SurfaceObject = null;
+                else if (Hitbox.Left + FallOfGrace > SurfaceObject.Hitbox.Right)
+                    SurfaceObject = null;
+            }
+        }
+
+        private void Gravity(GameTime gameTime)
+        {
+            if (SurfaceObject == null)
+                velocity.Y = MathHelper.Clamp(velocity.Y + 0.7f, -100, 15);
+        }
+
+        private void Animate(GameTime gameTime)
         {
             animationTimer -= gameTime.ElapsedGameTime.TotalSeconds;
             if (animationTimer < 0)
@@ -49,11 +81,8 @@ namespace ArcadeJump
                 }
             }
         }
+        #endregion
 
-        public override void Draw(SpriteBatch spritebatch)
-        {
-            spritebatch.Draw(texture, Hitbox, textureRectangle, color, rotation, origin, spriteEffect, 0);
-        }
     }
 }
 

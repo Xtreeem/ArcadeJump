@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ArcadeJump
 {
-    class Player : AnimatedGameObject
+    class Player : AdvancedGameObject
     {
         #region Variables
         int PlayerNumber;
@@ -50,7 +50,6 @@ namespace ArcadeJump
 
 
             Input();
-            Gravity(gametime);
             base.Update(gametime);
         }
 
@@ -89,22 +88,23 @@ namespace ArcadeJump
 
             else
             {
-                if (NewState.IsKeyDown(Keys.Left))
+                if (NewState.IsKeyDown(Keys.NumPad1))
                     velocity.X -= 0.2f;
                 else if (velocity.X < 0)
                     velocity.X = MathHelper.Clamp(velocity.X + 0.4f, -100, 0);
 
-                if (NewState.IsKeyDown(Keys.Right))
+                if (NewState.IsKeyDown(Keys.NumPad3))
                     velocity.X += 0.2f;
                 else if (velocity.X > 0)
                     velocity.X = MathHelper.Clamp(velocity.X - 0.4f, 0, 100);
 
-                if (NewState.IsKeyDown(Keys.Up) && SurfaceObject != null && !OldState.IsKeyDown(Keys.Up))
+                if (NewState.IsKeyDown(Keys.NumPad5) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     Jump();
             }
 
             OldState = NewState;
         }
+
         #endregion
     }
 }
