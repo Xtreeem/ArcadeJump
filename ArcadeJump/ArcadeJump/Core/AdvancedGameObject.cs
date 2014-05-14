@@ -34,6 +34,7 @@ namespace ArcadeJump
         {
             FallOfChecker();
             Gravity(gametime);
+            OffTheSideChecker();
             Animate(gametime);
             base.Update(gametime);
             BottomRectangle.X = Hitbox.X;
@@ -55,6 +56,18 @@ namespace ArcadeJump
                     SurfaceObject = null;
                 else if (Hitbox.Left + FallOfGrace > SurfaceObject.Hitbox.Right)
                     SurfaceObject = null;
+            }
+        }
+
+        private void OffTheSideChecker()
+        {
+            if (position.X > 1920)
+            {
+                position.X = -(Hitbox.Width - 1);
+            }
+            if (position.X < -Hitbox.Width)
+            {
+                position.X = 1919;
             }
         }
 
