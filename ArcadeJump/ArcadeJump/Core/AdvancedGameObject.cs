@@ -20,7 +20,7 @@ namespace ArcadeJump
         private int currentFrame;
         protected int maxNrFrame; 
         private double animationTimer;
-        private double timePerFrame = 0.1;
+        protected double timePerFrame = 0.1;
         protected int frameHeight;
         protected int frameWidht;
         protected int frameXOffset = 0;

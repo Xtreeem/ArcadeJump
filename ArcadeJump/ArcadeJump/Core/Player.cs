@@ -31,13 +31,14 @@ namespace ArcadeJump
         {
             this.PlayerNumber = PlayerNumber;
             position = pos;
-            texture = Content.Load<Texture2D>("Textures/PlayerSheet");
+            texture = Content.Load<Texture2D>("Textures/Test");
             Hitbox = new Rectangle((int)position.X, (int)position.Y, 30, 70);
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
 
             velocity.Y = 0.001f;
-            frameHeight = 250;
-            frameWidht = 350;
+            timePerFrame = 0.05;
+            frameHeight = 110;
+            frameWidht = 110;
             frameXOffset = 0;
             frameYOffset = 0;
             maxNrFrame = 7;
