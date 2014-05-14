@@ -58,7 +58,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\Test.jpg">
+    <Compile Include="Textures\Test.png">
       <Name>Test</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

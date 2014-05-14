@@ -11,6 +11,8 @@ namespace ArcadeJump
     class AdvancedGameObject : MovableGameObject
     {
         #region Variables
+        //Misc
+        protected float Gravitation = 0.7f;
         //Collision Related
         public Rectangle BottomRectangle;
         private int FallOfGrace = 0;
@@ -82,7 +84,7 @@ namespace ArcadeJump
         private void Gravity(GameTime gameTime)
         {
             if (SurfaceObject == null)
-                velocity.Y = MathHelper.Clamp(velocity.Y + 0.7f, -100, 15);
+                velocity.Y = MathHelper.Clamp(velocity.Y + Gravitation, -100, 15);
         }
 
         private void Animate(GameTime gameTime)
@@ -90,7 +92,7 @@ namespace ArcadeJump
             animationTimer -= gameTime.ElapsedGameTime.TotalSeconds;
             if (animationTimer < 0)
             {
-                if (currentFrame == maxNrFrame)
+                if (currentFrame >= maxNrFrame)
                 {
                     currentFrame = 0;
                 }

@@ -19,6 +19,9 @@ namespace ArcadeJump
         bool Stunned;
         double StunDuration;
         bool InvertedControls;
+        double IdleTimer;
+        double AnimationTimer;
+        Vector2 LastVelocity;
 
         KeyboardState OldState;
 
@@ -36,31 +39,38 @@ namespace ArcadeJump
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
 
             velocity.Y = 0.001f;
-            timePerFrame = 0.05;
+            timePerFrame = 0.08;
             frameHeight = 110;
             frameWidht = 110;
-            frameXOffset = 0;
-            frameYOffset = 0;
-            maxNrFrame = 7;
+
+            //frameXOffset = 0;
+            //frameYOffset = 110;
+            //maxNrFrame = 7;
+            
         }
 
-        public override void Update(GameTime gametime)
+        public override void Update(GameTime GameTime)
         {
             if (SurfaceObject != null)
                 color = Color.Red;
             else
                 color = Color.White;
-
-
             Input();
-            base.Update(gametime);
+            AnimationManager(GameTime);
+
+            
+            LastVelocity = velocity;
+            base.Update(GameTime);
         }
 
         public void Jump()
         {
             Console.WriteLine("Jump");
+            if (SurfaceObject != null)
+                AnimationJumping();
             SurfaceObject = null;
             velocity.Y -= JumpPower;
+            
         }
 
         #endregion
@@ -118,6 +128,121 @@ namespace ArcadeJump
 
             OldState = NewState;
         }
+
+        private void AnimationManager(GameTime GameTime)
+        {
+            if (AnimationTimer <= 0)
+            {
+                if (velocity == Vector2.Zero)
+                    IdleTimer += GameTime.ElapsedGameTime.TotalSeconds;
+                else IdleTimer = 0;
+
+                //if (IdleTimer < 3 && velocity == Vector2.Zero)
+                //    AnimationIdle();
+                if (velocity.Y < 0 && velocity.Y > 0 - (6 * Gravitation))
+                    AnimationLevelingOut();
+                else if (LastVelocity.Y != 0 && velocity.Y == 0)
+                    AnimationLanding();
+                else if (velocity.Y < 0)
+                    AnimationAscending();
+                else if (velocity.Y > 0)
+                    AnimationDescending();
+                else if (velocity.X != 0)
+                    AnimationRunning();
+                else if (IdleTimer > 3 && velocity == Vector2.Zero)
+                {
+                    AnimationProlongedIdle();
+                }
+                else
+                    AnimationIdle();
+            }
+
+
+
+
+
+                if (AnimationTimer > 0)
+                    AnimationTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+                else
+                {
+                    AnimationTimer = 0;
+                }
+                
+        }
+
+        private void AnimationClearAnimation()
+        {
+            frameXOffset = 0;
+            frameYOffset = 110;
+            maxNrFrame = 1;
+            AnimationTimer = 0;
+        }
+
+        private void AnimationAscending()
+        {
+            timePerFrame = 0.09;
+            frameXOffset = 330;
+            frameYOffset = 220;
+            maxNrFrame = 1;
+        }
+
+        private void AnimationLevelingOut()
+        {
+            frameXOffset = 330;
+            frameYOffset = 220;
+            maxNrFrame = 4;
+        }
+
+        private void AnimationDescending()
+        {
+            frameXOffset = 660;
+            frameYOffset = 220;
+            maxNrFrame = 1;
+        }
+
+        private void AnimationJumping()
+        {
+            timePerFrame = 0.09;
+            frameXOffset = 0;
+            frameYOffset = 220;
+            maxNrFrame = 3;
+            AnimationTimer = maxNrFrame * timePerFrame;
+        }
+
+        private void AnimationLanding()
+        {
+            Console.WriteLine("landing");
+            timePerFrame = 0.09;
+            frameXOffset = 880;
+            frameYOffset = 220;
+            maxNrFrame = 3;
+            AnimationTimer = maxNrFrame * timePerFrame;
+        }
+
+        private void AnimationIdle()
+        {
+            frameXOffset = 0;
+            frameYOffset = 110;
+            maxNrFrame = 1;
+        }
+
+        private void AnimationProlongedIdle()
+        {
+            timePerFrame = 0.08;
+            frameXOffset = 0;
+            frameYOffset = 110;
+            maxNrFrame = 7;
+        }
+
+        private void AnimationRunning()
+        {
+            timePerFrame = 0.05;
+            frameYOffset = 0;
+            frameXOffset = 0;
+            maxNrFrame = 7;
+        }
+
+
 
 
 

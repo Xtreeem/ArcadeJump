@@ -31,6 +31,12 @@ namespace ArcadeJump
 
         public override void Update(GameTime gametime)
         {
+            if (velocity.X > 0)
+                spriteEffect = SpriteEffects.None;
+            else if (velocity.X < 0)
+                spriteEffect = SpriteEffects.FlipHorizontally;
+                
+
             position += velocity;
             if (SurfaceObject != null)
                 position.Y = SurfaceObject.Hitbox.Top - Hitbox.Height;
