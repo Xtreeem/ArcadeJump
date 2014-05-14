@@ -13,7 +13,7 @@ namespace ArcadeJump
     {
         #region Variables
         int PlayerNumber;
-        float JumpPower = 30;
+        float JumpPower = 20;
         PowerUp CurrentPowerUp;
         int Score;
         bool Stunned;
@@ -56,6 +56,7 @@ namespace ArcadeJump
 
         public void Jump()
         {
+            Console.WriteLine("Jump");
             SurfaceObject = null;
             velocity.Y -= JumpPower;
         }

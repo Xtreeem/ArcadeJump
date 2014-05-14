@@ -175,6 +175,7 @@ namespace ArcadeJump
             if (Platform.SurfaceRectangle.Intersects(Player.BottomRectangle))
                 {
                     Player.SurfaceObject = Platform;
+                    Player.velocity.Y = 0;
                 }
         }
 

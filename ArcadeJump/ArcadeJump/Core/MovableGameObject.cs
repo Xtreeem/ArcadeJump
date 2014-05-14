@@ -41,7 +41,7 @@ namespace ArcadeJump
         public void Gravity(GameTime gameTime)
         {
             if (SurfaceObject == null)
-                velocity.Y = MathHelper.Clamp(velocity.Y + 0.7f, -100, 10);
+                velocity.Y = MathHelper.Clamp(velocity.Y + 0.7f, -100, 15);
         }
 
 
