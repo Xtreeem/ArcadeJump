@@ -34,7 +34,9 @@ namespace ArcadeJump
             Rand = new Random();
             LevelManager = new LevelManager(ref Platforms, Content);
             UpdateGameObjectList();
-            Players.Add(new Player(new Vector2(600, 600), Content));
+            Players.Add(new Player(new Vector2(600, 0), Content, 1));
+
+            Players.Add(new Player(new Vector2(600, 0), Content, 2));
 
 
         }
@@ -119,46 +121,88 @@ namespace ArcadeJump
         {
             if (ObjectA is Player)
             {
-                if (ObjectB is Platform && ObjectA.velocity.Y > 0)
+                if (ObjectB is Platform && ObjectA.velocity.Y > 0)  //Collision between a player (going downward) and a platform
                 {
-                    if (
-                        (ObjectB as Platform).SurfaceRectangle.Contains(ObjectA.collisionRectangle.Left, ObjectA.collisionRectangle.Bottom) ||
-                        (ObjectB as Platform).SurfaceRectangle.Contains(ObjectA.collisionRectangle.Right, ObjectA.collisionRectangle.Bottom) ||
-                        (ObjectB as Platform).SurfaceRectangle.Contains(ObjectA.collisionRectangle.Center.X, ObjectA.collisionRectangle.Bottom)
-                        )
-                    {
-                        ObjectA.SurfaceObject = ObjectB;
-                    }
+                    CollisionPlayerPlatform((ObjectA as Player), (ObjectB as Platform));
                 }
-                else if (ObjectB is Player)
+                else if (ObjectB is Player)     //Collision with player and player
                 {
-                    //Collision with player and player
+                    CollisionPlayerPlayer((ObjectA as Player), (ObjectB as Player));
                 }
 
-                else if (ObjectB is PowerUp)
+                else if (ObjectB is PowerUp)    //Collision with player and powerup
                 {
-                    //Collision with player and powerup
+                    CollisionPlayerPowerUp((ObjectA as Player), (ObjectB as PowerUp));
                 }
             }
             else if (ObjectA is Platform)
-                if (ObjectB is PowerUp && ObjectB.velocity.Y > 0)
+            {
+                if (ObjectB is Player && ObjectB.velocity.Y > 0)  //Collision between a player (going downward) and a platform
                 {
-                    //Collision with platform and powerup
+                    CollisionPlayerPlatform((ObjectB as Player), (ObjectA as Platform));
+                }
+                if (ObjectB is PowerUp && ObjectB.velocity.Y > 0)   //Collision with platform and powerup (Going downward)
+                {
+                    CollisionPlatformPowerUp((ObjectA as Platform), (ObjectB as PowerUp));
                 }
                 else if (ObjectB is Platform)
                 {
-                    //if ((ObjectA as Platform).Hitbox.Intersects((ObjectB as Platform).Hitbox))
-                    if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < ObjectA.Hitbox.Width)
-                    {
-                        if (Rand.Next(0, 2) > 0)
-                        {
-                            ObjectA.isDead = true;
-                        }
-                        else
-                            ObjectB.isDead = true;
-                    }
+                    CollisionPlatformPlatform((ObjectA as Platform), (ObjectB as Platform));
+                }
+            }
+            else if (ObjectA is PowerUp)
+            {
+                if (ObjectB is Player)  //Collision between a player and a powerup
+                {
+                    CollisionPlayerPowerUp((ObjectB as Player), (ObjectA as PowerUp));
+                }
+                else if (ObjectB is Platform)     //Collision with PowerUp and Platform
+                {
+                    CollisionPlatformPowerUp((ObjectB as Platform), (ObjectA as PowerUp));
+                }
+
+                else if (ObjectB is PowerUp)    //Collision with PowerUp and PowerUp
+                {
+                    CollisionPowerUpPowerUp((ObjectA as PowerUp), (ObjectB as PowerUp));
+                }
+            }
+
+
+        }
+
+        private void CollisionPlayerPlatform(Player Player, Platform Platform)
+        {
+            if (Platform.SurfaceRectangle.Intersects(Player.BottomRectangle))
+                {
+                    Player.SurfaceObject = Platform;
                 }
         }
+
+        private void CollisionPlayerPlayer(Player PlayerA, Player PlayerB)
+        { }
+
+        private void CollisionPlayerPowerUp(Player Player, PowerUp PowerUp)
+        { }
+
+        private void CollisionPlatformPowerUp(Platform Platform, PowerUp PowerUp)
+        { }
+
+        private void CollisionPlatformPlatform(Platform PlatformA, Platform PlatformB)
+        {
+            if (Vector2.Distance(PointToVector2(PlatformA.Hitbox.Center), PointToVector2(PlatformB.Hitbox.Center)) < PlatformA.Hitbox.Width)
+            {
+                if (Rand.Next(0, 2) > 0)
+                {
+                    PlatformA.isDead = true;
+                }
+                else
+                    PlatformB.isDead = true;
+            }
+        }
+        
+        private void CollisionPowerUpPowerUp(PowerUp PowerUpA, PowerUp PowerUpB)
+        { }
+
 
         /// <summary>
         /// Function used to remove any dead gameobject from the game.

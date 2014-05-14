@@ -10,8 +10,9 @@ namespace ArcadeJump
 {
     class AnimatedGameObject : MovableGameObject
     {
-        private int numFrame;
-        public Rectangle textureRectangle; 
+        public Rectangle BottomRectangle;
+
+        private Rectangle textureRectangle; 
         private int currentFrame;
         protected int maxNrFrame; 
         private double animationTimer;
@@ -21,11 +22,15 @@ namespace ArcadeJump
 
         public AnimatedGameObject(Vector2 pos, ContentManager Content)
             : base(pos, Content)
-        { }
+        {
+            
+        }
         public override void Update(GameTime gametime)
         {
             Animate(gametime);
             base.Update(gametime);
+            BottomRectangle.X = Hitbox.X;
+            BottomRectangle.Y = Hitbox.Bottom;
         }
         public void Animate(GameTime gameTime)
         {

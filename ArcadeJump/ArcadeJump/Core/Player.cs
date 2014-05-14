@@ -12,52 +12,97 @@ namespace ArcadeJump
     class Player : AnimatedGameObject
     {
         #region Variables
+        int PlayerNumber;
+        float JumpPower = 30;
         PowerUp CurrentPowerUp;
         int Score;
         bool Stunned;
         double StunDuration;
         bool InvertedControls;
 
-
+        KeyboardState OldState;
 
 
         #endregion
 
         #region Public Methods
-        public Player(Vector2 pos, ContentManager Content)
+        public Player(Vector2 pos, ContentManager Content, int PlayerNumber)
             : base(pos, Content)
         {
+            this.PlayerNumber = PlayerNumber;
             position = pos;
             texture = Content.Load<Texture2D>("Textures/DummyPlayer");
-            Hitbox = new Rectangle((int)position.X, (int)position.Y, 100, 100);
+            Hitbox = new Rectangle((int)position.X, (int)position.Y, 30, 70);
+            BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 10);
 
+            velocity.Y = 0.001f;
             frameHeight = 100;
             frameWidht = 100;
-            maxNrFrame = 2;
+            maxNrFrame = 5;
         }
 
         public override void Update(GameTime gametime)
         {
+            if (SurfaceObject != null)
+                color = Color.Red;
+            else
+                color = Color.White;
+
+
             Input();
+            Gravity(gametime);
             base.Update(gametime);
+        }
+
+        public void Jump()
+        {
+            SurfaceObject = null;
+            velocity.Y -= JumpPower;
         }
 
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Function designed to Scan for the control inputs and move the player accordingly
+        /// </summary>
         private void Input()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            var NewState = Keyboard.GetState();
+
+            if (PlayerNumber == 1)
             {
-                velocity.X -= 0.2f;
+                if (NewState.IsKeyDown(Keys.A))
+                    velocity.X -= 0.2f;
+                else if (velocity.X < 0)
+                    velocity.X = MathHelper.Clamp(velocity.X + 0.4f, -100, 0);
+
+                if (NewState.IsKeyDown(Keys.D))
+                    velocity.X += 0.2f;
+                else if (velocity.X > 0)
+                    velocity.X = MathHelper.Clamp(velocity.X - 0.4f, 0, 100);
+
+                if (NewState.IsKeyDown(Keys.W) && SurfaceObject != null && !OldState.IsKeyDown(Keys.W))
+                    Jump();
             }
-            else if (velocity.X < 0)
-                velocity.X = MathHelper.Clamp(velocity.X + 0.4f, -100, 0);
-            
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-                velocity.X += 0.2f;
-            else if (velocity.X > 0)
-                velocity.X = MathHelper.Clamp(velocity.X - 0.4f, 0, 100);
+
+            else
+            {
+                if (NewState.IsKeyDown(Keys.Left))
+                    velocity.X -= 0.2f;
+                else if (velocity.X < 0)
+                    velocity.X = MathHelper.Clamp(velocity.X + 0.4f, -100, 0);
+
+                if (NewState.IsKeyDown(Keys.Right))
+                    velocity.X += 0.2f;
+                else if (velocity.X > 0)
+                    velocity.X = MathHelper.Clamp(velocity.X - 0.4f, 0, 100);
+
+                if (NewState.IsKeyDown(Keys.Up) && SurfaceObject != null && !OldState.IsKeyDown(Keys.Up))
+                    Jump();
+            }
+
+            OldState = NewState;
         }
         #endregion
     }

@@ -32,23 +32,18 @@ namespace ArcadeJump
         public override void Update(GameTime gametime)
         {
             position += velocity;
-            Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
             if (SurfaceObject != null)
-                position.Y = SurfaceObject.Hitbox.Top;
+                position.Y = SurfaceObject.Hitbox.Top - Hitbox.Height;
+            Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
+            
         }
 
         public void Gravity(GameTime gameTime)
         {
-            acceleration.Y = gravity;
-            velocity += acceleration * gameTime.ElapsedGameTime.Milliseconds;
-            position += velocity;
+            if (SurfaceObject == null)
+                velocity.Y = MathHelper.Clamp(velocity.Y + 0.7f, -100, 10);
         }
 
-        public void Jump()
-        {
-            SurfaceObject = null;
-            velocity.Y += 10;
-            position.Y += velocity.Y;
-        }
+
     }
 }

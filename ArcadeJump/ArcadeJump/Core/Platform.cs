@@ -11,7 +11,7 @@ namespace ArcadeJump
     class Platform : MovableGameObject
     {
         public Rectangle SurfaceRectangle;
-        private double SurfaceHeight = 6;
+        private double SurfaceHeight = 10;
         private int MinimumWidth = 10;
         private int StartingWidth = 100;
         private int PlatformHeight = 15;
