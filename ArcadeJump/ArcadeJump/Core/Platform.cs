@@ -26,7 +26,9 @@ namespace ArcadeJump
             position = pos;
             texture = Content.Load<Texture2D>("Textures/plattform");
             Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
+            DrawRectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
             SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);
+            color = Color.Black;
         }
 
 
@@ -43,7 +45,7 @@ namespace ArcadeJump
         public override void Draw(SpriteBatch sB)
         {
             base.Draw(sB);
-            sB.Draw(texture, SurfaceRectangle, Color.Red); //Debug line to show the surface recangle
+            //sB.Draw(texture, SurfaceRectangle, Color.Red); //Debug line to show the surface recangle
 
         }
         #endregion

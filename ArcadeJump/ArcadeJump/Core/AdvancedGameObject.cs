@@ -12,8 +12,11 @@ namespace ArcadeJump
     {
         #region Variables
         //Misc
+        protected Texture2D HitBoXDebugTexture;
         protected float Gravitation = 0.7f;
         //Collision Related
+        protected int HitBoxXAdjustment = 0;
+        protected int HitBoxYAdjustment = 0;
         public Rectangle BottomRectangle;
         private int FallOfGrace = 0;
         protected double DroppingDownTimer;
@@ -33,15 +36,17 @@ namespace ArcadeJump
         public AdvancedGameObject(Vector2 pos, ContentManager Content)
             : base(pos, Content)
         {
-            
         }
         public override void Update(GameTime gametime)
         {
+            base.Update(gametime);
+            Hitbox.X += HitBoxXAdjustment;
+            Hitbox.Y += HitBoxYAdjustment;
             FallOfChecker();
             Gravity(gametime);
             OffTheSideChecker();
             Animate(gametime);
-            base.Update(gametime);
+            
             if (DroppingDownTimer < 0)
             {
                 BottomRectangle.X = Hitbox.X;
@@ -53,7 +58,8 @@ namespace ArcadeJump
 
         public override void Draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(texture, Hitbox, textureRectangle, color, rotation, origin, spriteEffect, 0);
+            //spritebatch.Draw(HitBoXDebugTexture, Hitbox, textureRectangle, Color.Red * 0.5f, rotation, origin, spriteEffect, 0);    //Debug Line used to display hitbox
+            spritebatch.Draw(texture, DrawRectangle, textureRectangle, Color.White, rotation, origin, spriteEffect, 0);
         }
         #endregion
 

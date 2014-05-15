@@ -13,6 +13,8 @@ namespace ArcadeJump
         #region Variables
         public Vector2 velocity;
         public MovableGameObject SurfaceObject;
+        protected Rectangle DrawRectangle;
+
         #endregion
 
         #region Public Methods
@@ -41,7 +43,7 @@ namespace ArcadeJump
             if (SurfaceObject != null)
                 position.Y = SurfaceObject.Hitbox.Top - Hitbox.Height;
             Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
-            
+            DrawRectangle = new Rectangle((int)position.X, (int)position.Y, DrawRectangle.Width, DrawRectangle.Height);
         }
         #endregion
 

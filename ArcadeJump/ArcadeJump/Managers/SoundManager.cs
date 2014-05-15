@@ -22,9 +22,11 @@ namespace ArcadeJump
         #region Method(s)
         public static void InitializeSound(ContentManager Content)
         {
-            a = Content.Load<SoundEffect>("NamnPåEffekt");
-            b = Content.Load<SoundEffect>("NamnPåEffekt");
-            c = Content.Load<SoundEffect>("NamnPåEffekt");
+            //a = Content.Load<SoundEffect>("NamnPåEffekt");
+            //b = Content.Load<SoundEffect>("NamnPåEffekt");
+            //c = Content.Load<SoundEffect>("NamnPåEffekt");
+
+            
         }
 
         public static void PlaySound(string Name)

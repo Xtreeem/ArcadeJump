@@ -23,9 +23,10 @@ namespace ArcadeJump
         double AnimationTimer;
         Vector2 LastVelocity;
 
+
         KeyboardState OldState;
 
-
+        
         #endregion
 
         #region Public Methods
@@ -34,9 +35,15 @@ namespace ArcadeJump
         {
             this.PlayerNumber = PlayerNumber;
             position = pos;
+            HitBoxXAdjustment = 7;
+            HitBoxYAdjustment = 0;
             texture = Content.Load<Texture2D>("Textures/Test");
-            Hitbox = new Rectangle((int)position.X, (int)position.Y, 30, 70);
+            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/Test2");
+            Hitbox = new Rectangle((int)position.X, (int)position.Y, 15, 70);
+            DrawRectangle = new Rectangle((int)position.X, (int)position.Y, 30, 70);
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
+
+
 
             velocity.Y = 0.001f;
             timePerFrame = 0.08;
@@ -212,7 +219,7 @@ namespace ArcadeJump
         private void AnimationLanding()
         {
             Console.WriteLine("landing");
-            timePerFrame = 0.09;
+            timePerFrame = 0.05;
             frameXOffset = 880;
             frameYOffset = 220;
             maxNrFrame = 3;

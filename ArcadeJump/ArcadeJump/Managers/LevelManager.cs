@@ -39,9 +39,6 @@ namespace ArcadeJump
           WidthAdjustment = ElapsedGameTime / IntendedGameLength;
         }
 
-        
-            
-
         public void CreateNewPlatform()
         {
             Platforms.Add(new Platform(GetPosition(), Content, WidthAdjustment));
@@ -61,8 +58,8 @@ namespace ArcadeJump
 
         private void InitateLevel()
         {
-            Platforms.Add(new Platform(new Vector2(0, 0), Content, WidthAdjustment));
-            Platforms.Add(new Platform(new Vector2(1820, 0), Content, WidthAdjustment));
+            Platforms.Add(new Platform(new Vector2(20, 800), Content, WidthAdjustment));
+            Platforms.Add(new Platform(new Vector2(1860, 800), Content, WidthAdjustment));
 
             Vector2 tempPosition;
 
@@ -76,77 +73,5 @@ namespace ArcadeJump
             }
         }
         #endregion
-
-
-
-
-
-        //List<Platform> platformList;
-        //Texture2D platformTex;
-        //Random random;
-        //float startingHeight = -50f;
-
-        //public LevelManager(ref List<Platform> list, ContentManager content)
-        //{
-        //    this.platformList = list;
-        //    platformTex = content.Load<Texture2D>("Textures/plattform");
-        //    random = new Random();
-
-        //    for (int i = 0; i < 10; i++)
-        //    {
-        //        CreateNewPlatform();
-        //    }
-        //}
-
-        
-
-        //public void Update(GameTime gameTime, double gameTimer)
-        //{
-        //}
-
-        //private float GetLength()
-        //{
-        //    float length = random.Next(20, 100);
-        //    length = length / 100;
-
-        //    return length;
-        //}
-
-        //#region GetPosition
-        //private Vector2 GetPosition()
-        //{
-        //    int nr = random.Next(1,5);
-        //    Vector2 pos = new Vector2();
-        //    if (nr == 1)
-        //    {
-        //        int randPos = random.Next(0, 230);
-        //        pos = new Vector2(randPos, startingHeight);
-        //    }
-        //    else if (nr == 2)
-        //    {
-        //        int randPos = random.Next(231, 460);
-        //        pos = new Vector2(randPos, startingHeight);
-        //    }
-        //    else if (nr == 3)
-        //    {
-        //        int randPos = random.Next(460, 690);
-        //        pos = new Vector2(randPos, startingHeight);
-        //    }
-        //    else if (nr == 4)
-        //    {
-        //        int randPos = random.Next(690, 860);
-        //        pos = new Vector2(randPos, startingHeight);
-        //    }
-        //    return pos;
-        //}
-        //#endregion
-
-        //public void CreateNewPlatform()
-        //{
-        //    //float changeWidth = (random.Next(0, 101) / 100);
-        //    int changeWidth = 1;
-        //    platformList.Add(new Platform(platformTex, GetPosition(), changeWidth));
-        //}
-       
     }
 }

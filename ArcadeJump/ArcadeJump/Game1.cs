@@ -18,7 +18,10 @@ namespace ArcadeJump
         #region Variables
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
+
+        Song BackgroundMusicOne;
+        bool songStart = false;
+
         Manager Manager;
 
         List<Platform> Platforms;
@@ -48,6 +51,10 @@ namespace ArcadeJump
 
         protected override void LoadContent()
         {
+            BackgroundMusicOne = Content.Load<Song>("BgMusic");
+            MediaPlayer.IsRepeating = true;
+
+            SoundManager.InitializeSound(Content);
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Manager = new Manager(ref Platforms, ref PowerUps, ref Players, Content);
             
@@ -63,13 +70,18 @@ namespace ArcadeJump
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            if(!songStart)
+            {
+                MediaPlayer.Play(BackgroundMusicOne);
+                songStart = true;
+            }
             Manager.Update(gameTime);
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.AntiqueWhite);
             Manager.DrawStuff(spriteBatch);
             base.Draw(gameTime);
         }

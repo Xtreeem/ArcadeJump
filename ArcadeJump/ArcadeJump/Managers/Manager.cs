@@ -34,9 +34,9 @@ namespace ArcadeJump
             Rand = new Random();
             LevelManager = new LevelManager(ref Platforms, Content);
             UpdateGameObjectList();
-            Players.Add(new Player(new Vector2(600, 0), Content, 1));
+            Players.Add(new Player(new Vector2(40, 0), Content, 1));
 
-            Players.Add(new Player(new Vector2(600, 0), Content, 2));
+            Players.Add(new Player(new Vector2(1880, 0), Content, 2));
 
 
         }
