@@ -12,7 +12,7 @@ namespace ArcadeJump
     class Player : AdvancedGameObject
     {
         #region Variables
-        int PlayerNumber;
+        public int PlayerNumber;
         float JumpPower = 20;
         PowerUp CurrentPowerUp;
         int Score;
@@ -64,10 +64,16 @@ namespace ArcadeJump
                 color = Color.White;
             Input();
             AnimationManager(GameTime);
-
+            DidIDieCheck();
             
             LastVelocity = velocity;
             base.Update(GameTime);
+        }
+
+        private void DidIDieCheck()
+        {
+            if (position.Y > 1100)
+                isDead = true;
         }
 
         public void Jump()
@@ -144,8 +150,6 @@ namespace ArcadeJump
                     IdleTimer += GameTime.ElapsedGameTime.TotalSeconds;
                 else IdleTimer = 0;
 
-                //if (IdleTimer < 3 && velocity == Vector2.Zero)
-                //    AnimationIdle();
                 if (velocity.Y < 0 && velocity.Y > 0 - (6 * Gravitation))
                     AnimationLevelingOut();
                 else if (LastVelocity.Y != 0 && velocity.Y == 0)
@@ -159,15 +163,12 @@ namespace ArcadeJump
                 else if (IdleTimer > 3 && velocity == Vector2.Zero)
                 {
                     AnimationProlongedIdle();
+                    if (currentFrame + 1 > maxNrFrame)
+                        IdleTimer = 0;
                 }
                 else
                     AnimationIdle();
             }
-
-
-
-
-
                 if (AnimationTimer > 0)
                     AnimationTimer -= GameTime.ElapsedGameTime.TotalSeconds;
                 else
@@ -176,7 +177,7 @@ namespace ArcadeJump
                 }
                 
         }
-
+        #region Animations
         private void AnimationClearAnimation()
         {
             frameXOffset = 0;
@@ -248,7 +249,7 @@ namespace ArcadeJump
             frameXOffset = 0;
             maxNrFrame = 7;
         }
-
+        #endregion
 
 
 

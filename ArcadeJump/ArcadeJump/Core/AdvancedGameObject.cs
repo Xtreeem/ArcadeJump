@@ -22,7 +22,7 @@ namespace ArcadeJump
         protected double DroppingDownTimer;
         //Animation Related
         private Rectangle textureRectangle; 
-        private int currentFrame;
+        protected int currentFrame;
         protected int maxNrFrame; 
         private double animationTimer;
         protected double timePerFrame = 0.1;

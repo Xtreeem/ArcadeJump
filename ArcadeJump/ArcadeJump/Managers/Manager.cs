@@ -16,6 +16,7 @@ namespace ArcadeJump
     {
         #region Variables
         Random Rand;
+        ContentManager Content;
         double ElapsedGameTime = 0;
         LevelManager LevelManager;
         List<Platform> Platforms;
@@ -27,6 +28,7 @@ namespace ArcadeJump
         #region Public Methods
         public Manager(ref List<Platform> Platforms, ref List<PowerUp> PowerUps, ref List<Player> Players, ContentManager Content)
         {
+            this.Content = Content;
             this.Players = Players;
             this.PowerUps = PowerUps;
             this.Platforms = Platforms;
@@ -231,6 +233,7 @@ namespace ArcadeJump
             {
                 if (Players[i].isDead)
                 {
+                    Players.Add(new Player(new Vector2(0,0), Content, Players[i].PlayerNumber)); //Debug line
                     Players.RemoveAt(i);
                     UpdateGameObjectList();
                 }
