@@ -108,7 +108,7 @@ namespace ArcadeJump
 
         private bool FirstCollisionCheck(GameObject ObjectA, GameObject ObjectB)
         {
-            if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < 200)
+            if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < ObjectA.Hitbox.Width)
                 return true;
             else
                 return false;
@@ -192,7 +192,7 @@ namespace ArcadeJump
 
         private void CollisionPlatformPlatform(Platform PlatformA, Platform PlatformB)
         {
-            if (Vector2.Distance(PointToVector2(PlatformA.Hitbox.Center), PointToVector2(PlatformB.Hitbox.Center)) < PlatformA.Hitbox.Width)
+            if (PlatformA.Hitbox.Intersects(PlatformB.Hitbox))
             {
                 if (Rand.Next(0, 2) > 0)
                 {

@@ -72,6 +72,8 @@ namespace ArcadeJump
                     SurfaceObject = null;
                 else if (Hitbox.Left + FallOfGrace > SurfaceObject.Hitbox.Right)
                     SurfaceObject = null;
+                else if (SurfaceObject.isDead)
+                    SurfaceObject = null;
             }
         }
 

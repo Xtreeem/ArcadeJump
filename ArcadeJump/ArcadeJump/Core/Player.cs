@@ -23,6 +23,10 @@ namespace ArcadeJump
         double AnimationTimer;
         Vector2 LastVelocity;
 
+        float SlowdownAir = 0.9f;
+        float SlowdownGround = 1.5f;
+        float SpeedUpAir = 0.5f;
+        float SpeedUpGround = 0.5f;
 
         KeyboardState OldState;
 
@@ -99,36 +103,35 @@ namespace ArcadeJump
             if (PlayerNumber == 1)
             {
                 if (NewState.IsKeyDown(Keys.A))
-                    velocity.X -= 0.2f;
+                    velocity.X -= (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
                 else if (velocity.X < 0)
-                    velocity.X = MathHelper.Clamp(velocity.X + 0.4f, -100, 0);
+                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -100, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -100, 0);
+
+                if (NewState.IsKeyDown(Keys.D))
+                    velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
+                else if (velocity.X > 0)
+                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, 100) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, 100);
 
                 if (NewState.IsKeyDown(Keys.S))
                 {
                     DropDown();
                 }
 
-                if (NewState.IsKeyDown(Keys.D))
-                    velocity.X += 0.2f;
-                else if (velocity.X > 0)
-                    velocity.X = MathHelper.Clamp(velocity.X - 0.4f, 0, 100);
-
-                if (NewState.IsKeyDown(Keys.W) && SurfaceObject != null && !OldState.IsKeyDown(Keys.W))
+                if (NewState.IsKeyDown(Keys.W) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     Jump();
-
             }
 
             else
             {
                 if (NewState.IsKeyDown(Keys.NumPad1))
-                    velocity.X -= 0.2f;
+                    velocity.X -= (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
                 else if (velocity.X < 0)
-                    velocity.X = MathHelper.Clamp(velocity.X + 0.4f, -100, 0);
+                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -100, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -100, 0);
 
                 if (NewState.IsKeyDown(Keys.NumPad3))
-                    velocity.X += 0.2f;
+                    velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
                 else if (velocity.X > 0)
-                    velocity.X = MathHelper.Clamp(velocity.X - 0.4f, 0, 100);
+                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, 100) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, 100);
 
                 if (NewState.IsKeyDown(Keys.NumPad2))
                 {
