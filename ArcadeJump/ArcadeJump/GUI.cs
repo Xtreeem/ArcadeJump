@@ -7,5 +7,16 @@ namespace ArcadeJump
 {
     class GUI
     {
+        List<Player> Players;
+
+        public GUI(ref List<Player> Players)
+        {
+            this.Players = Players;
+        }
+
+
+
+
+
     }
 }
