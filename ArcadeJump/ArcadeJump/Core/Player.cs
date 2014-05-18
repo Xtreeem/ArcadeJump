@@ -125,6 +125,8 @@ namespace ArcadeJump
                     SoundManager.PlaySound("PowerDown");
                 if (NewState.IsKeyDown(Keys.F4) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     SoundManager.PlaySound("PowerUp");
+                if (NewState.IsKeyDown(Keys.F5) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                    AnimationPunch();
             }
 
             else
@@ -270,7 +272,7 @@ namespace ArcadeJump
 
         private void AnimationGettingUp()
         {
-            timePerFrame = 0.05;
+            timePerFrame = 0.1;
             frameYOffset = 550;
             frameXOffset = 0;
             maxNrFrame = 10;
@@ -283,6 +285,15 @@ namespace ArcadeJump
             frameYOffset = 440;
             frameXOffset = 770;
             maxNrFrame = 1;
+        }
+
+        private void AnimationPunch()
+        {
+            timePerFrame = 0.05;
+            frameYOffset = 660;
+            frameXOffset = 0;
+            maxNrFrame = 12;
+            AnimationTimer = timePerFrame * maxNrFrame;
         }
         #endregion
 
