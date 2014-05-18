@@ -14,8 +14,8 @@ namespace ArcadeJump
         int NumberOfColums = 5;
         int IntendedGameLength = 600;
         private int SpawnYInvetervall = 200;
-        private int NumberOfPlatforms = 2;
-        private int PlatformWidth = 10000;
+        private int NumberOfPlatforms = 20;
+        private int PlatformWidth = 500;
 
 
 

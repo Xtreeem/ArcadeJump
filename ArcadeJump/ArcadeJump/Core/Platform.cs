@@ -38,8 +38,7 @@ namespace ArcadeJump
             base.Update(gameTime);
             
             SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);
-            if (position.Y > 1080)
-                isDead = true; 
+
         }
 
         public override void Draw(SpriteBatch sB)

@@ -44,11 +44,18 @@ namespace ArcadeJump
                 position.Y = SurfaceObject.Hitbox.Top - Hitbox.Height;
             Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
             DrawRectangle = new Rectangle((int)position.X, (int)position.Y, DrawRectangle.Width, DrawRectangle.Height);
+            FallenOfScreenChecker();
         }
         #endregion
 
+        #region Private Method
+        private void FallenOfScreenChecker()
+        {
+            if (position.Y > 1080)
+                isDead = true;
+        }
+        #endregion 
 
-        
 
 
     }

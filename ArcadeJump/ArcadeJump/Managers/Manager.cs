@@ -37,9 +37,10 @@ namespace ArcadeJump
             LevelManager = new LevelManager(ref Platforms, Content);
             UpdateGameObjectList();
             Players.Add(new Player(new Vector2(40, 0), Content, 1));
-
             Players.Add(new Player(new Vector2(1880, 0), Content, 2));
 
+
+            PowerUps.Add(new PowerUp(new Vector2(100, 100), Content, new Vector2(3, 0)));
 
         }
 
@@ -188,7 +189,10 @@ namespace ArcadeJump
         { }
 
         private void CollisionPlatformPowerUp(Platform Platform, PowerUp PowerUp)
-        { }
+        {
+            if (Platform.Hitbox.Intersects(PowerUp.Hitbox))
+                PowerUp.SurfaceObject = Platform;
+        }
 
         private void CollisionPlatformPlatform(Platform PlatformA, Platform PlatformB)
         {
