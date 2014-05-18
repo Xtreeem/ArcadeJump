@@ -13,7 +13,7 @@ namespace ArcadeJump
     static class SoundManager
     {
         #region Variable(s)
-        private static SoundEffect a, b, c;
+        private static SoundEffect PlayerHit, PlayerJump, PowerUp, PowerDown;
         #endregion
 
         #region Constructor (Tom)
@@ -22,25 +22,27 @@ namespace ArcadeJump
         #region Method(s)
         public static void InitializeSound(ContentManager Content)
         {
-            //a = Content.Load<SoundEffect>("NamnPåEffekt");
-            //b = Content.Load<SoundEffect>("NamnPåEffekt");
-            //c = Content.Load<SoundEffect>("NamnPåEffekt");
-
-            
+            PlayerHit = Content.Load<SoundEffect>("Sound/Hit");
+            PlayerJump = Content.Load<SoundEffect>("Sound/Jump");
+            PowerUp = Content.Load<SoundEffect>("Sound/Power-down");
+            PowerDown = Content.Load<SoundEffect>("Sound/Power-up");
         }
 
         public static void PlaySound(string Name)
         {
             switch (Name)
             { 
-                case "a" :
-                    a.Play();
+                case "PlayerJump" :
+                    PlayerJump.Play();
                     break;
-                case "b" :
-                    b.Play();
+                case "PlayerHit":
+                    PlayerHit.Play();
                     break;
-                case "c" :
-                    c.Play();
+                case "PowerUp":
+                    PowerUp.Play();
+                    break;
+                case "PowerDown":
+                    PowerDown.Play();
                     break;
             }
         }

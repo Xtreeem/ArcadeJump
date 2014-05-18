@@ -87,7 +87,6 @@ namespace ArcadeJump
                 AnimationJumping();
             SurfaceObject = null;
             velocity.Y -= JumpPower;
-            
         }
 
         #endregion
@@ -119,6 +118,19 @@ namespace ArcadeJump
 
                 if (NewState.IsKeyDown(Keys.W) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     Jump();
+
+
+                if (NewState.IsKeyDown(Keys.F1) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                    SoundManager.PlaySound("PlayerJump");
+                if (NewState.IsKeyDown(Keys.F2) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                    SoundManager.PlaySound("PlayerHit");
+                if (NewState.IsKeyDown(Keys.F3) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                    SoundManager.PlaySound("PowerDown");
+                if (NewState.IsKeyDown(Keys.F4) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                    SoundManager.PlaySound("PowerUp");
+
+
+
             }
 
             else
