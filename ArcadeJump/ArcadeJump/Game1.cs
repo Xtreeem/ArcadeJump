@@ -18,7 +18,7 @@ namespace ArcadeJump
         #region Variables
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        GUI GUI;
         Song BackgroundMusicOne;
         bool songStart = false;
 
@@ -41,7 +41,7 @@ namespace ArcadeJump
             PowerUps = new List<PowerUp>();
             Players = new List<Player>();
             Platforms = new List<Platform>();
-
+            GUI = new GUI(ref Players);
             graphics.PreferMultiSampling = true;
             graphics.PreferredBackBufferHeight = 1080;
             graphics.PreferredBackBufferWidth = 1920;
@@ -76,6 +76,7 @@ namespace ArcadeJump
                 songStart = true;
             }
             Manager.Update(gameTime);
+            GUI.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -83,6 +84,7 @@ namespace ArcadeJump
         {
             GraphicsDevice.Clear(Color.AntiqueWhite);
             Manager.DrawStuff(spriteBatch);
+            GUI.Draw(spriteBatch);
             base.Draw(gameTime);
         }
         #endregion

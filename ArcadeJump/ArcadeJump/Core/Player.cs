@@ -27,6 +27,9 @@ namespace ArcadeJump
         float SlowdownGround = 1.5f;
         float SpeedUpAir = 0.5f;
         float SpeedUpGround = 0.5f;
+        float MaxXSpeed = 10;
+
+
 
         KeyboardState OldState;
 
@@ -47,17 +50,10 @@ namespace ArcadeJump
             DrawRectangle = new Rectangle((int)position.X, (int)position.Y, 30, 70);
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
 
-
-
             velocity.Y = 0.001f;
             timePerFrame = 0.08;
             frameHeight = 110;
             frameWidht = 110;
-
-            //frameXOffset = 0;
-            //frameYOffset = 110;
-            //maxNrFrame = 7;
-            
         }
 
         public override void Update(GameTime GameTime)
@@ -104,22 +100,23 @@ namespace ArcadeJump
                 if (NewState.IsKeyDown(Keys.A))
                     velocity.X -= (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
                 else if (velocity.X < 0)
-                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -100, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -100, 0);
+                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -MaxXSpeed, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -MaxXSpeed, 0);
 
                 if (NewState.IsKeyDown(Keys.D))
                     velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
                 else if (velocity.X > 0)
-                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, 100) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, 100);
-
+                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, MaxXSpeed) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, MaxXSpeed);
+                
                 if (NewState.IsKeyDown(Keys.S))
                 {
                     DropDown();
                 }
-
                 if (NewState.IsKeyDown(Keys.W) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     Jump();
 
+                velocity.X = MathHelper.Clamp(velocity.X, -MaxXSpeed, MaxXSpeed);
 
+                //Debug Sound Test Buttons
                 if (NewState.IsKeyDown(Keys.F1) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     SoundManager.PlaySound("PlayerJump");
                 if (NewState.IsKeyDown(Keys.F2) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
@@ -128,9 +125,6 @@ namespace ArcadeJump
                     SoundManager.PlaySound("PowerDown");
                 if (NewState.IsKeyDown(Keys.F4) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     SoundManager.PlaySound("PowerUp");
-
-
-
             }
 
             else
