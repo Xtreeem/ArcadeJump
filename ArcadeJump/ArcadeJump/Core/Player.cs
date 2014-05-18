@@ -252,6 +252,32 @@ namespace ArcadeJump
             frameXOffset = 0;
             maxNrFrame = 7;
         }
+
+        private void AnimationFallingOver()
+        {
+            timePerFrame = 0.05;
+            frameYOffset = 440;
+            frameXOffset = 0;
+            maxNrFrame = 8;
+            AnimationTimer = maxNrFrame * timePerFrame;
+        }
+
+        private void AnimationGettingUp()
+        {
+            timePerFrame = 0.05;
+            frameYOffset = 550;
+            frameXOffset = 0;
+            maxNrFrame = 10;
+            AnimationTimer = maxNrFrame * timePerFrame;
+        }
+
+        private void AnimationLayingDown()
+        {
+            timePerFrame = 0.05;
+            frameYOffset = 440;
+            frameXOffset = 770;
+            maxNrFrame = 1;
+        }
         #endregion
 
 
