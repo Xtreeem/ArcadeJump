@@ -39,8 +39,8 @@ namespace ArcadeJump
             Players.Add(new Player(new Vector2(40, 0), Content, 1));
             Players.Add(new Player(new Vector2(1880, 0), Content, 2));
 
-
-            PowerUps.Add(new PowerUp(new Vector2(100, 100), Content, new Vector2(3, 0)));
+            PowerUps.Add(new PuStun(new Vector2(100, 100), Content, new Vector2(0, 0)));
+            //PowerUps.Add(new PowerUp(new Vector2(100, 100), Content, new Vector2(3, 0)));
 
         }
 
@@ -87,7 +87,7 @@ namespace ArcadeJump
             MovableGameObjects.AddRange(PowerUps);
         }
 
-
+        #region CollisionStuff
         /// <summary>
         /// Checks the Distance between two gameobjects to see if they are able to collide
         /// </summary>
@@ -109,7 +109,7 @@ namespace ArcadeJump
 
         private bool FirstCollisionCheck(GameObject ObjectA, GameObject ObjectB)
         {
-            if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < ObjectA.Hitbox.Width)
+            if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < ObjectA.Hitbox.Width + ObjectB.Hitbox.Width)
                 return true;
             else
                 return false;
@@ -196,12 +196,49 @@ namespace ArcadeJump
         }
 
         private void CollisionPlayerPowerUp(Player Player, PowerUp PowerUp)
-        { }
+        { 
+            //If the players punch box hits the powerup
+            if (Player.PunchingRectangle.Intersects(PowerUp.Hitbox))
+                if (Player.spriteEffect != SpriteEffects.FlipHorizontally)
+                {
+                    PowerUp.velocity = new Vector2(Player.velocity.X + 10, PowerUp.velocity.Y);
+                    PowerUp.Jump(15);
+                }
+                else
+                {
+                    PowerUp.velocity = new Vector2(-Player.velocity.X - 10, PowerUp.velocity.Y);
+                    PowerUp.Jump(15);
+                }
+            //If the players kick box hits the powerup
+            if (Player.KickingRectangle.Intersects(PowerUp.Hitbox))
+            {
+                Console.WriteLine("Kicked");
+                if (Player.spriteEffect != SpriteEffects.FlipHorizontally)
+                {
+                    PowerUp.velocity = new Vector2(Player.velocity.X + 10, PowerUp.velocity.Y);
+                    PowerUp.Jump(15);
+                }
+                else
+                {
+                    PowerUp.velocity = new Vector2(-Player.velocity.X - 10, PowerUp.velocity.Y);
+                    PowerUp.Jump(15);
+                }
+            }
+            //If the Players hitbox is hit rather than his kick/punchbox
+            if (Player.Hitbox.Intersects(PowerUp.Hitbox))
+            {
+                Console.WriteLine("ping");
+                PowerUp.PickedUp(ref Player);   
+            }
+        }
 
         private void CollisionPlatformPowerUp(Platform Platform, PowerUp PowerUp)
         {
             if (Platform.Hitbox.Intersects(PowerUp.Hitbox))
+            {
                 PowerUp.SurfaceObject = Platform;
+                PowerUp.velocity.Y = 0;
+            }
         }
 
         private void CollisionPlatformPlatform(Platform PlatformA, Platform PlatformB)
@@ -219,6 +256,8 @@ namespace ArcadeJump
         
         private void CollisionPowerUpPowerUp(PowerUp PowerUpA, PowerUp PowerUpB)
         { }
+        #endregion
+
 
 
         /// <summary>

@@ -44,7 +44,7 @@ namespace ArcadeJump
 
 
         
-        float KickingGrace = 2.5f;
+        float KickingGrace = 0.5f;
         float PunchingGrace = 0.5f;
         float KickCooldown = 0.8f;
         float PunchCooldown = 0.8f;
@@ -54,11 +54,6 @@ namespace ArcadeJump
         float SpeedUpGround = 0.5f;
         float MaxXSpeed = 10;
         float JumpPower = 20;
-
-
-        
-
-
         #endregion
 
         #region Public Methods
@@ -71,7 +66,7 @@ namespace ArcadeJump
             HitBoxXAdjustment = 7;
             HitBoxYAdjustment = 0;
             texture = Content.Load<Texture2D>("Textures/Test");
-            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/Test2");
+            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
             Hitbox = new Rectangle((int)position.X, (int)position.Y, 15, 70);
             DrawRectangle = new Rectangle((int)position.X, (int)position.Y, 30, 70);
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
@@ -112,6 +107,7 @@ namespace ArcadeJump
                 spritebatch.Draw(DebugTexture, PunchingRectangle, Color.Red);
             if (KickingRectangle != null)
                 spritebatch.Draw(DebugTexture, KickingRectangle, Color.Black);
+            //spritebatch.Draw(HitBoXDebugTexture, Hitbox, Color.Black);            //Debug Hitbox Display
         }
 
         public void GetStunned(double StunDuration)
@@ -124,11 +120,6 @@ namespace ArcadeJump
             }
         }
 
-        private void DidIDieCheck()
-        {
-            if (position.Y > 1100)
-                isDead = true;
-        }
 
         public void Jump()
         {
@@ -262,6 +253,12 @@ namespace ArcadeJump
             OldState = NewState;
             //Clamps the velocity to ensure no abnormalities
             velocity.X = MathHelper.Clamp(velocity.X, -MaxXSpeed, MaxXSpeed);
+        }
+
+        private void DidIDieCheck()
+        {
+            if (position.Y > 1100)
+                isDead = true;
         }
 
         private void BusyManager()

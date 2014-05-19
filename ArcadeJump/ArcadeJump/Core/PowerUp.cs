@@ -13,8 +13,8 @@ namespace ArcadeJump
         #region Variables
         bool LockedToPlatform = false;
 
-        int PowerUpWidth = 20;
-        int PowerUpHeight = 20;
+        protected int PowerUpWidth = 20;
+        protected int PowerUpHeight = 20;
         #endregion
 
         #region Public Methods
@@ -28,6 +28,7 @@ namespace ArcadeJump
             this.velocity = velocity;
             frameHeight = 131;
             frameWidht = 130;
+            origin = new Vector2(texture.Width / 2, texture.Height / 2);
         }
 
         public PowerUp(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
@@ -46,6 +47,7 @@ namespace ArcadeJump
 
             frameHeight = 131;
             frameWidht = 130;
+            origin = new Vector2(texture.Width / 2, texture.Height / 2);
         }
 
         public override void Update(GameTime gametime)
@@ -62,8 +64,21 @@ namespace ArcadeJump
             if (SurfaceObject != null)
                 if (SurfaceObject.isDead)
                     isDead = true;
+            DrawRectangle.Y += PowerUpHeight / 2;
+            DrawRectangle.X += PowerUpWidth / 2;
+        }
+
+        public void Jump(float KickPower)
+        {
+            SurfaceObject = null;
+            velocity.Y -= KickPower;
         }
         #endregion
+
+        public virtual void PickedUp(ref Player Player)
+        {
+
+        }
 
         #region Private Methods
         private float ForceNegativePosetive(float Velocity, bool Posetive)
