@@ -96,9 +96,12 @@ namespace ArcadeJump
 
         public void GetStunned(double StunDuration)
         {
-            Stunned = true;
-            this.StunDuration = StunDuration;
-            AnimationFallingOver();
+            if (!Stunned)
+            {
+                Stunned = true;
+                this.StunDuration = StunDuration;
+                AnimationFallingOver();
+            }
         }
 
         private void DidIDieCheck()
@@ -170,7 +173,9 @@ namespace ArcadeJump
                     Punch();
                     Console.WriteLine("punch");
                 }
-            }
+                if (NewState.IsKeyDown(Keys.F6) && !OldState.IsKeyDown(Keys.F6))
+                    AnimationKick();
+                }
 
             else
             {
@@ -391,6 +396,15 @@ namespace ArcadeJump
             maxNrFrame = 12;
             AnimationTimer = maxNrFrame * timePerFrame;
             PunchDelayTimer = AnimationTimer / 2;
+        }
+
+        private void AnimationKick()
+        {
+            timePerFrame = 0.05;
+            frameXOffset = 660;
+            frameYOffset = 110;
+            maxNrFrame = 9;
+            AnimationTimer = maxNrFrame * timePerFrame;
         }
         #endregion
         #endregion
