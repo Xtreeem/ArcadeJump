@@ -202,12 +202,12 @@ namespace ArcadeJump
                 if (Player.spriteEffect != SpriteEffects.FlipHorizontally)
                 {
                     PowerUp.velocity = new Vector2(Player.velocity.X + 10, PowerUp.velocity.Y);
-                    PowerUp.Jump(15);
+                    PowerUp.Kicked(Player.Kickpower);
                 }
                 else
                 {
                     PowerUp.velocity = new Vector2(-Player.velocity.X - 10, PowerUp.velocity.Y);
-                    PowerUp.Jump(15);
+                    PowerUp.Kicked(Player.Kickpower);
                 }
             //If the players kick box hits the powerup
             if (Player.KickingRectangle.Intersects(PowerUp.Hitbox))
@@ -216,12 +216,12 @@ namespace ArcadeJump
                 if (Player.spriteEffect != SpriteEffects.FlipHorizontally)
                 {
                     PowerUp.velocity = new Vector2(Player.velocity.X + 10, PowerUp.velocity.Y);
-                    PowerUp.Jump(15);
+                    PowerUp.Kicked(Player.Kickpower);
                 }
                 else
                 {
                     PowerUp.velocity = new Vector2(-Player.velocity.X - 10, PowerUp.velocity.Y);
-                    PowerUp.Jump(15);
+                    PowerUp.Kicked(Player.Kickpower);
                 }
             }
             //If the Players hitbox is hit rather than his kick/punchbox

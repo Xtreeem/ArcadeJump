@@ -43,7 +43,7 @@ namespace ArcadeJump
         public Rectangle KickingRectangle;
 
 
-        
+        public float Kickpower = 15;
         float KickingGrace = 0.5f;
         float PunchingGrace = 0.5f;
         float KickCooldown = 0.8f;

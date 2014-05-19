@@ -68,7 +68,7 @@ namespace ArcadeJump
             DrawRectangle.X += PowerUpWidth / 2;
         }
 
-        public void Jump(float KickPower)
+        public void Kicked(float KickPower)
         {
             SurfaceObject = null;
             velocity.Y -= KickPower;
