@@ -103,10 +103,10 @@ namespace ArcadeJump
         public override void Draw(SpriteBatch spritebatch)
         {
             base.Draw(spritebatch);
-            if (PunchingRectangle != null)
-                spritebatch.Draw(DebugTexture, PunchingRectangle, Color.Red);
-            if (KickingRectangle != null)
-                spritebatch.Draw(DebugTexture, KickingRectangle, Color.Black);
+            //if (PunchingRectangle != null)
+            //    spritebatch.Draw(DebugTexture, PunchingRectangle, Color.Red);
+            //if (KickingRectangle != null)
+            //    spritebatch.Draw(DebugTexture, KickingRectangle, Color.Black);
             //spritebatch.Draw(HitBoXDebugTexture, Hitbox, Color.Black);            //Debug Hitbox Display
         }
 
