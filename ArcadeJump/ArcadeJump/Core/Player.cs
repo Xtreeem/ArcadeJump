@@ -15,7 +15,7 @@ namespace ArcadeJump
         public int PlayerNumber;
         float JumpPower = 20;
         PowerUp CurrentPowerUp;
-        int Score;
+        public double Score;
         bool Stunned = false;
         double StunDuration;
         bool InvertedControls;
@@ -51,6 +51,7 @@ namespace ArcadeJump
         {
             this.PlayerNumber = PlayerNumber;
             position = pos;
+            Score = 0;
             HitBoxXAdjustment = 7;
             HitBoxYAdjustment = 0;
             texture = Content.Load<Texture2D>("Textures/Test");
@@ -83,6 +84,7 @@ namespace ArcadeJump
             
             base.Update(GameTime);
             PunchManager(GameTime);
+            Score += GameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public override void Draw(SpriteBatch spritebatch)
