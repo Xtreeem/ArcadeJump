@@ -183,7 +183,17 @@ namespace ArcadeJump
         }
 
         private void CollisionPlayerPlayer(Player PlayerA, Player PlayerB)
-        { }
+        { 
+            if (PlayerA.PunchingRectangle.Width != 0)
+            {
+                if( PlayerA.PunchingRectangle.Intersects(PlayerB.Hitbox))
+                {
+                    Console.WriteLine("Hit");
+                    PlayerB.IsHit((PlayerA as MovableGameObject));
+                }
+            }
+        
+        }
 
         private void CollisionPlayerPowerUp(Player Player, PowerUp PowerUp)
         { }

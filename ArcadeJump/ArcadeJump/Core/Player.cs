@@ -16,13 +16,22 @@ namespace ArcadeJump
         float JumpPower = 20;
         PowerUp CurrentPowerUp;
         int Score;
-        bool Stunned;
+        bool Stunned = false;
         double StunDuration;
         bool InvertedControls;
         double IdleTimer;
         double AnimationTimer;
         Vector2 LastVelocity;
 
+        bool Punching = false;
+        double PunchDelayTimer;
+        double PunchLifeTimer;
+        double PunchCooldownTimer;
+        public Rectangle PunchingRectangle;
+        
+
+        Texture2D DebugTexture;
+        float PunchCooldown = 0.8f;
         float SlowdownAir = 0.9f;
         float SlowdownGround = 1.5f;
         float SpeedUpAir = 0.5f;
@@ -33,7 +42,7 @@ namespace ArcadeJump
 
         KeyboardState OldState;
 
-        
+
         #endregion
 
         #region Public Methods
@@ -54,6 +63,8 @@ namespace ArcadeJump
             timePerFrame = 0.08;
             frameHeight = 110;
             frameWidht = 110;
+
+            DebugTexture = Content.Load<Texture2D>("Textures/plattform");
         }
 
         public override void Update(GameTime GameTime)
@@ -62,12 +73,30 @@ namespace ArcadeJump
                 color = Color.Red;
             else
                 color = Color.White;
-            Input();
+            if(!Stunned)
+                Input();
             AnimationManager(GameTime);
             DidIDieCheck();
-            
+
             LastVelocity = velocity;
+            TimerManager(GameTime);
+            
             base.Update(GameTime);
+            PunchManager(GameTime);
+        }
+
+        public override void Draw(SpriteBatch spritebatch)
+        {
+            base.Draw(spritebatch);
+            if (PunchingRectangle != null)
+                spritebatch.Draw(DebugTexture, PunchingRectangle, Color.Red);
+        }
+
+        public void GetStunned(double StunDuration)
+        {
+            Stunned = true;
+            this.StunDuration = StunDuration;
+            AnimationFallingOver();
         }
 
         private void DidIDieCheck()
@@ -84,10 +113,19 @@ namespace ArcadeJump
             SurfaceObject = null;
             velocity.Y -= JumpPower;
         }
-
         #endregion
 
         #region Private Methods
+        private void TimerManager(GameTime GameTime)
+        {
+            if (PunchCooldownTimer >= 0)
+                PunchCooldownTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+            if (StunDuration >= 0)
+                StunDuration -= GameTime.ElapsedGameTime.TotalSeconds;
+            else
+                Stunned = false;
+        }
+
         /// <summary>
         /// Function designed to Scan for the control inputs and move the player accordingly
         /// </summary>
@@ -106,7 +144,7 @@ namespace ArcadeJump
                     velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
                 else if (velocity.X > 0)
                     velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, MaxXSpeed) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, MaxXSpeed);
-                
+
                 if (NewState.IsKeyDown(Keys.S))
                 {
                     DropDown();
@@ -117,16 +155,19 @@ namespace ArcadeJump
                 velocity.X = MathHelper.Clamp(velocity.X, -MaxXSpeed, MaxXSpeed);
 
                 //Debug Sound Test Buttons
-                if (NewState.IsKeyDown(Keys.F1) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                if (NewState.IsKeyDown(Keys.F1) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F1))
                     SoundManager.PlaySound("PlayerJump");
-                if (NewState.IsKeyDown(Keys.F2) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                if (NewState.IsKeyDown(Keys.F2) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F2))
                     SoundManager.PlaySound("PlayerHit");
-                if (NewState.IsKeyDown(Keys.F3) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                if (NewState.IsKeyDown(Keys.F3) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F3))
                     SoundManager.PlaySound("PowerDown");
-                if (NewState.IsKeyDown(Keys.F4) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
+                if (NewState.IsKeyDown(Keys.F4) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F4))
                     SoundManager.PlaySound("PowerUp");
-                if (NewState.IsKeyDown(Keys.F5) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
-                    AnimationPunch();
+                if (NewState.IsKeyDown(Keys.F5) && !OldState.IsKeyDown(Keys.F5) && PunchCooldownTimer <= 0)
+                {
+                    Punch();
+                    Console.WriteLine("punch");
+                }
             }
 
             else
@@ -140,53 +181,102 @@ namespace ArcadeJump
                     velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
                 else if (velocity.X > 0)
                     velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, 100) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, 100);
-
+                
                 if (NewState.IsKeyDown(Keys.NumPad2))
-                {
                     DropDown();
-                }
-
+                
                 if (NewState.IsKeyDown(Keys.NumPad5) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
                     Jump();
             }
-
             OldState = NewState;
         }
 
+
+
+        #region PunchingStuff
+        private void PunchManager(GameTime GameTime)
+        {
+            if (Punching)
+            {
+                if (PunchDelayTimer <= 0)
+                {
+                    if (spriteEffect == SpriteEffects.None)
+                        PunchingRectangle = new Rectangle(Hitbox.Center.X, Hitbox.Top + Hitbox.Height / 4, DrawRectangle.Width / 2, 5);
+                    else
+                        PunchingRectangle = new Rectangle(Hitbox.Center.X - DrawRectangle.Width / 2, Hitbox.Top + Hitbox.Height / 4, DrawRectangle.Width / 2, 5);
+
+                    if (PunchLifeTimer >= 0)
+                        PunchLifeTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+                    else
+                        Punching = false;
+                }
+                else
+                    PunchDelayTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                PunchingRectangle.Width = 0;
+                PunchingRectangle.Height = 0;
+            }
+        }
+
+        private void Punch()
+        {
+            Punching = true;
+            AnimationPunch();
+            PunchCooldownTimer = PunchCooldown;
+            PunchLifeTimer = (maxNrFrame * timePerFrame) / 2 - ((maxNrFrame * timePerFrame) / 5);
+        }
+        #endregion
+
+        #region AnimationStuff
         private void AnimationManager(GameTime GameTime)
         {
-            if (AnimationTimer <= 0)
+            if (!Stunned)
             {
-                if (velocity == Vector2.Zero)
-                    IdleTimer += GameTime.ElapsedGameTime.TotalSeconds;
-                else IdleTimer = 0;
+                if (AnimationTimer <= 0)
+                {
+                    if (velocity == Vector2.Zero)
+                        IdleTimer += GameTime.ElapsedGameTime.TotalSeconds;
+                    else IdleTimer = 0;
 
-                if (velocity.Y < 0 && velocity.Y > 0 - (6 * Gravitation))
-                    AnimationLevelingOut();
-                else if (LastVelocity.Y != 0 && velocity.Y == 0)
-                    AnimationLanding();
-                else if (velocity.Y < 0)
-                    AnimationAscending();
-                else if (velocity.Y > 0)
-                    AnimationDescending();
-                else if (velocity.X != 0)
-                    AnimationRunning();
-                else if (IdleTimer > 3 && velocity == Vector2.Zero)
-                {
-                    AnimationProlongedIdle();
-                    if (currentFrame + 1 > maxNrFrame)
-                        IdleTimer = 0;
+                    if (velocity.Y < 0 && velocity.Y > 0 - (6 * Gravitation))
+                        AnimationLevelingOut();
+                    else if (LastVelocity.Y != 0 && velocity.Y == 0)
+                        AnimationLanding();
+                    else if (velocity.Y < 0)
+                        AnimationAscending();
+                    else if (velocity.Y > 0)
+                        AnimationDescending();
+                    else if (velocity.X != 0)
+                        AnimationRunning();
+                    else if (IdleTimer > 3 && velocity == Vector2.Zero)
+                    {
+                        AnimationProlongedIdle();
+                        if (currentFrame + 1 > maxNrFrame)
+                            IdleTimer = 0;
+                    }
+                    else
+                        AnimationIdle();
                 }
-                else
-                    AnimationIdle();
+
             }
-                if (AnimationTimer > 0)
-                    AnimationTimer -= GameTime.ElapsedGameTime.TotalSeconds;
-                else
+            else if (AnimationTimer <= 0)
+            {
+                if (StunDuration <= 0.20)
                 {
-                    AnimationTimer = 0;
+                    AnimationGettingUp();
                 }
-                
+                else
+                    AnimationLayingDown();
+            }
+
+            if (AnimationTimer > 0)
+                AnimationTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+            else
+            {
+                AnimationTimer = 0;
+            }
         }
         #region Animations
         private void AnimationClearAnimation()
@@ -225,6 +315,7 @@ namespace ArcadeJump
             frameXOffset = 0;
             frameYOffset = 220;
             maxNrFrame = 3;
+            currentFrame = 0;
             AnimationTimer = maxNrFrame * timePerFrame;
         }
 
@@ -235,6 +326,7 @@ namespace ArcadeJump
             frameXOffset = 880;
             frameYOffset = 220;
             maxNrFrame = 3;
+            currentFrame = 0;
             AnimationTimer = maxNrFrame * timePerFrame;
         }
 
@@ -267,15 +359,17 @@ namespace ArcadeJump
             frameYOffset = 440;
             frameXOffset = 0;
             maxNrFrame = 8;
+            currentFrame = 0;
             AnimationTimer = maxNrFrame * timePerFrame;
         }
 
         private void AnimationGettingUp()
         {
-            timePerFrame = 0.1;
+            timePerFrame = 0.05;
             frameYOffset = 550;
             frameXOffset = 0;
             maxNrFrame = 10;
+            currentFrame = 0;
             AnimationTimer = maxNrFrame * timePerFrame;
         }
 
@@ -293,13 +387,11 @@ namespace ArcadeJump
             frameYOffset = 660;
             frameXOffset = 0;
             maxNrFrame = 12;
-            AnimationTimer = timePerFrame * maxNrFrame;
+            AnimationTimer = maxNrFrame * timePerFrame;
+            PunchDelayTimer = AnimationTimer / 2;
         }
         #endregion
-
-
-
-
+        #endregion
         #endregion
     }
 }

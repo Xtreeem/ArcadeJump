@@ -22,13 +22,13 @@ namespace ArcadeJump
             : base(pos)
         { }
 
-        // thought that player class will call method when pressing buttons. and then it will move 
-        // powerups will have call move function with a bool that is always true 
-        // plattforms will call move but will not call gravity 
-
-        public void IsHit()
+        public void IsHit(MovableGameObject Assailant)
         {
-
+            if (Assailant is Player)
+                if (this is Player)
+                    (this as Player).GetStunned(5);
+                else if (Assailant is PowerUp)
+                { }
         }
 
         public override void Update(GameTime gametime)
