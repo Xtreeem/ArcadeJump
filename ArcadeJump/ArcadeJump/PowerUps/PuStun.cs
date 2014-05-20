@@ -26,6 +26,13 @@ namespace ArcadeJump
             HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
         }
 
+        public PuStun(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
+            : base(SurfaceObject, Content, velocity, LockedToPlatform)
+        {
+            texture = Content.Load<Texture2D>("Textures/Rock");
+            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
+        }
+
         public override void Draw(SpriteBatch spritebatch)
         {
             base.Draw(spritebatch);
@@ -56,7 +63,10 @@ namespace ArcadeJump
                 float Distance = Vector2.Distance(position, OldPosition);
                 float Circumferance = 2 * MathHelper.Pi * (DrawRectangle.Width / 2);
                 float rot = Distance / Circumferance;
-                return (float)(Math.PI * 2) * rot;
+                if (spriteEffect == SpriteEffects.None)
+                    return (float)(Math.PI * 2) * rot;
+                else
+                    return (float)(-(Math.PI *2) *rot);
             }
             else return 0;
         }

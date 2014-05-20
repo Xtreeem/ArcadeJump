@@ -13,8 +13,8 @@ namespace ArcadeJump
         #region Variables
         bool LockedToPlatform = false;
 
-        protected int PowerUpWidth = 20;
-        protected int PowerUpHeight = 20;
+        protected int PowerUpWidth = 45;
+        protected int PowerUpHeight = 45;
         #endregion
 
         #region Public Methods

@@ -34,7 +34,7 @@ namespace ArcadeJump
             this.Platforms = Platforms;
             MovableGameObjects = new List<MovableGameObject>();
             Rand = new Random();
-            LevelManager = new LevelManager(ref Platforms, Content);
+            LevelManager = new LevelManager(ref PowerUps, ref Platforms, Content);
             UpdateGameObjectList();
             Players.Add(new Player(new Vector2(40, 0), Content, 1));
             Players.Add(new Player(new Vector2(1880, 0), Content, 2));
@@ -183,13 +183,22 @@ namespace ArcadeJump
         }
 
         private void CollisionPlayerPlayer(Player PlayerA, Player PlayerB)
-        { 
+        {
             if (PlayerA.PunchingRectangle.Width != 0)
             {
-                if( PlayerA.PunchingRectangle.Intersects(PlayerB.Hitbox))
+                if (PlayerA.PunchingRectangle.Intersects(PlayerB.Hitbox))
                 {
                     Console.WriteLine("Hit");
                     PlayerB.IsHit((PlayerA as MovableGameObject));
+                }
+            }
+            
+            if (PlayerB.PunchingRectangle.Width != 0)
+            {
+                if (PlayerB.PunchingRectangle.Intersects(PlayerA.Hitbox))
+                {
+                    Console.WriteLine("Hit");
+                    PlayerA.IsHit((PlayerB as MovableGameObject));
                 }
             }
         

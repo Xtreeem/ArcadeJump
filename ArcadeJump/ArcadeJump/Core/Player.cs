@@ -128,6 +128,7 @@ namespace ArcadeJump
                 AnimationJumping();
             SurfaceObject = null;
             velocity.Y -= JumpPower;
+
         }
         #endregion
 
@@ -210,7 +211,7 @@ namespace ArcadeJump
                     SoundManager.PlaySound("PowerDown");
                 if (NewState.IsKeyDown(Keys.F4) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F4))
                     SoundManager.PlaySound("PowerUp");
-                if (NewState.IsKeyDown(Keys.F7) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F7))
+                if (NewState.IsKeyDown(Keys.F7) && !OldState.IsKeyDown(Keys.F7))
                 {
                     if (InvertedControls)
                         InvertedControls = false;
