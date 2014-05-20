@@ -11,13 +11,14 @@ namespace ArcadeJump
     class LevelManager
     {
         #region Variables
-        Platform LastPlatform;
+        public Platform LastPlatform;
 
 
         float MaximumYDistanceAllowed = 200f;
+        float MinmumPlatformDistance = 20;
         int NumberOfColums = 5;
         int IntendedGameLength = 600;
-        private int SpawnYInvetervall = 60;
+        private int SpawnYInvetervall = 200;
         private int NumberOfPlatforms = 20;
         private int PlatformWidth = 500;
         
@@ -37,8 +38,9 @@ namespace ArcadeJump
             this.Platforms = Platforms;
             ColumWidth = 1920 / NumberOfColums;
             Random = new Random();
-            CreateNewPlatform();
             InitateLevel();
+            CreateNewPlatform();
+            
         }
 
         public void Update(double ElapsedGameTime)
@@ -51,6 +53,7 @@ namespace ArcadeJump
             Platform tempPlatform = new Platform(GetPosition(), Content, WidthAdjustment, PlatformWidth);
             Platforms.Add(tempPlatform);
             LastPlatform = tempPlatform;
+            
         }
 
         #endregion
@@ -60,7 +63,10 @@ namespace ArcadeJump
         {
             Vector2 tempPosition;
             int tempColumNumber = Random.Next(0, NumberOfColums);
-            tempPosition.Y = Random.Next(-100-SpawnYInvetervall, -100);
+            //tempPosition.Y = Random.Next(-100 - SpawnYInvetervall, -100);
+            tempPosition.Y = LastPlatform.position.Y;
+            tempPosition.Y -= (MinmumPlatformDistance + Random.Next(0, SpawnYInvetervall));
+            tempPosition.Y = MathHelper.Clamp(tempPosition.Y, LastPlatform.position.Y - MaximumYDistanceAllowed, LastPlatform.position.Y - MinmumPlatformDistance);
             tempPosition.X = (tempColumNumber * ColumWidth) + Random.Next(-ColumWidth / 2, ColumWidth / 2);
             return tempPosition;
         }
