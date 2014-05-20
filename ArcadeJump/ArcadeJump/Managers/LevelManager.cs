@@ -11,12 +11,16 @@ namespace ArcadeJump
     class LevelManager
     {
         #region Variables
+        Platform LastPlatform;
+
+
+        float MaximumYDistanceAllowed = 200f;
         int NumberOfColums = 5;
         int IntendedGameLength = 600;
-        private int SpawnYInvetervall = 200;
+        private int SpawnYInvetervall = 60;
         private int NumberOfPlatforms = 20;
         private int PlatformWidth = 500;
-
+        
 
 
         int ColumWidth;
@@ -44,7 +48,9 @@ namespace ArcadeJump
 
         public void CreateNewPlatform()
         {
-            Platforms.Add(new Platform(GetPosition(), Content, WidthAdjustment, PlatformWidth));
+            Platform tempPlatform = new Platform(GetPosition(), Content, WidthAdjustment, PlatformWidth);
+            Platforms.Add(tempPlatform);
+            LastPlatform = tempPlatform;
         }
 
         #endregion
@@ -61,9 +67,9 @@ namespace ArcadeJump
 
         private void InitateLevel()
         {
-            Platforms.Add(new Platform(new Vector2(20, 800), Content, WidthAdjustment, PlatformWidth));
-            Platforms.Add(new Platform(new Vector2(1860, 800), Content, WidthAdjustment, PlatformWidth));
-
+            Platforms.Add(new Platform(new Vector2(20, 800), Content, WidthAdjustment, PlatformWidth, true));
+            Platforms.Add(new Platform(new Vector2(1860, 800), Content, WidthAdjustment, PlatformWidth, true));
+            LastPlatform = Platforms[0];
             Vector2 tempPosition;
 
             for (int i = 0; i < NumberOfPlatforms; i++)

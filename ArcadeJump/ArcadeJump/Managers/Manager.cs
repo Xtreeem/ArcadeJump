@@ -247,10 +247,12 @@ namespace ArcadeJump
             {
                 if (Rand.Next(0, 2) > 0)
                 {
-                    PlatformA.isDead = true;
+                    if (!PlatformA.Indestructable)
+                        PlatformA.isDead = true;
                 }
                 else
-                    PlatformB.isDead = true;
+                    if (!PlatformB.Indestructable)
+                        PlatformB.isDead = true;
             }
         }
         

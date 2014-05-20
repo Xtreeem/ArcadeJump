@@ -16,6 +16,7 @@ namespace ArcadeJump
         private int MinimumWidth = 10;
         //private int StartingWidth = 100;
         private int PlatformHeight = 15;
+        public bool Indestructable;
         #endregion
 
         #region Public Methods
@@ -25,10 +26,24 @@ namespace ArcadeJump
             velocity = new Vector2(0, 1);
             position = pos;
             texture = Content.Load<Texture2D>("Textures/plattform");
-            Hitbox =        new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
+            Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
             DrawRectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
             SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);
             color = Color.Black;
+            Indestructable = false;
+        }
+
+        public Platform(Vector2 pos, ContentManager Content, double WidthAdjustment, int StartingWidth, bool Indestructable)
+            : base(pos, Content)
+        {
+            velocity = new Vector2(0, 1);
+            position = pos;
+            texture = Content.Load<Texture2D>("Textures/plattform");
+            Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
+            DrawRectangle = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
+            SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);
+            color = Color.Black;
+            this.Indestructable = Indestructable;
         }
 
 
