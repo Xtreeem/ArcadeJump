@@ -329,6 +329,12 @@ namespace ArcadeJump
 
                 }
             }
+            if (Stunned)
+            {
+                PunchingRectangle.Width = 0;
+                PunchingRectangle.Height = 0;
+                Punching = false;
+            }
         }
 
         private void Punch()
@@ -361,6 +367,7 @@ namespace ArcadeJump
                 else
                     KickDelayTimer -= GameTime.ElapsedGameTime.TotalSeconds;
             }
+            else
             {
                 if (KickingGraceTimer <= 0)
                 {
@@ -375,6 +382,12 @@ namespace ArcadeJump
                     else
                         KickingRectangle = new Rectangle(Hitbox.Center.X - DrawRectangle.Width / 2, Hitbox.Bottom - Hitbox.Height / 6, DrawRectangle.Width / 2, 5);
                 }
+            }
+            if (Stunned)
+            {
+                PunchingRectangle.Width = 0;
+                PunchingRectangle.Height = 0;
+                Punching = false;
             }
         }
 
