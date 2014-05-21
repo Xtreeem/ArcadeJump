@@ -24,7 +24,7 @@
   <Class Name="ArcadeJump.Platform" Collapsed="true">
     <Position X="5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAgBAAAABAAAAAAAAAAgCAAAAAABAAAA=</HashCode>
+      <HashCode>AAUAAAAAAAAAAgBAAAABAAAAAAAAAAgCAAAAAABAAAA=</HashCode>
       <FileName>Core\Platform.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -52,7 +52,7 @@
   <Class Name="ArcadeJump.GUI" Collapsed="true">
     <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>MAQAAAABCgACAgAAAAAAAAAAAAAgAAAAAAAAAAACAAA=</HashCode>
       <FileName>GUI.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -66,7 +66,7 @@
   <Class Name="ArcadeJump.Manager" Collapsed="true">
     <Position X="7.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>gCUAEAAAIgBACAAAAAEAgAAAKAAgAAAgiACgAICEIAA=</HashCode>
+      <HashCode>gCVAEAAAIgBACAAAAAEAgAAAKAAgAAAgiACgAICUIAA=</HashCode>
       <FileName>Managers\Manager.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -77,18 +77,12 @@
       <FileName>Managers\SoundManager.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="ArcadeJump.PuStun" Collapsed="true">
+  <Class Name="ArcadeJump.PuSuperJump" Collapsed="true">
     <Position X="2.75" Y="6.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AARAAAAAAAAAAgABAAAAAAACAAEAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>PowerUps\PuStun.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="ArcadeJump.PuSuperJump" Collapsed="true">
-    <Position X="11" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AARAAAAAAAAAAgABAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PowerUps\PuSuperJump.cs</FileName>
+      <NewMemberFileName>PowerUps\PuStun.cs</NewMemberFileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ArcadeJump.Program" Collapsed="true">

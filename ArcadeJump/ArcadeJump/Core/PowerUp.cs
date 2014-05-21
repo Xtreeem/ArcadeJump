@@ -11,16 +11,20 @@ namespace ArcadeJump
     class PowerUp : AdvancedGameObject
     {
         #region Variables
+        protected bool Dummy = false;
         protected bool LockedToPlatform = false;
-
+        public String PowerUpName;
+        public bool UsableWhileStunned = false;
         protected int PowerUpWidth = 45;
         protected int PowerUpHeight = 45;
+        
         #endregion
 
         #region Public Methods
         public PowerUp(Vector2 position, ContentManager Content, Vector2 velocity)
             : base(position, Content)
         {
+            color = Color.Black;
             this.position = position;
             Hitbox = new Rectangle((int)position.X, (int)position.Y, PowerUpWidth, PowerUpHeight);
             DrawRectangle = Hitbox;
@@ -34,7 +38,7 @@ namespace ArcadeJump
         public PowerUp(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
             : base(new Vector2(0, 0), Content)
         {
-
+            color = Color.Black;
             position = new Vector2(SurfaceObject.SurfaceRectangle.Center.X, SurfaceObject.SurfaceRectangle.Top - PowerUpHeight);
             Hitbox = new Rectangle((int)position.X, (int)position.Y, PowerUpWidth, PowerUpHeight);
             DrawRectangle = Hitbox;
@@ -78,10 +82,22 @@ namespace ArcadeJump
 
         public virtual void PickedUp(ref Player Player)
         {
-
+            if (Player.CurrentPowerUp != null)
+                this.isDead = true;
         }
 
         #region Private Methods
+
+        protected void MakePickedUp()
+        {
+
+            Dummy = true;
+            Hitbox.Width = 0;
+            Hitbox.Height = 0;
+            DrawRectangle.X = 10;
+            DrawRectangle.Y = 10;
+        }
+
         private float ForceNegativePosetive(float Velocity, bool Posetive)
         {
             if (Posetive)
