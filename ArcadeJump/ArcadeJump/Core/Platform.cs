@@ -14,7 +14,7 @@ namespace ArcadeJump
         public Rectangle SurfaceRectangle;
         private double SurfaceHeight = 10;
         private int MinimumWidth = 10;
-        //private int StartingWidth = 100;
+        private float StartingVelocity = 1;
         private int PlatformHeight = 15;
         public bool Indestructable;
         #endregion
@@ -23,7 +23,7 @@ namespace ArcadeJump
         public Platform(Vector2 pos, ContentManager Content, double WidthAdjustment, int StartingWidth)
             : base(pos, Content)
         {
-            velocity = new Vector2(0, 1);
+            velocity = new Vector2(0, StartingVelocity);
             position = pos;
             texture = Content.Load<Texture2D>("Textures/plattform");
             Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
@@ -36,7 +36,7 @@ namespace ArcadeJump
         public Platform(Vector2 pos, ContentManager Content, double WidthAdjustment, int StartingWidth, bool Indestructable)
             : base(pos, Content)
         {
-            velocity = new Vector2(0, 1);
+            velocity = new Vector2(0, StartingVelocity);
             position = pos;
             texture = Content.Load<Texture2D>("Textures/plattform");
             Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
@@ -47,9 +47,9 @@ namespace ArcadeJump
         }
 
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, float SpeedModifier)
         {
-
+            velocity.Y = StartingVelocity + SpeedModifier;
             base.Update(gameTime);
             
             SurfaceRectangle = new Rectangle(Hitbox.X, Hitbox.Y, Hitbox.Width, (int)SurfaceHeight);

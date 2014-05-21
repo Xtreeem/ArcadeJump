@@ -12,7 +12,6 @@ namespace ArcadeJump
     {
         #region Variables
         Vector2 OldPosition;
-        float rot;
 
 
         double StunDuration = 3;
@@ -50,7 +49,8 @@ namespace ArcadeJump
         public override void PickedUp(ref Player Player)
         {
             Player.GetStunned(StunDuration);
-            this.isDead = true;
+            LockedToPlatform = false;
+            //this.isDead = true;
         }
 
         #endregion

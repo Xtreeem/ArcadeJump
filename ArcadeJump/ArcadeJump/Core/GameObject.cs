@@ -30,6 +30,9 @@ namespace ArcadeJump
         
         }
 
+        public virtual void Update(GameTime gameTime, float Speedmodification)
+        { }
+
         public virtual void Draw(SpriteBatch spritebatch)
         {
             spritebatch.Draw(texture, Hitbox, null, color, rotation, origin, spriteEffect, 0);
