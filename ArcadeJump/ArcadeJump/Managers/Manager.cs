@@ -19,7 +19,7 @@ namespace ArcadeJump
         ContentManager Content;
         float SpeedModifier;
         float maxSpeedmodifier = 2;
-        double ElapsedGameTime = 0;
+        public double ElapsedGameTime = 0;
         LevelManager LevelManager;
         List<Platform> Platforms;
         List<Player> Players;
