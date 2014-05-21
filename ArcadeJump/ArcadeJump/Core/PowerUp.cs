@@ -11,7 +11,7 @@ namespace ArcadeJump
     class PowerUp : AdvancedGameObject
     {
         #region Variables
-        bool LockedToPlatform = false;
+        protected bool LockedToPlatform = false;
 
         protected int PowerUpWidth = 45;
         protected int PowerUpHeight = 45;
@@ -70,6 +70,7 @@ namespace ArcadeJump
 
         public void Kicked(float KickPower)
         {
+            LockedToPlatform = false;
             SurfaceObject = null;
             velocity.Y -= KickPower;
         }

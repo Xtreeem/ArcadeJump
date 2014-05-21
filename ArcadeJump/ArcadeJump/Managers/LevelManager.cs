@@ -14,11 +14,11 @@ namespace ArcadeJump
         public Platform LastPlatform;
 
 
-        float MaximumYDistanceAllowed = 150f;
-        float MinimumPlatformYDistance = 40;
-        float MinimumPlatformXDistance = 250;
-        int NumberOfColums = 10;
-        int IntendedGameLength = 300;
+        private float MaximumYDistanceAllowed = 150f;
+        private float MinimumPlatformYDistance = 40;
+        private float MinimumPlatformXDistance = 250;
+        private int NumberOfColums = 10;
+        public int IntendedGameLength = 300;
         private int MaxXDistance = 510;
         private int SpawnYInvetervall = 150;
         private int NumberOfPlatforms = 20;
@@ -65,9 +65,9 @@ namespace ArcadeJump
                 tempLocked = false;
             Vector2 tempVelocity;
             if (Random.Next(0, 101) < 50)
-               tempVelocity = new Vector2(Random.Next(-2, 0), 0);
+               tempVelocity = new Vector2(Random.Next(-2, -1), 0);
             else
-                tempVelocity = new Vector2(Random.Next(0,2), 0);
+                tempVelocity = new Vector2(Random.Next(1,3), 0);
 
             if (Random.Next(0,101) < ChanceToSpawnPowerup)
             {
@@ -133,7 +133,7 @@ namespace ArcadeJump
 
         private void InitateLevel()
         {
-            Platforms.Add(new Platform(new Vector2(1080, 980), Content, WidthAdjustment, PlatformWidth, true));
+            Platforms.Add(new Platform(new Vector2(0, 1920), Content, WidthAdjustment, PlatformWidth, true));
             Platforms.Add(new Platform(new Vector2(20, 800), Content, WidthAdjustment, PlatformWidth, true));
             Platforms.Add(new Platform(new Vector2(1860, 800), Content, WidthAdjustment, PlatformWidth, true));
             LastPlatform = Platforms[0];

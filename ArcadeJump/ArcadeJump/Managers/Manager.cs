@@ -17,6 +17,8 @@ namespace ArcadeJump
         #region Variables
         Random Rand;
         ContentManager Content;
+        float SpeedModifier;
+        float maxSpeedmodifier = 2;
         double ElapsedGameTime = 0;
         LevelManager LevelManager;
         List<Platform> Platforms;
@@ -310,12 +312,13 @@ namespace ArcadeJump
         private void UpdateStuff(GameTime GameTime)
         {
             ElapsedGameTime += GameTime.ElapsedGameTime.TotalSeconds;
+            SpeedModifier = (float)((maxSpeedmodifier / LevelManager.IntendedGameLength) * ElapsedGameTime); 
             LevelManager.Update(ElapsedGameTime);
 
 
             foreach (Platform p in Platforms)
             {
-                p.Update(GameTime);
+                p.Update(GameTime, SpeedModifier);
             }
 
             foreach (Player p in Players)
