@@ -23,7 +23,7 @@ namespace ArcadeJump
         public Platform(Vector2 pos, ContentManager Content, double WidthAdjustment, int StartingWidth)
             : base(pos, Content)
         {
-            velocity = new Vector2(0, 1);
+            velocity = new Vector2(0, 2);
             position = pos;
             texture = Content.Load<Texture2D>("Textures/plattform");
             Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);
@@ -36,7 +36,7 @@ namespace ArcadeJump
         public Platform(Vector2 pos, ContentManager Content, double WidthAdjustment, int StartingWidth, bool Indestructable)
             : base(pos, Content)
         {
-            velocity = new Vector2(0, 1);
+            velocity = new Vector2(0, 2);
             position = pos;
             texture = Content.Load<Texture2D>("Textures/plattform");
             Hitbox = new Rectangle((int)pos.X, (int)pos.Y, (int)(StartingWidth - (StartingWidth * WidthAdjustment)) + MinimumWidth, PlatformHeight);

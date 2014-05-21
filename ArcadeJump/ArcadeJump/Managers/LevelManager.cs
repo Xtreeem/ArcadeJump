@@ -133,7 +133,7 @@ namespace ArcadeJump
 
         private void InitateLevel()
         {
-            //Platforms.Add(new Platform(new Vector2(0, 0), Content, WidthAdjustment, PlatformWidth, true));
+            Platforms.Add(new Platform(new Vector2(1080, 980), Content, WidthAdjustment, PlatformWidth, true));
             Platforms.Add(new Platform(new Vector2(20, 800), Content, WidthAdjustment, PlatformWidth, true));
             Platforms.Add(new Platform(new Vector2(1860, 800), Content, WidthAdjustment, PlatformWidth, true));
             LastPlatform = Platforms[0];
@@ -143,10 +143,10 @@ namespace ArcadeJump
             {
 
                 CreateNewPlatform();
-                int tempColumNumber = Random.Next(0, NumberOfColums);
-                tempPosition.Y = Random.Next(0, 1080);
-                tempPosition.X = (tempColumNumber * ColumWidth) + Random.Next(-ColumWidth / 2, ColumWidth / 2);
-                Platforms.Add(new Platform(tempPosition, Content, WidthAdjustment, PlatformWidth));
+                //int tempColumNumber = Random.Next(0, NumberOfColums);
+                //tempPosition.Y = Random.Next(0, 1080);
+                //tempPosition.X = (tempColumNumber * ColumWidth) + Random.Next(-ColumWidth / 2, ColumWidth / 2);
+                //Platforms.Add(new Platform(tempPosition, Content, WidthAdjustment, PlatformWidth));
             }
         }
         #endregion

@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ArcadeJump.AdvancedGameObject" Collapsed="true">
+    <Position X="1.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAACAAmAAIAwgAEAAAIAQCAAIgQBACQgAAAAAABAA=</HashCode>
+      <FileName>Core\AdvancedGameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.GameObject" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQAAAAAAAAEAgAAACCAIAACABAAAgCAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.MovableGameObject" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAQAAAAAAAAAAAQAAAAAAAAAAQAAAQCAAAAAAA=</HashCode>
+      <FileName>Core\MovableGameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.Platform" Collapsed="true">
+    <Position X="5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgBAAAABAAAAAAAAAAgCAAAAAABAAAA=</HashCode>
+      <FileName>Core\Platform.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.Player" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQREIABBDgODEgsIAzo9BCAKFgggASAACBUcCTCAAMg=</HashCode>
+      <FileName>Core\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.PowerUp" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEUAAAAAAQAAAAAAAAgAAAAAAAEAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Core\PowerUp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.Game1" Collapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEEAAAAAAAwAAAAAAAAAABAAgBAgAiACAAgAAAAQ=</HashCode>
+      <FileName>Game1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.GUI" Collapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GUI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.LevelManager" Collapsed="true">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAAoAqRAgQAAAAAAACEAAQKABgAACAGAABEAAAQ=</HashCode>
+      <FileName>Managers\LevelManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.Manager" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gCUAEAAAIgBACAAAAAEAgAAAKAAgAAAgiACgAICEIAA=</HashCode>
+      <FileName>Managers\Manager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.SoundManager" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAABAAAAAAQAAABAAAgAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Managers\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.PuStun" Collapsed="true">
+    <Position X="2.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAAAAAAAAgABAAAAAAACAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PowerUps\PuStun.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.PuSuperJump" Collapsed="true">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PowerUps\PuSuperJump.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.Program" Collapsed="true">
+    <Position X="9.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ArcadeJump.Features.BouncyPlatform" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Platforms\BouncyPlatform.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
