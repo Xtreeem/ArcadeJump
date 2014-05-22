@@ -82,6 +82,7 @@
     <Compile Include="Core\Platform.cs" />
     <Compile Include="Core\Player.cs" />
     <Compile Include="Core\PowerUp.cs" />
+    <Compile Include="PowerUps\PuPoints.cs" />
     <Compile Include="PowerUps\PuStun.cs" />
     <Compile Include="PowerUps\PuSuperJump.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
