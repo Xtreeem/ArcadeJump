@@ -11,10 +11,6 @@ namespace ArcadeJump
     class PuSuperJump : PowerUp
     {
         #region Variables
-        Vector2 OldPosition;
-         
-
-        double StunDuration = 3;
         #endregion
 
         #region Public Variables
@@ -44,6 +40,7 @@ namespace ArcadeJump
 
         public override void Draw(SpriteBatch spritebatch)
         {
+            if (!Dummy)
             base.Draw(spritebatch);
             //spritebatch.Draw(HitBoXDebugTexture, Hitbox, Color.Red);                  //debug hitbox display
         }
@@ -71,20 +68,6 @@ namespace ArcadeJump
         #endregion
 
         #region Private Variables
-        private float CalculateRotation()
-        {
-            if (Vector2.Distance(position, OldPosition) > 1)
-            {
-                float Distance = Vector2.Distance(position, OldPosition);
-                float Circumferance = 2 * MathHelper.Pi * (DrawRectangle.Width / 2);
-                float rot = Distance / Circumferance;
-                if (spriteEffect == SpriteEffects.None)
-                    return (float)(Math.PI * 2) * rot;
-                else
-                    return (float)(-(Math.PI * 2) * rot);
-            }
-            else return 0;
-        }
 
         #endregion
 

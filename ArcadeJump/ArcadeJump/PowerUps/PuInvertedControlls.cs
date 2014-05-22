@@ -8,37 +8,34 @@ using System.Text;
 
 namespace ArcadeJump
 {
-    class PuPoints : PowerUp
+    class PuInvertedControlls : PowerUp
     {
         #region Variables
 
-
-        double ScoreValue = 50;
+        double InvertionDuration = 3;
         #endregion
 
         #region Public Variables
-        public PuPoints(Vector2 position, ContentManager Content, Vector2 velocity)
+        public PuInvertedControlls(Vector2 position, ContentManager Content, Vector2 velocity)
             : base(position, Content, velocity)
         {
-            velocity = Vector2.Zero;
-            texture = Content.Load<Texture2D>("Textures/Points");
-            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
+            texture = Content.Load<Texture2D>("Textures/Inverted");
+            color = Color.Purple;
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
-            color = Color.Cyan;
+            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
         }
 
-        public PuPoints(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
+        public PuInvertedControlls(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
             : base(SurfaceObject, Content, velocity, LockedToPlatform)
         {
-            velocity = Vector2.Zero;
-            texture = Content.Load<Texture2D>("Textures/Points");
+            texture = Content.Load<Texture2D>("Textures/Inverted");
+            color = Color.Purple;
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
             HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
-            color = Color.Cyan;
         }
 
         public override void Draw(SpriteBatch spritebatch)
@@ -50,12 +47,11 @@ namespace ArcadeJump
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-
         }
 
         public override void PickedUp(ref Player Player)
         {
-            Player.Score += ScoreValue;
+            Player.GetInverted(InvertionDuration);
             this.isDead = true;
         }
 

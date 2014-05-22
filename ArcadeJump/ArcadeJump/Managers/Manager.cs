@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace ArcadeJump
     {
         #region Variables
         Random Rand;
+        KeyboardState OldState;
         ContentManager Content;
         float SpeedModifier;
         float maxSpeedmodifier = 2;
@@ -38,8 +40,7 @@ namespace ArcadeJump
             Rand = new Random();
             LevelManager = new LevelManager(ref PowerUps, ref Platforms, Content);
             UpdateGameObjectList();
-            Players.Add(new Player(new Vector2(40, 0), Content, 1));
-            Players.Add(new Player(new Vector2(1880, 0), Content, 2));
+
 
             PowerUps.Add(new PuStun(new Vector2(100, 100), Content, new Vector2(0, 0)));
             //PowerUps.Add(new PowerUp(new Vector2(100, 100), Content, new Vector2(3, 0)));
@@ -51,6 +52,7 @@ namespace ArcadeJump
             RemoveDeadStuff();
             UpdateStuff(GameTime);
             CollisionManager();
+            Input();
         }
 
 
@@ -88,6 +90,41 @@ namespace ArcadeJump
             MovableGameObjects.AddRange(Players);
             MovableGameObjects.AddRange(PowerUps);
         }
+
+        private void SpawnPlayer(int PlayerIndex)
+        {
+            bool ValidSpawn = true;
+
+            foreach (Player P in Players)
+            {
+                if(P.PlayerNumber == PlayerIndex)
+                    ValidSpawn = false;
+            }
+
+            if (ValidSpawn)
+            {
+                for (int i = 0; i < Players.Count; i++)
+                {
+                    Players[i].Score = 0;
+                }
+
+                ElapsedGameTime = 0;
+
+                if (PlayerIndex == 1)
+                {
+                    Players.Add(new Player(new Vector2(50, 0), Content, 1));
+                    Platforms.Add(new Platform(new Vector2(0, 150), Content, 0, 100, true));
+                    UpdateGameObjectList();
+                }
+                else
+                {
+                    Players.Add(new Player(new Vector2(1880, 0), Content, 2));
+                    Platforms.Add(new Platform(new Vector2(1830, 150), Content, 0, 100, true));
+                    UpdateGameObjectList();
+                }
+            }
+        }
+
 
         #region CollisionStuff
         /// <summary>
@@ -299,7 +336,7 @@ namespace ArcadeJump
             {
                 if (Players[i].isDead)
                 {
-                    Players.Add(new Player(new Vector2(0,0), Content, Players[i].PlayerNumber)); //Debug line
+                    //Players.Add(new Player(new Vector2(0,0), Content, Players[i].PlayerNumber)); //Debug line
                     Players.RemoveAt(i);
                     UpdateGameObjectList();
                 }
@@ -311,7 +348,8 @@ namespace ArcadeJump
         /// </summary>
         private void UpdateStuff(GameTime GameTime)
         {
-            ElapsedGameTime += GameTime.ElapsedGameTime.TotalSeconds;
+            if (Players.Count < 0)
+                ElapsedGameTime += GameTime.ElapsedGameTime.TotalSeconds;
             SpeedModifier = (float)((maxSpeedmodifier / LevelManager.IntendedGameLength) * ElapsedGameTime); 
             LevelManager.Update(ElapsedGameTime);
 
@@ -335,6 +373,16 @@ namespace ArcadeJump
         private Vector2 PointToVector2(Point Point)
         {
             return new Vector2(Point.X, Point.Y);
+        }
+
+        private void Input()
+        {
+            KeyboardState NewState = Keyboard.GetState();
+            if (NewState.IsKeyDown(Keys.F9) && OldState.IsKeyUp(Keys.F9))
+                SpawnPlayer(1);
+            if (NewState.IsKeyDown(Keys.F10) && OldState.IsKeyUp(Keys.F10))
+                SpawnPlayer(2);
+            OldState = NewState;
         }
         #endregion
 

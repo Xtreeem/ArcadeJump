@@ -8,55 +8,61 @@ using System.Text;
 
 namespace ArcadeJump
 {
-    class PuPoints : PowerUp
+    class PuShield : PowerUp
     {
         #region Variables
-
-
-        double ScoreValue = 50;
         #endregion
 
         #region Public Variables
-        public PuPoints(Vector2 position, ContentManager Content, Vector2 velocity)
+        public PuShield(Vector2 position, ContentManager Content, Vector2 velocity)
             : base(position, Content, velocity)
         {
-            velocity = Vector2.Zero;
-            texture = Content.Load<Texture2D>("Textures/Points");
-            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
+            texture = Content.Load<Texture2D>("Textures/Shield");
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
-            color = Color.Cyan;
+            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
+            color = Color.Gold;
+            PowerUpName = "PuShield";
         }
 
-        public PuPoints(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
+        public PuShield(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
             : base(SurfaceObject, Content, velocity, LockedToPlatform)
         {
-            velocity = Vector2.Zero;
-            texture = Content.Load<Texture2D>("Textures/Points");
+            texture = Content.Load<Texture2D>("Textures/Shield");
+            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
-            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
-            color = Color.Cyan;
+            color = Color.Gold;
+            PowerUpName = "PuShield";
         }
 
         public override void Draw(SpriteBatch spritebatch)
         {
+            if(!Dummy)
             base.Draw(spritebatch);
             //spritebatch.Draw(HitBoXDebugTexture, Hitbox, Color.Red);                  //debug hitbox display
         }
 
         public override void Update(GameTime gametime)
         {
-            base.Update(gametime);
+            if (!Dummy)
+                base.Update(gametime);
 
+            //rotation += CalculateRotation();
+            //OldPosition = position;
         }
 
         public override void PickedUp(ref Player Player)
         {
-            Player.Score += ScoreValue;
-            this.isDead = true;
+            base.PickedUp(ref Player);
+            if (!this.isDead)
+            {
+                Player.CurrentPowerUp = this;
+                //LockedToPlatform = false;
+                MakePickedUp();
+            }
         }
 
         #endregion

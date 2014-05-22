@@ -64,7 +64,6 @@ namespace ArcadeJump
         }
         public void CreateNewPowerUp()
         {
-            PowerUp temp;
             bool Selector;
             int Index = Random.Next(0,101); 
            bool tempLocked;
@@ -85,35 +84,59 @@ namespace ArcadeJump
 
             if (Selector)
             {
-                if (Index < 50)
+                if (Index < 20)
                 {
                     PowerUps.Add(new PuStun(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
                 }
-                else if (Index < 100)
+                else if (Index < 40)
                 {
                     PowerUps.Add(new PuSuperJump(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
+                }
+                else if (Index < 60)
+                {
+                    PowerUps.Add(new PuPoints(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
+                }
+                else if (Index < 80)
+                {
+                    PowerUps.Add(new PuInvertedControlls(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
+                }
+                else if (Index < 100)
+                {
+                    PowerUps.Add(new PuShield(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
                 }
 
             }
             else
             {
-                if (Index < 50)
+                if (Index < 20)
                 {
                     PowerUps.Add(new PuStun(LastPlatform, Content, tempVelocity, tempLocked));
                 }
-                else if (Index < 100)
+                else if (Index < 40)
                 {
                     PowerUps.Add(new PuSuperJump(LastPlatform, Content, tempVelocity, tempLocked));
                 }
+                else if (Index < 60)
+                {
+                    PowerUps.Add(new PuPoints(LastPlatform, Content, tempVelocity, tempLocked));
+                }
+                else if (Index < 80)
+                {
+                    PowerUps.Add(new PuInvertedControlls(LastPlatform, Content, tempVelocity, tempLocked));
+                }
+                else if (Index < 100)
+                {
+                    PowerUps.Add(new PuShield(LastPlatform, Content, tempVelocity, tempLocked));
+                }
             }
-
+        }
 
                 
                 
             
 
 
-        }
+        
             
         #endregion
 
@@ -173,16 +196,10 @@ namespace ArcadeJump
             Platforms.Add(new Platform(new Vector2(20, 800), Content, WidthAdjustment, PlatformWidth, true));
             Platforms.Add(new Platform(new Vector2(1860, 800), Content, WidthAdjustment, PlatformWidth, true));
             LastPlatform = Platforms[0];
-            Vector2 tempPosition;
 
             for (int i = 0; i < NumberOfPlatforms; i++)
             {
-
                 CreateNewPlatform();
-                //int tempColumNumber = Random.Next(0, NumberOfColums);
-                //tempPosition.Y = Random.Next(0, 1080);
-                //tempPosition.X = (tempColumNumber * ColumWidth) + Random.Next(-ColumWidth / 2, ColumWidth / 2);
-                //Platforms.Add(new Platform(tempPosition, Content, WidthAdjustment, PlatformWidth));
             }
         }
         #endregion

@@ -13,7 +13,7 @@ namespace ArcadeJump
         #region Variables
         public Vector2 velocity;
         public MovableGameObject SurfaceObject;
-        protected Rectangle DrawRectangle;
+        public Rectangle DrawRectangle;
 
         #endregion
 

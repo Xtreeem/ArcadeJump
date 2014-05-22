@@ -94,8 +94,7 @@ namespace ArcadeJump
             Dummy = true;
             Hitbox.Width = 0;
             Hitbox.Height = 0;
-            DrawRectangle.X = 10;
-            DrawRectangle.Y = 10;
+            
         }
 
         private float ForceNegativePosetive(float Velocity, bool Posetive)

@@ -22,10 +22,12 @@ namespace ArcadeJump
         double StunDuration;
         double StunImmunityTimer;
         bool InvertedControls;
-        double InvertedControlsDuration;
+        public double InvertedControlsDuration;
 
         double IdleTimer;
         double AnimationTimer;
+        double BlinkingTimer;
+        Color OriginalColor; 
         Vector2 LastVelocity;
 
         bool Busy = false;
@@ -44,7 +46,7 @@ namespace ArcadeJump
         double KickCooldownTimer;
         public Rectangle KickingRectangle;
 
-
+        float BlinkingInterval = 0.1f;
         public float Kickpower = 15;
         float KickingGrace = 0.5f;
         float PunchingGrace = 0.5f;
@@ -57,6 +59,7 @@ namespace ArcadeJump
         float SpeedUpGround = 0.5f;
         float MaxXSpeed = 10;
         float JumpPower = 20;
+        
         #endregion
 
         #region Public Methods
@@ -67,7 +70,7 @@ namespace ArcadeJump
                 color = Color.Black;
             else
                 color = Color.DarkOliveGreen;
-
+            OriginalColor = color;
             this.PlayerNumber = PlayerNumber;
             position = pos;
             Score = 0;
@@ -104,6 +107,7 @@ namespace ArcadeJump
             PunchManager(GameTime);
             KickManager(GameTime);
             BusyManager();
+            Blinking(GameTime);
             Score += GameTime.ElapsedGameTime.TotalSeconds;
         }
 
@@ -120,17 +124,27 @@ namespace ArcadeJump
         public void GetStunned(double StunDuration)
         {
             if (!Stunned)
-            {
                 if (StunImmunityTimer < 0)
-                {
-                    Stunned = true;
-                    this.StunDuration = StunDuration;
-                    AnimationFallingOver();
-                    StunImmunityTimer = StunDuration * 2;
-                }
-            }
+                    if (!ShieldChecker())
+                    {
+                        Stunned = true;
+                        this.StunDuration = StunDuration;
+                        AnimationFallingOver();
+                        StunImmunityTimer = StunDuration * 2;
+                    }
+                    else
+                        StunImmunityTimer = 0.6;
         }
 
+        public void GetInverted(double InvertionDuration)
+        {
+            if (!InvertedControls)
+                if (!ShieldChecker())
+                {
+                    InvertedControls = true;
+                    InvertedControlsDuration = InvertionDuration;
+                }
+        }
 
         public void Jump()
         {
@@ -158,13 +172,39 @@ namespace ArcadeJump
                 PunchCooldownTimer -= GameTime.ElapsedGameTime.TotalSeconds;
             if (KickCooldownTimer >= 0)
                 KickCooldownTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+            if (StunImmunityTimer >= 0)
+                StunImmunityTimer -= GameTime.ElapsedGameTime.TotalSeconds;
             if (StunDuration >= 0)
                 StunDuration -= GameTime.ElapsedGameTime.TotalSeconds;
             else
                 Stunned = false;
-            if (StunImmunityTimer >= 0)
-                StunImmunityTimer -= GameTime.ElapsedGameTime.TotalSeconds;
-            
+            if (InvertedControlsDuration >= 0)
+                InvertedControlsDuration -= GameTime.ElapsedGameTime.TotalSeconds;
+            else
+                InvertedControls = false;
+        }
+
+        private void Blinking(GameTime GameTime)
+        {
+            if (InvertedControlsDuration > 0)
+            {
+                BlinkingTimer += GameTime.ElapsedGameTime.TotalSeconds;
+                if (BlinkingTimer > BlinkingInterval)
+                {
+                    if (color == OriginalColor)
+                    {
+                        if (PlayerNumber != 1)
+                            color = Color.LimeGreen;
+                        else
+                            color = Color.SlateGray;
+                    }
+                    else
+                        color = OriginalColor;
+                    BlinkingTimer = 0;
+                }
+            }
+            else if (color != OriginalColor)
+                color = OriginalColor;
         }
 
         private void PowerUpKeyManager()
@@ -181,9 +221,12 @@ namespace ArcadeJump
                             SuperJump();
                             CurrentPowerUp = null;
                             break;
+                        case ("PuShield"):
+                            CurrentPowerUp.isDead = true;
+                            CurrentPowerUp = null;
+                            break;
                         default:
                             throw new Exception("Trying to use none implemented powerup");
-                            break;
                     }
                 }
             }
@@ -329,6 +372,18 @@ namespace ArcadeJump
             OldState = NewState;
             //Clamps the velocity to ensure no abnormalities
             velocity.X = MathHelper.Clamp(velocity.X, -MaxXSpeed, MaxXSpeed);
+        }
+
+        private bool ShieldChecker()
+        {
+            if (CurrentPowerUp != null)
+                if (CurrentPowerUp.PowerUpName == "PuShield")
+                {
+                    CurrentPowerUp.isDead = true;
+                    CurrentPowerUp = null;
+                    return true;
+                }
+            return false;
         }
 
         private void DidIDieCheck()
