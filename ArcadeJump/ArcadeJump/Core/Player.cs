@@ -210,7 +210,7 @@ namespace ArcadeJump
             if (PlayerNumber == 1)
                 color = Color.Black;
             else
-                color = Color.DarkOliveGreen;
+                color = Color.Red;
             OriginalColor = color;
         }
         /// <summary>
@@ -227,7 +227,7 @@ namespace ArcadeJump
                     if (color == OriginalColor)
                     {
                         if (PlayerNumber != 1)
-                            color = Color.LimeGreen;
+                            color = Color.DarkRed;
                         else
                             color = Color.SlateGray;
                     }

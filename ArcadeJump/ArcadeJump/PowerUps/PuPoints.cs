@@ -24,7 +24,7 @@ namespace ArcadeJump
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
-            color = Color.Cyan;
+            //color = Color.Cyan;
         }
 
         public PuPoints(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
@@ -36,7 +36,7 @@ namespace ArcadeJump
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
             HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
-            color = Color.Cyan;
+            //color = Color.Cyan;
         }
 
         public override void Draw(SpriteBatch spritebatch)

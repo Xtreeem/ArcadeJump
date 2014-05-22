@@ -19,7 +19,7 @@ namespace ArcadeJump
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
             HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
-            color = Color.DarkGreen;
+            //color = Color.DarkGreen;
             PowerUpName = "PuSuperJump";
         }
 
@@ -31,7 +31,7 @@ namespace ArcadeJump
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
-            color = Color.DarkGreen;
+            //color = Color.DarkGreen;
             PowerUpName = "PuSuperJump";
         }
 

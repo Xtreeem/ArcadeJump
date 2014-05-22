@@ -19,7 +19,7 @@ namespace ArcadeJump
             : base(position, Content, velocity)
         {
             texture = Content.Load<Texture2D>("Textures/Inverted");
-            color = Color.Purple;
+            //color = Color.Purple;
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);
@@ -30,7 +30,7 @@ namespace ArcadeJump
             : base(SurfaceObject, Content, velocity, LockedToPlatform)
         {
             texture = Content.Load<Texture2D>("Textures/Inverted");
-            color = Color.Purple;
+            //color = Color.Purple;
             frameHeight = texture.Height;
             frameWidht = texture.Width;
             origin = new Vector2(texture.Height / 2, texture.Width / 2);

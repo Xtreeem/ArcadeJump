@@ -86,7 +86,7 @@ namespace ArcadeJump
        {
            string text = "Score:" + ScoreP1;
 
-           SpriteBatch.DrawString(Font, text, P1TextPos, Color.Blue);
+           SpriteBatch.DrawString(Font, text, P1TextPos, Color.Black);
            SpriteBatch.Draw(PowerUpFrame, P1PowerUpFrameRec, Color.White);
            if (Player.InvertedControlsDuration > 0)
            {
@@ -107,7 +107,7 @@ namespace ArcadeJump
        private void PlayerTwo(SpriteBatch SpriteBatch, Player Player)
        {
            string text = "Score:" + ScoreP2;
-           SpriteBatch.DrawString(Font, text, P2TextPos, Color.Blue);
+           SpriteBatch.DrawString(Font, text, P2TextPos, Color.Black);
            SpriteBatch.Draw(PowerUpFrame, P2PowerUpFrameRec, Color.White);
            if (Player.InvertedControlsDuration > 0)
            {
