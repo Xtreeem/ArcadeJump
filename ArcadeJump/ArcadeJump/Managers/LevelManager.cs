@@ -57,8 +57,17 @@ namespace ArcadeJump
             Platform tempPlatform = new Platform(GetPosition(), Content, WidthAdjustment, PlatformWidth);
             Platforms.Add(tempPlatform);
             LastPlatform = tempPlatform;
-            
-            bool tempLocked;
+            if (Random.Next(0, 101) < ChanceToSpawnPowerup)
+            {
+                CreateNewPowerUp();
+            }
+        }
+        public void CreateNewPowerUp()
+        {
+            PowerUp temp;
+            bool Selector;
+            int Index = Random.Next(0,101); 
+           bool tempLocked;
             if (Random.Next(0, 101) < 50)
                 tempLocked = true;
             else
@@ -69,16 +78,43 @@ namespace ArcadeJump
             else
                 tempVelocity = new Vector2(Random.Next(1,3), 0);
 
-            if (Random.Next(0,101) < ChanceToSpawnPowerup)
-            {
-                if (Random.Next(0, 101) < 50)
-                    PowerUps.Add(new PuStun(LastPlatform, Content, tempVelocity, tempLocked));
+            if (Random.Next(0, 101) < 50)
+                Selector = true;
                 else
-                    PowerUps.Add(new PuStun(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
-                
-            }
-        }
+            Selector = false;
 
+            if (Selector)
+            {
+                if (Index < 50)
+                {
+                    PowerUps.Add(new PuStun(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
+                }
+                else if (Index < 100)
+                {
+                    PowerUps.Add(new PuSuperJump(new Vector2(LastPlatform.Hitbox.Center.X, LastPlatform.Hitbox.Top - 30), Content, tempVelocity));
+                }
+
+            }
+            else
+            {
+                if (Index < 50)
+                {
+                    PowerUps.Add(new PuStun(LastPlatform, Content, tempVelocity, tempLocked));
+                }
+                else if (Index < 100)
+                {
+                    PowerUps.Add(new PuSuperJump(LastPlatform, Content, tempVelocity, tempLocked));
+                }
+            }
+
+
+                
+                
+            
+
+
+        }
+            
         #endregion
 
         #region Private Methods

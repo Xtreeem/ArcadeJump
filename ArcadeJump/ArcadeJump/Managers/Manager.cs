@@ -19,7 +19,7 @@ namespace ArcadeJump
         ContentManager Content;
         float SpeedModifier;
         float maxSpeedmodifier = 2;
-        double ElapsedGameTime = 0;
+        public double ElapsedGameTime = 0;
         LevelManager LevelManager;
         List<Platform> Platforms;
         List<Player> Players;
@@ -124,7 +124,7 @@ namespace ArcadeJump
         /// </summary>
         private void CollisionChecking(MovableGameObject ObjectA, MovableGameObject ObjectB)
         {
-            if (ObjectA is Player)
+            if (ObjectA is Player && ObjectA.position.Y > -(ObjectA.texture.Height / 2))
             {
                 if (ObjectB is Platform && ObjectA.velocity.Y > 0)  //Collision between a player (going downward) and a platform
                 {
@@ -142,7 +142,7 @@ namespace ArcadeJump
             }
             else if (ObjectA is Platform)
             {
-                if (ObjectB is Player && ObjectB.velocity.Y > 0)  //Collision between a player (going downward) and a platform
+                if (ObjectB is Player && ObjectB.velocity.Y > 0 && ObjectB.position.Y > -(ObjectA.texture.Height / 2))  //Collision between a player (going downward) and a platform
                 {
                     CollisionPlayerPlatform((ObjectB as Player), (ObjectA as Platform));
                 }
@@ -157,7 +157,7 @@ namespace ArcadeJump
             }
             else if (ObjectA is PowerUp)
             {
-                if (ObjectB is Player)  //Collision between a player and a powerup
+                if (ObjectB is Player && ObjectB.position.Y > -(ObjectB.texture.Height / 2))  //Collision between a player and a powerup
                 {
                     CollisionPlayerPowerUp((ObjectB as Player), (ObjectA as PowerUp));
                 }

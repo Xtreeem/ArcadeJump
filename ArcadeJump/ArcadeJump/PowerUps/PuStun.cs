@@ -13,7 +13,6 @@ namespace ArcadeJump
         #region Variables
         Vector2 OldPosition;
 
-
         double StunDuration = 3;
         #endregion
 
@@ -23,6 +22,7 @@ namespace ArcadeJump
         {
             texture = Content.Load<Texture2D>("Textures/Rock");
             HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
+            PowerUpName = "PuStun";
         }
 
         public PuStun(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
@@ -30,6 +30,7 @@ namespace ArcadeJump
         {
             texture = Content.Load<Texture2D>("Textures/Rock");
             HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
+            PowerUpName = "PuStun";
         }
 
         public override void Draw(SpriteBatch spritebatch)
