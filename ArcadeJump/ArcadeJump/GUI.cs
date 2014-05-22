@@ -5,15 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace ArcadeJump
 {
    class GUI
    {
        List<Player> Players;
-       SpriteFont Font;
+       SpriteFont Font, HighScoreFont;
        ContentManager Content;
-       int ScoreP1, ScoreP2;
+       int ScoreP1, ScoreP2, ScoreToBeat;
        Texture2D PowerUpFrame;
        Rectangle P1PowerUpFrameRec, P2PowerUpFrameRec;
        Vector2 PlayerPos1, PlayerPos2;
@@ -36,6 +37,8 @@ namespace ArcadeJump
            PuPos2 = new Vector2(P2PowerUpFrameRec.X + 5, P2PowerUpFrameRec.Y + 5);
            PowerUpFrame = Content.Load<Texture2D>("PowerUpFrame");
            Font = Content.Load<SpriteFont>("Fonts/font");
+           HighScoreFont = Content.Load<SpriteFont>("Fonts/HighScoreFont");
+           ReadInHighScore();
        }
 
        public void Update(GameTime GameTime)
@@ -59,6 +62,7 @@ namespace ArcadeJump
                        }
                    }
                }
+               HighScoreCheck();
        }
 
        /// <summary>
@@ -68,13 +72,16 @@ namespace ArcadeJump
        public void Draw(SpriteBatch SpriteBatch)
        {
            SpriteBatch.Begin();
-           for (int i = 0; i < Players.Count; i++)
-           {
-               if (Players[i].PlayerNumber == 1)
-                   PlayerOne(SpriteBatch, Players[i]);
-               else
-                   PlayerTwo(SpriteBatch, Players[i]);
-           }
+           //if (Players.Count != 0)
+               for (int i = 0; i < Players.Count; i++)
+               {
+                   if (Players[i].PlayerNumber == 1)
+                       PlayerOne(SpriteBatch, Players[i]);
+                   else
+                       PlayerTwo(SpriteBatch, Players[i]);
+               }
+           //else
+
            SpriteBatch.End();
        }
 
@@ -121,5 +128,49 @@ namespace ArcadeJump
                SpriteBatch.Draw(Player.CurrentPowerUp.texture, Player.CurrentPowerUp.DrawRectangle, Player.CurrentPowerUp.color);
            }
        }
+
+       private void HighScoreCheck()
+       {
+           int tempScore = ScoreToBeat;
+           if (ScoreP1 > ScoreToBeat)
+               ScoreToBeat = ScoreP1;
+           if (ScoreP2 > ScoreToBeat)
+               ScoreToBeat = ScoreP2;
+           if (tempScore != ScoreToBeat)
+               WriteDownHighScore();
+       }
+
+       /// <summary>
+       /// Reads in the Score to beat from a text file
+       /// </summary>
+       private void ReadInHighScore()
+       {
+           if (File.Exists("HighScore.txt"))
+           {
+               string tempString;
+               StreamReader _sReader = new StreamReader(@"HighScore.txt", true);
+               {
+                   while (!_sReader.EndOfStream)
+                   {
+                       tempString = _sReader.ReadLine();
+                       int.TryParse(tempString, out ScoreToBeat);
+                   }
+               }
+               _sReader.Close();
+           }
+       }
+
+       /// <summary>
+       /// Writes the new Score to beat to a text file
+       /// </summary>
+       private void WriteDownHighScore()
+       {
+               StreamWriter _sWriter = new StreamWriter(@"HighScore.txt", false);
+               {
+                   _sWriter.Write(ScoreToBeat);
+               }
+               _sWriter.Close();
+       }
+
    }
 }
