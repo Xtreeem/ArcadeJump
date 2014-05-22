@@ -10,9 +10,6 @@ namespace ArcadeJump
 {
     class PuShield : PowerUp
     {
-        #region Variables
-        #endregion
-
         #region Public Variables
         public PuShield(Vector2 position, ContentManager Content, Vector2 velocity)
             : base(position, Content, velocity)
@@ -60,23 +57,9 @@ namespace ArcadeJump
             if (!this.isDead)
             {
                 Player.CurrentPowerUp = this;
-                //LockedToPlatform = false;
                 MakePickedUp();
             }
         }
-
         #endregion
-
-        #region Private Variables
-        #endregion
-
-
-
-
-
-
-
-
-
     }
 }

@@ -12,7 +12,6 @@ namespace ArcadeJump
     {
         #region Variables
         Vector2 OldPosition;
-
         double StunDuration = 3;
         #endregion
 
@@ -51,12 +50,14 @@ namespace ArcadeJump
         {
             Player.GetStunned(StunDuration);
             LockedToPlatform = false;
-            //this.isDead = true;
         }
-
         #endregion
 
         #region Private Variables
+        /// <summary>
+        /// Function that updates the PowerUps rotation to reflect that its rolling along
+        /// </summary>
+        /// <returns></returns>
         private float CalculateRotation()
         {
             if (Vector2.Distance(position, OldPosition) > 1)
@@ -71,16 +72,6 @@ namespace ArcadeJump
             }
             else return 0;
         }
-
         #endregion
-
-
-
-
-
-
-
-
-
     }
 }

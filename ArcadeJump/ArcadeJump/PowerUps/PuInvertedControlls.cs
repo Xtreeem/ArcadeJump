@@ -11,11 +11,10 @@ namespace ArcadeJump
     class PuInvertedControlls : PowerUp
     {
         #region Variables
-
         double InvertionDuration = 3;
         #endregion
 
-        #region Public Variables
+        #region Public Functions
         public PuInvertedControlls(Vector2 position, ContentManager Content, Vector2 velocity)
             : base(position, Content, velocity)
         {
@@ -54,19 +53,6 @@ namespace ArcadeJump
             Player.GetInverted(InvertionDuration);
             this.isDead = true;
         }
-
         #endregion
-
-        #region Private Variables
-        #endregion
-
-
-
-
-
-
-
-
-
     }
 }

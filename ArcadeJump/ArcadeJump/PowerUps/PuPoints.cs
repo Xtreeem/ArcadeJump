@@ -11,8 +11,6 @@ namespace ArcadeJump
     class PuPoints : PowerUp
     {
         #region Variables
-
-
         double ScoreValue = 50;
         #endregion
 
@@ -20,7 +18,7 @@ namespace ArcadeJump
         public PuPoints(Vector2 position, ContentManager Content, Vector2 velocity)
             : base(position, Content, velocity)
         {
-            velocity = Vector2.Zero;
+            this.velocity = Vector2.Zero;
             texture = Content.Load<Texture2D>("Textures/Points");
             HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
             frameHeight = texture.Height;
@@ -32,7 +30,7 @@ namespace ArcadeJump
         public PuPoints(Platform SurfaceObject, ContentManager Content, Vector2 velocity, bool LockedToPlatform)
             : base(SurfaceObject, Content, velocity, LockedToPlatform)
         {
-            velocity = Vector2.Zero;
+            this.velocity = Vector2.Zero;
             texture = Content.Load<Texture2D>("Textures/Points");
             frameHeight = texture.Height;
             frameWidht = texture.Width;
@@ -60,17 +58,5 @@ namespace ArcadeJump
         }
 
         #endregion
-
-        #region Private Variables
-        #endregion
-
-
-
-
-
-
-
-
-
     }
 }

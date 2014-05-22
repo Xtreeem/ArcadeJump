@@ -12,24 +12,26 @@ namespace ArcadeJump
     class Player : AdvancedGameObject
     {
         #region Variables
+        //Misc
         public int PlayerNumber;
         public double Score;
         public PowerUp CurrentPowerUp;
         KeyboardState OldState;
         Texture2D DebugTexture;
-
+        //Debuff Related
         bool Stunned = false;
         double StunDuration;
         double StunImmunityTimer;
         bool InvertedControls;
         public double InvertedControlsDuration;
-
+        //Animation Related
         double IdleTimer;
         double AnimationTimer;
         double BlinkingTimer;
         Color OriginalColor; 
         Vector2 LastVelocity;
 
+        //Action Related
         bool Busy = false;
 
         bool Punching = false;
@@ -46,12 +48,14 @@ namespace ArcadeJump
         double KickCooldownTimer;
         public Rectangle KickingRectangle;
 
+        //Balancing Variables
         float BlinkingInterval = 0.1f;
         public float Kickpower = 15;
         float KickingGrace = 0.5f;
         float PunchingGrace = 0.5f;
         float KickCooldown = 0.8f;
         float PunchCooldown = 0.8f;
+        public float PunchStunDuration = 3f;
         float SlowdownAir = 0.9f;
         float SlowdownGround = 1.5f;
         float SLowdownStunned = 0.3f;
@@ -59,20 +63,14 @@ namespace ArcadeJump
         float SpeedUpGround = 0.5f;
         float MaxXSpeed = 10;
         float JumpPower = 20;
-        
         #endregion
 
         #region Public Methods
         public Player(Vector2 pos, ContentManager Content, int PlayerNumber)
             : base(pos, Content)
         {
-            if (PlayerNumber == 1)
-                color = Color.Black;
-            else
-                color = Color.DarkOliveGreen;
-            OriginalColor = color;
             this.PlayerNumber = PlayerNumber;
-            position = pos;
+            SetColor();
             Score = 0;
             HitBoxXAdjustment = 7;
             HitBoxYAdjustment = 0;
@@ -81,29 +79,32 @@ namespace ArcadeJump
             Hitbox = new Rectangle((int)position.X, (int)position.Y, 15, 70);
             DrawRectangle = new Rectangle((int)position.X, (int)position.Y, 30, 70);
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
-
             velocity.Y = 0.001f;
             timePerFrame = 0.08;
             frameHeight = 110;
             frameWidht = 110;
-
             DebugTexture = Content.Load<Texture2D>("Textures/plattform");
         }
 
         public override void Update(GameTime GameTime)
         {
-            //if (SurfaceObject != null)
+            //if (SurfaceObject != null)                                                //Debug Feature to display when a player is considered on a platform
             //    color = Color.Red;
             //else
-            //    color = Color.White;
+            //    color = OriginalColor;
             Input();
             AnimationManager(GameTime);
             DidIDieCheck();
-
             LastVelocity = velocity;
             TimerManager(GameTime);
-
             base.Update(GameTime);
+            if (DroppingDownTimer < 0)                                          //Checks to see if its time to restore the players BottomRectangle yet
+            {
+                BottomRectangle.X = Hitbox.X;
+                BottomRectangle.Y = Hitbox.Bottom;
+            }
+            else
+                DroppingDownTimer -= GameTime.ElapsedGameTime.TotalSeconds;
             PunchManager(GameTime);
             KickManager(GameTime);
             BusyManager();
@@ -114,13 +115,20 @@ namespace ArcadeJump
         public override void Draw(SpriteBatch spritebatch)
         {
             base.Draw(spritebatch);
-            //if (PunchingRectangle != null)
+            //if (PunchingRectangle != null)                                    //Debug Hitbox Display
             //    spritebatch.Draw(DebugTexture, PunchingRectangle, Color.Red);
             //if (KickingRectangle != null)
             //    spritebatch.Draw(DebugTexture, KickingRectangle, Color.Black);
-            //spritebatch.Draw(HitBoXDebugTexture, Hitbox, Color.Black);            //Debug Hitbox Display
+            //spritebatch.Draw(HitBoXDebugTexture, Hitbox, Color.Black);            
         }
-
+        /// <summary>
+        /// Function used to stun the player,
+        /// also checks to see if the player is stun immune
+        /// or has any form of protection.
+        /// 
+        /// If the player gets stunned sets an immunity timer.
+        /// </summary>
+        /// <param name="StunDuration">The length of the intended stun</param>
         public void GetStunned(double StunDuration)
         {
             if (!Stunned)
@@ -135,7 +143,11 @@ namespace ArcadeJump
                     else
                         StunImmunityTimer = 0.6;
         }
-
+        /// <summary>
+        /// Function that tries to invert the players controls
+        /// Checks to see if the player is shielded against debuffs
+        /// </summary>
+        /// <param name="InvertionDuration">the intended length of the inversion</param>
         public void GetInverted(double InvertionDuration)
         {
             if (!InvertedControls)
@@ -145,7 +157,9 @@ namespace ArcadeJump
                     InvertedControlsDuration = InvertionDuration;
                 }
         }
-
+        /// <summary>
+        /// Makes the player jump
+        /// </summary>
         public void Jump()
         {
             Console.WriteLine("Jump");
@@ -154,7 +168,9 @@ namespace ArcadeJump
             SurfaceObject = null;
             velocity.Y -= JumpPower;
         }
-
+        /// <summary>
+        /// Makes the player jump really high
+        /// </summary>
         public void SuperJump()
         {
             Console.WriteLine("SuperJump");
@@ -166,6 +182,9 @@ namespace ArcadeJump
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Function that runs each update and updates all the timers controlling the players behaviour
+        /// </summary>
         private void TimerManager(GameTime GameTime)
         {
             if (PunchCooldownTimer >= 0)
@@ -183,7 +202,21 @@ namespace ArcadeJump
             else
                 InvertedControls = false;
         }
-
+        /// <summary>
+        /// Initialization method used to set the players color based if its player 1 or 2
+        /// </summary>
+        private void SetColor()
+        {
+            if (PlayerNumber == 1)
+                color = Color.Black;
+            else
+                color = Color.DarkOliveGreen;
+            OriginalColor = color;
+        }
+        /// <summary>
+        /// Function used to illustrate the fact that the players controls have been inverted 
+        /// by rapidly shifting between a bright and dark color
+        /// </summary>
         private void Blinking(GameTime GameTime)
         {
             if (InvertedControlsDuration > 0)
@@ -206,13 +239,13 @@ namespace ArcadeJump
             else if (color != OriginalColor)
                 color = OriginalColor;
         }
-
+        /// <summary>
+        /// Function that is called when the PowerUp button is pressed
+        /// </summary>
         private void PowerUpKeyManager()
         {
             if (CurrentPowerUp != null)
-            {
                 if ((CurrentPowerUp.UsableWhileStunned && Stunned) || !Stunned)
-                {
                     switch (CurrentPowerUp.PowerUpName)
                     {
                         case ("PuStun"):
@@ -228,19 +261,13 @@ namespace ArcadeJump
                         default:
                             throw new Exception("Trying to use none implemented powerup");
                     }
-                }
-            }
         }
-
-
-
         /// <summary>
         /// Function designed to Scan for the control inputs and move the player accordingly
         /// </summary>
         private void Input()
         {
-            var NewState = Keyboard.GetState();
-
+            var NewState = Keyboard.GetState();         //Keyboard state that will be used to ensure no spamming is unintended.
             if (PlayerNumber == 1)
             {
                 if (!Stunned)
@@ -283,13 +310,14 @@ namespace ArcadeJump
 
                 }
                 else
-                {
+                {   
+                    //Ensures that the player will still slow down even if he is stunned
                     if (velocity.X < 0)
                         velocity.X = MathHelper.Clamp(velocity.X + SLowdownStunned, -MaxXSpeed, 0);
                     else if (velocity.X > 0)
                         velocity.X = MathHelper.Clamp(velocity.X - SLowdownStunned, 0, MaxXSpeed);
                 }
-
+                //Player input to trigger stored PowerUp
                 if (NewState.IsKeyDown(Keys.C) && !OldState.IsKeyDown(Keys.C) && KickCooldownTimer <= 0)
                 {
                     PowerUpKeyManager();
@@ -358,11 +386,13 @@ namespace ArcadeJump
                 }
                 else
                 {
+                    //Ensures that the player will still slowdown even if he is stunned
                     if (velocity.X < 0)
                         velocity.X = MathHelper.Clamp(velocity.X + SLowdownStunned, -MaxXSpeed, 0);
                     else if (velocity.X > 0)
                         velocity.X = MathHelper.Clamp(velocity.X - SLowdownStunned, 0, MaxXSpeed);
                 }
+                //Player Input to trigger stored PowerUp
                 if (NewState.IsKeyDown(Keys.End) && !OldState.IsKeyDown(Keys.End) && KickCooldownTimer <= 0)
                 {
                     PowerUpKeyManager();
@@ -373,7 +403,21 @@ namespace ArcadeJump
             //Clamps the velocity to ensure no abnormalities
             velocity.X = MathHelper.Clamp(velocity.X, -MaxXSpeed, MaxXSpeed);
         }
-
+        /// <summary>
+        /// Function used to hide the players bottom rectangle away of screen 
+        /// allowing them to fall down
+        /// </summary>
+        private void DropDown()
+        {
+            DroppingDownTimer = 0.07;
+            SurfaceObject = null;
+            BottomRectangle = new Rectangle(-300, 0, BottomRectangle.Width, BottomRectangle.Height);
+        }
+        /// <summary>
+        /// Function that checks if the player is holding the shield powerup
+        /// then removes the powerup from the player and returns true
+        /// </summary>
+        /// <returns>true if the player had the powerup</returns>
         private bool ShieldChecker()
         {
             if (CurrentPowerUp != null)
@@ -385,13 +429,17 @@ namespace ArcadeJump
                 }
             return false;
         }
-
+        /// <summary>
+        /// Checks to see if the player has fallen off the screen
+        /// </summary>
         private void DidIDieCheck()
         {
             if (position.Y > 1100)
                 isDead = true;
         }
-
+        /// <summary>
+        /// Checks to see if the player is busy kicking, punching or being stunned
+        /// </summary>
         private void BusyManager()
         {
             if (Punching)
@@ -405,18 +453,21 @@ namespace ArcadeJump
         }
 
         #region PunchingStuff
+        /// <summary>
+        /// Function that manages everything that has to do with the punching mechanics
+        /// </summary>
         private void PunchManager(GameTime GameTime)
         {
-            if (Punching)
+            if (Punching)                       //Checks to see if the player is punching
             {
-                if (PunchDelayTimer <= 0)
+                if (PunchDelayTimer <= 0)       //Checks to see if its time to spawn the punch rectangle yet
                 {
-                    if (spriteEffect == SpriteEffects.None)
+                    if (spriteEffect == SpriteEffects.None) //Checks to see what direction the player is facing and spawns the rectangle
                         PunchingRectangle = new Rectangle(Hitbox.Center.X, Hitbox.Top + Hitbox.Height / 4, DrawRectangle.Width / 2, 5);
                     else
                         PunchingRectangle = new Rectangle(Hitbox.Center.X - DrawRectangle.Width / 2, Hitbox.Top + Hitbox.Height / 4, DrawRectangle.Width / 2, 5);
 
-                    if (PunchLifeTimer >= 0)
+                    if (PunchLifeTimer >= 0)    //counts down before removing the rectangle
                         PunchLifeTimer -= GameTime.ElapsedGameTime.TotalSeconds;
                     else
                         Punching = false;
@@ -426,7 +477,7 @@ namespace ArcadeJump
             }
             else
             {
-                if (PunchingGraceTimer <= 0)
+                if (PunchingGraceTimer <= 0) //checks to see if the grace period where the rectangle remains after the animation is still going on or not, if not removed the rectangle.
                 {
                     PunchingRectangle.Width = 0;
                     PunchingRectangle.Height = 0;
@@ -441,14 +492,16 @@ namespace ArcadeJump
 
                 }
             }
-            if (Stunned)
+            if (Stunned) //Checks if the player gets stunned while punching and if so aborts the punch
             {
                 PunchingRectangle.Width = 0;
                 PunchingRectangle.Height = 0;
                 Punching = false;
             }
         }
-
+        /// <summary>
+        /// Function called to start the punch mechanic
+        /// </summary>
         private void Punch()
         {
             Punching = true;
@@ -458,7 +511,10 @@ namespace ArcadeJump
             PunchingGraceTimer = PunchingGrace;
         }
         #endregion
-
+        /// <summary>
+        /// Function that manages everything that has to do with kicking
+        /// Mirror copy of the punching function.
+        /// </summary>
         #region KickingStuff
         private void KickManager(GameTime GameTime)
         {
@@ -515,48 +571,54 @@ namespace ArcadeJump
 
 
         #region AnimationStuff
+        /// <summary>
+        /// Function that manages eveyrthing that has to do with the players animations
+        /// What animation should be played when and what order that has priority.
+        /// </summary>
+        /// <param name="GameTime"></param>
         private void AnimationManager(GameTime GameTime)
         {
-            if (!Stunned)
+            if (!Stunned)                                                       //Checks so that the player aint stunned
             {
-                if (AnimationTimer <= 0)
+                if (AnimationTimer <= 0)                                        //Checks to see so no animation is running atm 
                 {
-                    if (velocity == Vector2.Zero)
-                        IdleTimer += GameTime.ElapsedGameTime.TotalSeconds;
-                    else IdleTimer = 0;
+                    if (velocity == Vector2.Zero)                               //checks if the player is moving atm 
+                        IdleTimer += GameTime.ElapsedGameTime.TotalSeconds;     //Updates how long the player has been doing nothing
+                    else 
+                        IdleTimer = 0;
 
-                    if (velocity.Y < 0 && velocity.Y > 0 - (6 * Gravitation))
+                    if (velocity.Y < 0 && velocity.Y > 0 - (6 * Gravitation))   //Tests to see if its time to start leveling out in a jump by multiplying the velocity decrease by the number of frames in the leveling out animation and how long each one will take
                         AnimationLevelingOut();
-                    else if (LastVelocity.Y != 0 && velocity.Y == 0)
+                    else if (LastVelocity.Y != 0 && velocity.Y == 0)            //Checks if the player just has landed (aka his old velocity was moving downwards and now he aint)
                         AnimationLanding();
-                    else if (velocity.Y < 0)
-                        AnimationAscending();
-                    else if (velocity.Y > 0)
-                        AnimationDescending();
-                    else if (velocity.X != 0)
+                    else if (velocity.Y < 0)                                    //checks if the player is moving upwards
+                        AnimationAscending();                       
+                    else if (velocity.Y > 0)                                    //Checks if the player is moving downwards
+                        AnimationDescending();                                  
+                    else if (velocity.X != 0)                                   //Checks to see if the player is running
                         AnimationRunning();
-                    else if (IdleTimer > 3 && velocity == Vector2.Zero)
+                    else if (IdleTimer > 3 && velocity == Vector2.Zero)         //Checks to see if the player is still standing still and the idle time has triggerd a bored event
                     {
                         AnimationProlongedIdle();
-                        if (currentFrame + 1 > maxNrFrame)
+                        if (currentFrame + 1 > maxNrFrame)                      //Ensures that the bored animation gets to finish before resetting the idle timer
                             IdleTimer = 0;
                     }
                     else
-                        AnimationIdle();
+                        AnimationIdle();                                        //If all else fails makes the player stand still
                 }
 
             }
-            else if (AnimationTimer <= 0)
+            else if (AnimationTimer <= 0)                                       //If the player is stunned and no animation is running
             {
-                if (StunDuration <= 0.20)
+                if (StunDuration <= 0.20)                                       //if the stun is about to expire show the getting up animation
                 {
                     AnimationGettingUp();
                 }
                 else
-                    AnimationLayingDown();
+                    AnimationLayingDown();                                      //otherwise show the player laying on his back
             }
 
-            if (AnimationTimer > 0)
+            if (AnimationTimer > 0)                                             //if an animation is running count down its timer
                 AnimationTimer -= GameTime.ElapsedGameTime.TotalSeconds;
             else
             {
@@ -564,6 +626,14 @@ namespace ArcadeJump
             }
         }
         #region Animations
+        /// <summary>
+        /// A long list of differant animations following the formula of 
+        /// where int he spritesheet to start
+        /// how many frames the animation is 
+        /// and how long each frame should take
+        /// and finally if its an animation that overrides other animations an animation timer is started.
+        /// </summary>
+
         private void AnimationClearAnimation()
         {
             frameXOffset = 0;
@@ -687,7 +757,6 @@ namespace ArcadeJump
         }
         #endregion
         #endregion
-
         #endregion
     }
 }

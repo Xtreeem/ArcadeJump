@@ -8,11 +8,14 @@ using System.Text;
 
 namespace ArcadeJump
 {
+    /// <summary>
+    /// A game object capable of moving one way or another
+    /// </summary>
     abstract class MovableGameObject : GameObject
     {
         #region Variables
         public Vector2 velocity;
-        public MovableGameObject SurfaceObject;
+        public MovableGameObject SurfaceObject;                     //A rectangle that lines the very top of the hitbox.
         public Rectangle DrawRectangle;
 
         #endregion
@@ -22,26 +25,12 @@ namespace ArcadeJump
             : base(pos)
         { }
 
-        public void IsHit(MovableGameObject Assailant)
-        {
-            if (Assailant is Player)
-                if (this is Player)
-                    (this as Player).GetStunned(5);
-                else if (Assailant is PowerUp)
-                { }
-        }
-
         public override void Update(GameTime gametime)
         {
-            if (velocity.X > 0)
-                spriteEffect = SpriteEffects.None;
-            else if (velocity.X < 0)
-                spriteEffect = SpriteEffects.FlipHorizontally;
-                
-
+            FlipCheck();
             position += velocity;
             if (SurfaceObject != null)
-                position.Y = SurfaceObject.Hitbox.Top - Hitbox.Height;
+                position.Y = SurfaceObject.Hitbox.Top - Hitbox.Height;                                                  //Ensures that the object is sticking to whatever surface its on
             Hitbox = new Rectangle((int)position.X, (int)position.Y, Hitbox.Width, Hitbox.Height);
             DrawRectangle = new Rectangle((int)position.X, (int)position.Y, DrawRectangle.Width, DrawRectangle.Height);
             FallenOfScreenChecker();
@@ -53,6 +42,19 @@ namespace ArcadeJump
         #endregion
 
         #region Private Method
+        /// <summary>
+        /// Checks to see what direction that object should be facing.
+        /// </summary>
+        private void FlipCheck()
+        {
+            if (velocity.X > 0)                                     
+                spriteEffect = SpriteEffects.None;
+            else if (velocity.X < 0)
+                spriteEffect = SpriteEffects.FlipHorizontally;
+        }
+        /// <summary>
+        /// Marks the object as dead if its off the screen
+        /// </summary>
         private void FallenOfScreenChecker()
         {
             if (position.Y > 1080)

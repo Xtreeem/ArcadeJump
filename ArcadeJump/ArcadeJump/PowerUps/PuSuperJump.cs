@@ -10,10 +10,7 @@ namespace ArcadeJump
 {
     class PuSuperJump : PowerUp
     {
-        #region Variables
-        #endregion
-
-        #region Public Variables
+        #region Public Functions
         public PuSuperJump(Vector2 position, ContentManager Content, Vector2 velocity)
             : base(position, Content, velocity)
         {
@@ -49,9 +46,6 @@ namespace ArcadeJump
         {
             if(!Dummy)
                 base.Update(gametime);
-
-            //rotation += CalculateRotation();
-            //OldPosition = position;
         }
 
         public override void PickedUp(ref Player Player)
@@ -60,24 +54,10 @@ namespace ArcadeJump
             if (!this.isDead)
             {
                 Player.CurrentPowerUp = this;
-                //LockedToPlatform = false;
                 MakePickedUp();
             }
         }
 
         #endregion
-
-        #region Private Variables
-
-        #endregion
-
-
-
-
-
-
-
-
-
     }
 }

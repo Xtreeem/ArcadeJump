@@ -78,7 +78,6 @@ namespace ArcadeJump
            SpriteBatch.End();
        }
 
-
        /// <summary>
        /// Draw Player One score and current power up
        /// </summary>
@@ -122,8 +121,5 @@ namespace ArcadeJump
                SpriteBatch.Draw(Player.CurrentPowerUp.texture, Player.CurrentPowerUp.DrawRectangle, Player.CurrentPowerUp.color);
            }
        }
-
-
-
    }
 }

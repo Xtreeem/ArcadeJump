@@ -18,7 +18,6 @@ namespace ArcadeJump
         private int PlatformHeight = 15;
         public bool Indestructable;
         #endregion
-
         #region Public Methods
         public Platform(Vector2 pos, ContentManager Content, double WidthAdjustment, int StartingWidth)
             : base(pos, Content)
@@ -63,7 +62,6 @@ namespace ArcadeJump
 
         }
         #endregion
-
         #region Private Methods
         #endregion
     }

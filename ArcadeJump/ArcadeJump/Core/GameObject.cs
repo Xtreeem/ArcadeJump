@@ -7,17 +7,19 @@ using System.Text;
 
 namespace ArcadeJump
 {
-
+    /// <summary>
+    /// Basic GameObject
+    /// </summary>
     abstract class GameObject
     {
         public Texture2D texture;
         public Vector2 position;
-        public Vector2 origin = new Vector2();
+        protected Vector2 origin = new Vector2();
         public bool isDead;
         public SpriteEffects spriteEffect;
-        public float scale = 1f;
+        protected float scale = 1f;
         public Color color = Color.White;
-        public float rotation;
+        protected float rotation;
         public Rectangle Hitbox;
 
         public GameObject(Vector2 pos)

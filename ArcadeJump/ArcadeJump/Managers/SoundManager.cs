@@ -8,8 +8,9 @@ using System.Text;
 
 namespace ArcadeJump
 {
-    // AG:
-    //  Lägg till samtliga ljudeffekter. - JvA [2014-05-10]
+    /// <summary>
+    /// Static sound manager used to play sound from anywhere inside the program. 
+    /// </summary>
     static class SoundManager
     {
         #region Variable(s)
@@ -20,6 +21,9 @@ namespace ArcadeJump
         #endregion
 
         #region Method(s)
+        /// <summary>
+        /// Function used to load all the sounds into their sound variables.
+        /// </summary>
         public static void InitializeSound(ContentManager Content)
         {
             PlayerHit = Content.Load<SoundEffect>("Sound/Hit");
@@ -27,7 +31,10 @@ namespace ArcadeJump
             PowerUp = Content.Load<SoundEffect>("Sound/Power-down");
             PowerDown = Content.Load<SoundEffect>("Sound/Power-up");
         }
-
+        /// <summary>
+        /// Function called from anywhere to play any sound wanted
+        /// </summary>
+        /// <param name="Name">Name of the sound file requested</param>
         public static void PlaySound(string Name)
         {
             switch (Name)

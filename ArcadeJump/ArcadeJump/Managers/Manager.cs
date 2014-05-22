@@ -40,11 +40,6 @@ namespace ArcadeJump
             Rand = new Random();
             LevelManager = new LevelManager(ref PowerUps, ref Platforms, Content);
             UpdateGameObjectList();
-
-
-            PowerUps.Add(new PuStun(new Vector2(100, 100), Content, new Vector2(0, 0)));
-            //PowerUps.Add(new PowerUp(new Vector2(100, 100), Content, new Vector2(3, 0)));
-
         }
 
         public void Update(GameTime GameTime)
@@ -54,7 +49,6 @@ namespace ArcadeJump
             CollisionManager();
             Input();
         }
-
 
         /// <summary>
         /// Function used to draw every single Player/Platform/Powerup
@@ -78,11 +72,12 @@ namespace ArcadeJump
             }
             SpriteBatch.End();
         }
-
         #endregion
 
         #region Private Methods
-
+        /// <summary>
+        /// Function used to update the list used in Collion detection
+        /// </summary>
         private void UpdateGameObjectList()
         {
             MovableGameObjects.Clear();
@@ -91,26 +86,30 @@ namespace ArcadeJump
             MovableGameObjects.AddRange(PowerUps);
         }
 
+        /// <summary>
+        /// Function called to Create a player
+        /// </summary>
+        /// <param name="PlayerIndex">Either 1 or 2, depending on what player you want to spawn</param>
         private void SpawnPlayer(int PlayerIndex)
         {
-            bool ValidSpawn = true;
+            bool ValidSpawn = true;                     //Starts of by assuming you can spawn a player
 
-            foreach (Player P in Players)
+            foreach (Player P in Players)               //Checks all active players to see if any of them have the same playerIndex as the one you want to spawn
             {
                 if(P.PlayerNumber == PlayerIndex)
-                    ValidSpawn = false;
+                    ValidSpawn = false;                 //if so it tells you that you can not
             }
 
-            if (ValidSpawn)
+            if (ValidSpawn)                             //if you still can spawn a player
             {
                 for (int i = 0; i < Players.Count; i++)
                 {
-                    Players[i].Score = 0;
+                    Players[i].Score = 0;               //Resets each players score
                 }
 
-                ElapsedGameTime = 0;
+                ElapsedGameTime = 0;                    //Reset the elapsed game (controls the width adjustment and speed adjustment of the platforms)
 
-                if (PlayerIndex == 1)
+                if (PlayerIndex == 1)                   //Spawns a player on the correct side of the screen, as well as a small platoform for them to stand on.
                 {
                     Players.Add(new Player(new Vector2(50, 0), Content, 1));
                     Platforms.Add(new Platform(new Vector2(0, 150), Content, 0, 100, true));
@@ -125,54 +124,54 @@ namespace ArcadeJump
             }
         }
 
-
         #region CollisionStuff
         /// <summary>
-        /// Checks the Distance between two gameobjects to see if they are able to collide
+        /// Manager function that will do do our collision checks for us
         /// </summary>
         private void CollisionManager()
         {
-            int adjuster = 0;
+            int adjuster = 0;                                                                   //Variable that will be used to ensure taht we do not check A vs B and then B vs A again.
             for (int a = 0; a < MovableGameObjects.Count; a++)
             {
                 adjuster++;
                 for (int b = 0+ adjuster; b < MovableGameObjects.Count; b++)
                 {
-                    if (FirstCollisionCheck(MovableGameObjects[a], MovableGameObjects[b]))
+                    if (FirstCollisionCheck(MovableGameObjects[a], MovableGameObjects[b]))      //Checks if an object is close enough to qualify for future collisioncheck
                     {
-                        CollisionChecking(MovableGameObjects[a], MovableGameObjects[b]);
+                        CollisionChecking(MovableGameObjects[a], MovableGameObjects[b]);        //Does a closer collision check to see if they really have colided
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Function used to check if the distance between the center of two objects is closer than their combined width (plus the width adjustment applied to platforms over time)
+        /// </summary>
         private bool FirstCollisionCheck(GameObject ObjectA, GameObject ObjectB)
         {
-            if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < ObjectA.Hitbox.Width + ObjectB.Hitbox.Width)
+            if (Vector2.Distance(PointToVector2(ObjectA.Hitbox.Center), PointToVector2(ObjectB.Hitbox.Center)) < ObjectA.Hitbox.Width + ObjectB.Hitbox.Width + LevelManager.WidthAdjustment)
                 return true;
             else
                 return false;
         }
-
-
 
         /// <summary>
         /// Function that takes two game objects and checks if they are colliding
         /// </summary>
         private void CollisionChecking(MovableGameObject ObjectA, MovableGameObject ObjectB)
         {
-            if (ObjectA is Player && ObjectA.position.Y > -(ObjectA.texture.Height / 2))
+            if (ObjectA is Player && ObjectA.position.Y > -(ObjectA.texture.Height / 2))        //Checks if the first object is a player and ensures that it is not of the top of the screen
             {
-                if (ObjectB is Platform && ObjectA.velocity.Y > 0)  //Collision between a player (going downward) and a platform
+                if (ObjectB is Platform && ObjectA.velocity.Y > 0)                              //Collision between a player (going downward) and a platform
                 {
                     CollisionPlayerPlatform((ObjectA as Player), (ObjectB as Platform));
                 }
-                else if (ObjectB is Player)     //Collision with player and player
+                else if (ObjectB is Player)                                                     //Collision with player and player
                 {
                     CollisionPlayerPlayer((ObjectA as Player), (ObjectB as Player));
                 }
 
-                else if (ObjectB is PowerUp)    //Collision with player and powerup
+                else if (ObjectB is PowerUp)                                                    //Collision with player and powerup
                 {
                     CollisionPlayerPowerUp((ObjectA as Player), (ObjectB as PowerUp));
                 }
@@ -183,7 +182,7 @@ namespace ArcadeJump
                 {
                     CollisionPlayerPlatform((ObjectB as Player), (ObjectA as Platform));
                 }
-                if (ObjectB is PowerUp && ObjectB.velocity.Y > 0)   //Collision with platform and powerup (Going downward)
+                if (ObjectB is PowerUp && ObjectB.velocity.Y > 0)                               //Collision with platform and powerup (Going downward)
                 {
                     CollisionPlatformPowerUp((ObjectA as Platform), (ObjectB as PowerUp));
                 }
@@ -194,24 +193,24 @@ namespace ArcadeJump
             }
             else if (ObjectA is PowerUp)
             {
-                if (ObjectB is Player && ObjectB.position.Y > -(ObjectB.texture.Height / 2))  //Collision between a player and a powerup
+                if (ObjectB is Player && ObjectB.position.Y > -(ObjectB.texture.Height / 2))    //Collision between a player and a powerup
                 {
                     CollisionPlayerPowerUp((ObjectB as Player), (ObjectA as PowerUp));
                 }
-                else if (ObjectB is Platform)     //Collision with PowerUp and Platform
+                else if (ObjectB is Platform)                                                   //Collision with PowerUp and Platform
                 {
                     CollisionPlatformPowerUp((ObjectB as Platform), (ObjectA as PowerUp));
                 }
 
-                else if (ObjectB is PowerUp)    //Collision with PowerUp and PowerUp
+                else if (ObjectB is PowerUp)                                                    //Collision with PowerUp and PowerUp
                 {
                     CollisionPowerUpPowerUp((ObjectA as PowerUp), (ObjectB as PowerUp));
                 }
             }
-
-
         }
-
+        /// <summary>
+        /// Function that is called when a player and a platform collide
+        /// </summary>
         private void CollisionPlayerPlatform(Player Player, Platform Platform)
         {
             if (Platform.SurfaceRectangle.Intersects(Player.BottomRectangle))
@@ -220,29 +219,34 @@ namespace ArcadeJump
                     Player.velocity.Y = 0;
                 }
         }
-
+        /// <summary>
+        /// Function called when a player and another player collides
+        /// </summary>
         private void CollisionPlayerPlayer(Player PlayerA, Player PlayerB)
         {
-            if (PlayerA.PunchingRectangle.Width != 0)
+            if (PlayerA.PunchingRectangle.Width != 0)                       //checks if the first player is punching
             {
-                if (PlayerA.PunchingRectangle.Intersects(PlayerB.Hitbox))
+                if (PlayerA.PunchingRectangle.Intersects(PlayerB.Hitbox))   //checks to see if he has hit the other player
                 {
                     Console.WriteLine("Hit");
-                    PlayerB.IsHit((PlayerA as MovableGameObject));
+                    PlayerB.GetStunned(PlayerA.PunchStunDuration);          //Stunst he second player
                 }
             }
             
-            if (PlayerB.PunchingRectangle.Width != 0)
+            if (PlayerB.PunchingRectangle.Width != 0)                       //checks if the second player is punching
             {
-                if (PlayerB.PunchingRectangle.Intersects(PlayerA.Hitbox))
+                if (PlayerB.PunchingRectangle.Intersects(PlayerA.Hitbox))   //Checks to see if he has hit the other player
                 {
                     Console.WriteLine("Hit");
-                    PlayerA.IsHit((PlayerB as MovableGameObject));
+                    PlayerA.GetStunned(PlayerB.PunchStunDuration);          //Stuns the first player
                 }
             }
         
         }
 
+        /// <summary>
+        /// Checks if a Player and a PowerUp collided
+        /// </summary>
         private void CollisionPlayerPowerUp(Player Player, PowerUp PowerUp)
         { 
             //If the players punch box hits the powerup
@@ -279,7 +283,10 @@ namespace ArcadeJump
                 PowerUp.PickedUp(ref Player);   
             }
         }
-
+ 
+        /// <summary>
+        /// Checks if a platform and a PowerUp collided
+        /// </summary>
         private void CollisionPlatformPowerUp(Platform Platform, PowerUp PowerUp)
         {
             if (Platform.Hitbox.Intersects(PowerUp.Hitbox))
@@ -289,6 +296,9 @@ namespace ArcadeJump
             }
         }
 
+        /// <summary>
+        /// Checks if two platforms intersects and if so destroys one of them
+        /// </summary>
         private void CollisionPlatformPlatform(Platform PlatformA, Platform PlatformB)
         {
             if (PlatformA.Hitbox.Intersects(PlatformB.Hitbox))
@@ -304,11 +314,12 @@ namespace ArcadeJump
             }
         }
         
+        /// <summary>
+        /// Unused method for possible future expandability
+        /// </summary>
         private void CollisionPowerUpPowerUp(PowerUp PowerUpA, PowerUp PowerUpB)
         { }
         #endregion
-
-
 
         /// <summary>
         /// Function used to remove any dead gameobject from the game.
@@ -375,6 +386,12 @@ namespace ArcadeJump
             return new Vector2(Point.X, Point.Y);
         }
 
+        /// <summary>
+        /// Used to check for input to the manager
+        /// Currently accepts:
+        /// F9 to Spawn player 1 
+        /// F10 to Spawn player 2
+        /// </summary>
         private void Input()
         {
             KeyboardState NewState = Keyboard.GetState();
@@ -385,8 +402,6 @@ namespace ArcadeJump
             OldState = NewState;
         }
         #endregion
-
-
     }
 }
 

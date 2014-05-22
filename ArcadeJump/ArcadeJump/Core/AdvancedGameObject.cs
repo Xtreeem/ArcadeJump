@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Content;
 
 namespace ArcadeJump
 {
+    /// <summary>
+    /// An Advanced GameObject containing methods that would be used by the Players and PowerUps but not by the platforms.
+    /// </summary>
     class AdvancedGameObject : MovableGameObject
     {
         #region Variables
@@ -15,10 +18,10 @@ namespace ArcadeJump
         protected Texture2D HitBoXDebugTexture;
         protected float Gravitation = 0.7f;
         //Collision Related
-        protected int HitBoxXAdjustment = 0;
-        protected int HitBoxYAdjustment = 0;
+        protected int HitBoxXAdjustment = 0;        //Patchwork
+        protected int HitBoxYAdjustment = 0;        //Patchwork
         public Rectangle BottomRectangle;
-        private int FallOfGrace = 0;
+        private int FallOfGrace = 0;                //Variable that can be used to move the point where a object is considered "off the edge" 
         protected double DroppingDownTimer;
         //Animation Related
         private Rectangle textureRectangle; 
@@ -40,20 +43,12 @@ namespace ArcadeJump
         public override void Update(GameTime gametime)
         {
             base.Update(gametime);
-            Hitbox.X += HitBoxXAdjustment;
-            Hitbox.Y += HitBoxYAdjustment;
+            Hitbox.X += HitBoxXAdjustment;                  //Patchwork
+            Hitbox.Y += HitBoxYAdjustment;                  //Patchwork
             FallOfChecker();
             Gravity(gametime);
             OffTheSideChecker();
             Animate(gametime);
-            
-            if (DroppingDownTimer < 0)
-            {
-                BottomRectangle.X = Hitbox.X;
-                BottomRectangle.Y = Hitbox.Bottom;
-            }
-            else
-                DroppingDownTimer -= gametime.ElapsedGameTime.TotalSeconds;
         }
 
         public override void Draw(SpriteBatch spritebatch)
@@ -64,6 +59,9 @@ namespace ArcadeJump
         #endregion
 
         #region Private Methods
+        /// <summary>
+        ///Function designed to check if the object has walked of the edge of a platform
+        /// </summary>
         private void FallOfChecker()
         {
             if (SurfaceObject != null)  //If it has a surfaceobject
@@ -77,6 +75,9 @@ namespace ArcadeJump
             }
         }
 
+        /// <summary>
+        /// Function that allows passage from one side of the screen to the other
+        /// </summary>
         private void OffTheSideChecker()
         {
             if (position.X > 1920)
@@ -89,12 +90,19 @@ namespace ArcadeJump
             }
         }
 
+        /// <summary>
+        /// Applies gravitation unless the object is on "solid" ground, 
+        /// also clamps the objects velocity
+        /// </summary>
         private void Gravity(GameTime gameTime)
         {
             if (SurfaceObject == null)
                 velocity.Y = MathHelper.Clamp(velocity.Y + Gravitation, -100, 15);
         }
 
+        /// <summary>
+        /// Basic animation function
+        /// </summary>
         private void Animate(GameTime gameTime)
         {
             animationTimer -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -104,25 +112,14 @@ namespace ArcadeJump
                 {
                     currentFrame = 0;
                 }
-                //else
-                //{
                 float temp = currentFrame * frameXOffset;
                 temp = MathHelper.Clamp((int)temp, 0, frameXOffset);
                     textureRectangle = new Rectangle((currentFrame * frameWidht) + frameXOffset, frameYOffset, frameWidht, frameHeight);
                     animationTimer = timePerFrame;
                     currentFrame++;
-                //}
             }
         }
-
-        protected void DropDown()
-        {
-            DroppingDownTimer = 0.07;
-            SurfaceObject = null;
-            BottomRectangle = new Rectangle(-300, 0, BottomRectangle.Width, BottomRectangle.Height);
-        }
         #endregion
-
     }
 }
 
