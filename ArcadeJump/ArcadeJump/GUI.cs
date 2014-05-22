@@ -72,7 +72,7 @@ namespace ArcadeJump
        public void Draw(SpriteBatch SpriteBatch)
        {
            SpriteBatch.Begin();
-           //if (Players.Count != 0)
+           if (Players.Count != 0)
                for (int i = 0; i < Players.Count; i++)
                {
                    if (Players[i].PlayerNumber == 1)
@@ -80,8 +80,8 @@ namespace ArcadeJump
                    else
                        PlayerTwo(SpriteBatch, Players[i]);
                }
-           //else
-
+           else
+               DrawTitleScreen(SpriteBatch);
            SpriteBatch.End();
        }
 
@@ -128,6 +128,15 @@ namespace ArcadeJump
                SpriteBatch.Draw(Player.CurrentPowerUp.texture, Player.CurrentPowerUp.DrawRectangle, Player.CurrentPowerUp.color);
            }
        }
+
+       private void DrawTitleScreen(SpriteBatch SpriteBatch)
+       {
+           string Text = "The Score to Beat is";
+           
+           SpriteBatch.DrawString(HighScoreFont, Text, new Vector2((1920/2)- (HighScoreFont.MeasureString(Text).X/2), (1080/2)-HighScoreFont.MeasureString(Text).Y), Color.Black);
+           SpriteBatch.DrawString(HighScoreFont, ScoreToBeat.ToString(), new Vector2((1920 / 2), (1080 / 2)), Color.Black, 0f, Vector2.Zero, 1.2f, SpriteEffects.None, 0f);
+       }
+
 
        private void HighScoreCheck()
        {

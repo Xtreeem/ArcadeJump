@@ -359,7 +359,7 @@ namespace ArcadeJump
         /// </summary>
         private void UpdateStuff(GameTime GameTime)
         {
-            if (Players.Count < 0)
+            if (Players.Count > 0)
                 ElapsedGameTime += GameTime.ElapsedGameTime.TotalSeconds;
             SpeedModifier = (float)((maxSpeedmodifier / LevelManager.IntendedGameLength) * ElapsedGameTime); 
             LevelManager.Update(ElapsedGameTime);

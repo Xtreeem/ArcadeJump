@@ -22,7 +22,7 @@ namespace ArcadeJump
         private float MaximumYDistanceAllowed = 150f;   //The maximum distance Y allowed between a new platform and the one before it
         private float MinimumPlatformYDistance = 40;
         private float MinimumPlatformXDistance = 250;
-        public int IntendedGameLength = 300;
+        public int IntendedGameLength = 600;
         private int MaxXDistance = 510;                 //The maximum distance X allowed between a new platform and the one before it 
         private int SpawnYInvetervall = 150;            //The height of the intervall new platforms will try to spawn from the old one
         private int NumberOfPlatforms = 20;
