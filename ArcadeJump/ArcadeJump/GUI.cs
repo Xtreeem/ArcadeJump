@@ -12,10 +12,10 @@ namespace ArcadeJump
    class GUI
    {
        List<Player> Players;
-       SpriteFont Font, HighScoreFont;
+       SpriteFont Font, HighScoreFont, TitelFont;
        ContentManager Content;
        int ScoreP1, ScoreP2, ScoreToBeat;
-       Texture2D PowerUpFrame;
+       Texture2D PowerUpFrame, Titel;
        Rectangle P1PowerUpFrameRec, P2PowerUpFrameRec;
        Vector2 PlayerPos1, PlayerPos2;
        Vector2 PuPos1, PuPos2;
@@ -35,9 +35,11 @@ namespace ArcadeJump
            P2InvertTextPos = new Vector2(P2PowerUpFrameRec.Left - 10 -55, P2PowerUpFrameRec.Top);
            PuPos1 = new Vector2(P1PowerUpFrameRec.X + 5, P1PowerUpFrameRec.Y + 5);
            PuPos2 = new Vector2(P2PowerUpFrameRec.X + 5, P2PowerUpFrameRec.Y + 5);
-           PowerUpFrame = Content.Load<Texture2D>("PowerUpFrame");
+           PowerUpFrame = Content.Load<Texture2D>("GUI/PowerUpFrame");
+           Titel = Content.Load<Texture2D>("GUI/Title");
            Font = Content.Load<SpriteFont>("Fonts/font");
            HighScoreFont = Content.Load<SpriteFont>("Fonts/HighScoreFont");
+           TitelFont = Content.Load<SpriteFont>("Fonts/TitelFont");
            ReadInHighScore();
        }
 
@@ -132,7 +134,7 @@ namespace ArcadeJump
        private void DrawTitleScreen(SpriteBatch SpriteBatch)
        {
            string Text = "The Score to Beat is";
-           
+           SpriteBatch.Draw(Titel, new Vector2(1920 / 2 - Titel.Width / 2, 250), Color.White);
            SpriteBatch.DrawString(HighScoreFont, Text, new Vector2((1920/2)- (HighScoreFont.MeasureString(Text).X/2), (1080/2)-HighScoreFont.MeasureString(Text).Y), Color.Black);
            SpriteBatch.DrawString(HighScoreFont, ScoreToBeat.ToString(), new Vector2((1920 / 2), (1080 / 2)), Color.Black, 0f, Vector2.Zero, 1.2f, SpriteEffects.None, 0f);
        }
