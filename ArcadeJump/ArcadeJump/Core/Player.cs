@@ -13,49 +13,71 @@ namespace ArcadeJump
     {
         #region Variables
         public int PlayerNumber;
-        float JumpPower = 20;
-        PowerUp CurrentPowerUp;
         public double Score;
+        public PowerUp CurrentPowerUp;
+        KeyboardState OldState;
+        Texture2D DebugTexture;
+
         bool Stunned = false;
         double StunDuration;
+        double StunImmunityTimer;
         bool InvertedControls;
+        public double InvertedControlsDuration;
+
         double IdleTimer;
         double AnimationTimer;
+        double BlinkingTimer;
+        Color OriginalColor; 
         Vector2 LastVelocity;
 
+        bool Busy = false;
+
         bool Punching = false;
+        double PunchingGraceTimer;
         double PunchDelayTimer;
         double PunchLifeTimer;
         double PunchCooldownTimer;
         public Rectangle PunchingRectangle;
-        
 
-        Texture2D DebugTexture;
+        bool Kicking = false;
+        double KickingGraceTimer;
+        double KickDelayTimer;
+        double KickLifeTimer;
+        double KickCooldownTimer;
+        public Rectangle KickingRectangle;
+
+        float BlinkingInterval = 0.1f;
+        public float Kickpower = 15;
+        float KickingGrace = 0.5f;
+        float PunchingGrace = 0.5f;
+        float KickCooldown = 0.8f;
         float PunchCooldown = 0.8f;
         float SlowdownAir = 0.9f;
         float SlowdownGround = 1.5f;
+        float SLowdownStunned = 0.3f;
         float SpeedUpAir = 0.5f;
         float SpeedUpGround = 0.5f;
         float MaxXSpeed = 10;
-
-
-
-        KeyboardState OldState;
-
-
+        float JumpPower = 20;
+        
         #endregion
 
         #region Public Methods
         public Player(Vector2 pos, ContentManager Content, int PlayerNumber)
             : base(pos, Content)
         {
+            if (PlayerNumber == 1)
+                color = Color.Black;
+            else
+                color = Color.DarkOliveGreen;
+            OriginalColor = color;
             this.PlayerNumber = PlayerNumber;
             position = pos;
             Score = 0;
             HitBoxXAdjustment = 7;
             HitBoxYAdjustment = 0;
             texture = Content.Load<Texture2D>("Textures/Test");
-            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/Test2");
+            HitBoXDebugTexture = Content.Load<Texture2D>("Textures/DebugTexture");
             Hitbox = new Rectangle((int)position.X, (int)position.Y, 15, 70);
             DrawRectangle = new Rectangle((int)position.X, (int)position.Y, 30, 70);
             BottomRectangle = new Rectangle(Hitbox.X, Hitbox.Bottom, Hitbox.Width, 5);
@@ -70,41 +92,58 @@ namespace ArcadeJump
 
         public override void Update(GameTime GameTime)
         {
-            if (SurfaceObject != null)
-                color = Color.Red;
-            else
-                color = Color.White;
-            if(!Stunned)
-                Input();
+            //if (SurfaceObject != null)
+            //    color = Color.Red;
+            //else
+            //    color = Color.White;
+            Input();
             AnimationManager(GameTime);
             DidIDieCheck();
 
             LastVelocity = velocity;
             TimerManager(GameTime);
-            
+
             base.Update(GameTime);
             PunchManager(GameTime);
+            KickManager(GameTime);
+            BusyManager();
+            Blinking(GameTime);
             Score += GameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public override void Draw(SpriteBatch spritebatch)
         {
             base.Draw(spritebatch);
-            if (PunchingRectangle != null)
-                spritebatch.Draw(DebugTexture, PunchingRectangle, Color.Red);
+            //if (PunchingRectangle != null)
+            //    spritebatch.Draw(DebugTexture, PunchingRectangle, Color.Red);
+            //if (KickingRectangle != null)
+            //    spritebatch.Draw(DebugTexture, KickingRectangle, Color.Black);
+            //spritebatch.Draw(HitBoXDebugTexture, Hitbox, Color.Black);            //Debug Hitbox Display
         }
 
         public void GetStunned(double StunDuration)
         {
-            Stunned = true;
-            this.StunDuration = StunDuration;
-            AnimationFallingOver();
+            if (!Stunned)
+                if (StunImmunityTimer < 0)
+                    if (!ShieldChecker())
+                    {
+                        Stunned = true;
+                        this.StunDuration = StunDuration;
+                        AnimationFallingOver();
+                        StunImmunityTimer = StunDuration * 2;
+                    }
+                    else
+                        StunImmunityTimer = 0.6;
         }
 
-        private void DidIDieCheck()
+        public void GetInverted(double InvertionDuration)
         {
-            if (position.Y > 1100)
-                isDead = true;
+            if (!InvertedControls)
+                if (!ShieldChecker())
+                {
+                    InvertedControls = true;
+                    InvertedControlsDuration = InvertionDuration;
+                }
         }
 
         public void Jump()
@@ -115,6 +154,15 @@ namespace ArcadeJump
             SurfaceObject = null;
             velocity.Y -= JumpPower;
         }
+
+        public void SuperJump()
+        {
+            Console.WriteLine("SuperJump");
+            AnimationJumping();
+            SurfaceObject = null;
+            velocity.Y -= JumpPower * 2;
+            CurrentPowerUp.isDead = true;
+        }
         #endregion
 
         #region Private Methods
@@ -122,11 +170,69 @@ namespace ArcadeJump
         {
             if (PunchCooldownTimer >= 0)
                 PunchCooldownTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+            if (KickCooldownTimer >= 0)
+                KickCooldownTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+            if (StunImmunityTimer >= 0)
+                StunImmunityTimer -= GameTime.ElapsedGameTime.TotalSeconds;
             if (StunDuration >= 0)
                 StunDuration -= GameTime.ElapsedGameTime.TotalSeconds;
             else
                 Stunned = false;
+            if (InvertedControlsDuration >= 0)
+                InvertedControlsDuration -= GameTime.ElapsedGameTime.TotalSeconds;
+            else
+                InvertedControls = false;
         }
+
+        private void Blinking(GameTime GameTime)
+        {
+            if (InvertedControlsDuration > 0)
+            {
+                BlinkingTimer += GameTime.ElapsedGameTime.TotalSeconds;
+                if (BlinkingTimer > BlinkingInterval)
+                {
+                    if (color == OriginalColor)
+                    {
+                        if (PlayerNumber != 1)
+                            color = Color.LimeGreen;
+                        else
+                            color = Color.SlateGray;
+                    }
+                    else
+                        color = OriginalColor;
+                    BlinkingTimer = 0;
+                }
+            }
+            else if (color != OriginalColor)
+                color = OriginalColor;
+        }
+
+        private void PowerUpKeyManager()
+        {
+            if (CurrentPowerUp != null)
+            {
+                if ((CurrentPowerUp.UsableWhileStunned && Stunned) || !Stunned)
+                {
+                    switch (CurrentPowerUp.PowerUpName)
+                    {
+                        case ("PuStun"):
+                            break;
+                        case ("PuSuperJump"):
+                            SuperJump();
+                            CurrentPowerUp = null;
+                            break;
+                        case ("PuShield"):
+                            CurrentPowerUp.isDead = true;
+                            CurrentPowerUp = null;
+                            break;
+                        default:
+                            throw new Exception("Trying to use none implemented powerup");
+                    }
+                }
+            }
+        }
+
+
 
         /// <summary>
         /// Function designed to Scan for the control inputs and move the player accordingly
@@ -137,26 +243,61 @@ namespace ArcadeJump
 
             if (PlayerNumber == 1)
             {
-                if (NewState.IsKeyDown(Keys.A))
-                    velocity.X -= (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
-                else if (velocity.X < 0)
-                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -MaxXSpeed, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -MaxXSpeed, 0);
-
-                if (NewState.IsKeyDown(Keys.D))
-                    velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
-                else if (velocity.X > 0)
-                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, MaxXSpeed) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, MaxXSpeed);
-
-                if (NewState.IsKeyDown(Keys.S))
+                if (!Stunned)
                 {
-                    DropDown();
+                    //Player Input to move Left
+                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.D) : NewState.IsKeyDown(Keys.A))
+                        velocity.X -= (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
+                    else if (velocity.X < 0)
+                        velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -MaxXSpeed, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -MaxXSpeed, 0);
+
+                    //Player Input to move Right
+                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.A) : NewState.IsKeyDown(Keys.D))
+                        velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
+                    else if (velocity.X > 0)
+                        velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, MaxXSpeed) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, MaxXSpeed);
+                    //Player Input to DropDown
+                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.W) : NewState.IsKeyDown(Keys.S))
+                    {
+                        DropDown();
+                    }
+                    //Player Input to Jump
+                    if (
+                        ((InvertedControls) ? NewState.IsKeyDown(Keys.S) : NewState.IsKeyDown(Keys.W)) &&
+                        (SurfaceObject != null) &&
+                        ((InvertedControls) ? !OldState.IsKeyDown(Keys.S) : !OldState.IsKeyDown(Keys.W))
+                        )
+                        Jump();
+                    //Player Input to Punch
+                    if (NewState.IsKeyDown(Keys.V) && !OldState.IsKeyDown(Keys.V) && PunchCooldownTimer <= 0 && !Busy)
+                    {
+                        Punch();
+                        Console.WriteLine("punch");
+                    }
+                    //Player Input to Kick
+                    if (NewState.IsKeyDown(Keys.B) && !OldState.IsKeyDown(Keys.B) && KickCooldownTimer <= 0 && !Busy)
+                    {
+                        Kick();
+                        Console.WriteLine("kick");
+                    }
+
                 }
-                if (NewState.IsKeyDown(Keys.W) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
-                    Jump();
+                else
+                {
+                    if (velocity.X < 0)
+                        velocity.X = MathHelper.Clamp(velocity.X + SLowdownStunned, -MaxXSpeed, 0);
+                    else if (velocity.X > 0)
+                        velocity.X = MathHelper.Clamp(velocity.X - SLowdownStunned, 0, MaxXSpeed);
+                }
 
-                velocity.X = MathHelper.Clamp(velocity.X, -MaxXSpeed, MaxXSpeed);
+                if (NewState.IsKeyDown(Keys.C) && !OldState.IsKeyDown(Keys.C) && KickCooldownTimer <= 0)
+                {
+                    PowerUpKeyManager();
+                    Console.WriteLine("PowerUp");
+                }
 
-                //Debug Sound Test Buttons
+
+                //Debug Testing buttons
                 if (NewState.IsKeyDown(Keys.F1) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F1))
                     SoundManager.PlaySound("PlayerJump");
                 if (NewState.IsKeyDown(Keys.F2) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F2))
@@ -165,35 +306,103 @@ namespace ArcadeJump
                     SoundManager.PlaySound("PowerDown");
                 if (NewState.IsKeyDown(Keys.F4) && SurfaceObject != null && !OldState.IsKeyDown(Keys.F4))
                     SoundManager.PlaySound("PowerUp");
-                if (NewState.IsKeyDown(Keys.F5) && !OldState.IsKeyDown(Keys.F5) && PunchCooldownTimer <= 0)
+                if (NewState.IsKeyDown(Keys.F7) && !OldState.IsKeyDown(Keys.F7))
                 {
-                    Punch();
-                    Console.WriteLine("punch");
+                    if (InvertedControls)
+                        InvertedControls = false;
+                    else
+                        InvertedControls = true;
                 }
+
             }
 
             else
             {
-                if (NewState.IsKeyDown(Keys.NumPad1))
-                    velocity.X -= (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
-                else if (velocity.X < 0)
-                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -100, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -100, 0);
+                if (!Stunned)
+                {
+                    //Player Input to move Left
+                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.NumPad3) : NewState.IsKeyDown(Keys.NumPad1))
+                        velocity.X -= (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
+                    else if (velocity.X < 0)
+                        velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X + SlowdownGround, -MaxXSpeed, 0) : MathHelper.Clamp(velocity.X + SlowdownAir, -MaxXSpeed, 0);
 
-                if (NewState.IsKeyDown(Keys.NumPad3))
-                    velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
-                else if (velocity.X > 0)
-                    velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, 100) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, 100);
-                
-                if (NewState.IsKeyDown(Keys.NumPad2))
-                    DropDown();
-                
-                if (NewState.IsKeyDown(Keys.NumPad5) && SurfaceObject != null && !OldState.IsKeyDown(Keys.NumPad5))
-                    Jump();
+                    //Player Input to move Right
+                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.NumPad1) : NewState.IsKeyDown(Keys.NumPad3))
+                        velocity.X += (SurfaceObject != null) ? SpeedUpGround : SpeedUpAir;
+                    else if (velocity.X > 0)
+                        velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, MaxXSpeed) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, MaxXSpeed);
+                    //Player Input to DropDown
+                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.NumPad5) : NewState.IsKeyDown(Keys.NumPad2))
+                    {
+                        DropDown();
+                    }
+                    //Player Input to Jump
+                    if (
+                        ((InvertedControls) ? NewState.IsKeyDown(Keys.NumPad2) : NewState.IsKeyDown(Keys.NumPad5)) &&
+                        (SurfaceObject != null) &&
+                        ((InvertedControls) ? !OldState.IsKeyDown(Keys.NumPad2) : !OldState.IsKeyDown(Keys.NumPad5))
+                        )
+                        Jump();
+                    //Player Input to Punch
+                    if (NewState.IsKeyDown(Keys.Delete) && !OldState.IsKeyDown(Keys.Delete) && PunchCooldownTimer <= 0 && !Busy)
+                    {
+                        Punch();
+                        Console.WriteLine("punch");
+                    }
+                    //Player Input to Kick
+                    if (NewState.IsKeyDown(Keys.PageDown) && !OldState.IsKeyDown(Keys.PageDown) && KickCooldownTimer <= 0 && !Busy)
+                    {
+                        Kick();
+                        Console.WriteLine("kick");
+                    }
+                }
+                else
+                {
+                    if (velocity.X < 0)
+                        velocity.X = MathHelper.Clamp(velocity.X + SLowdownStunned, -MaxXSpeed, 0);
+                    else if (velocity.X > 0)
+                        velocity.X = MathHelper.Clamp(velocity.X - SLowdownStunned, 0, MaxXSpeed);
+                }
+                if (NewState.IsKeyDown(Keys.End) && !OldState.IsKeyDown(Keys.End) && KickCooldownTimer <= 0)
+                {
+                    PowerUpKeyManager();
+                    Console.WriteLine("PowerUp");
+                }
             }
             OldState = NewState;
+            //Clamps the velocity to ensure no abnormalities
+            velocity.X = MathHelper.Clamp(velocity.X, -MaxXSpeed, MaxXSpeed);
         }
 
+        private bool ShieldChecker()
+        {
+            if (CurrentPowerUp != null)
+                if (CurrentPowerUp.PowerUpName == "PuShield")
+                {
+                    CurrentPowerUp.isDead = true;
+                    CurrentPowerUp = null;
+                    return true;
+                }
+            return false;
+        }
 
+        private void DidIDieCheck()
+        {
+            if (position.Y > 1100)
+                isDead = true;
+        }
+
+        private void BusyManager()
+        {
+            if (Punching)
+                Busy = true;
+            else if (Kicking)
+                Busy = true;
+            else if (Stunned)
+                Busy = true;
+            else
+                Busy = false;
+        }
 
         #region PunchingStuff
         private void PunchManager(GameTime GameTime)
@@ -217,8 +426,26 @@ namespace ArcadeJump
             }
             else
             {
+                if (PunchingGraceTimer <= 0)
+                {
+                    PunchingRectangle.Width = 0;
+                    PunchingRectangle.Height = 0;
+                }
+                else
+                {
+                    PunchingGraceTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+                    if (spriteEffect == SpriteEffects.None)
+                        PunchingRectangle = new Rectangle(Hitbox.Center.X, Hitbox.Top + Hitbox.Height / 4, DrawRectangle.Width / 2, 5);
+                    else
+                        PunchingRectangle = new Rectangle(Hitbox.Center.X - DrawRectangle.Width / 2, Hitbox.Top + Hitbox.Height / 4, DrawRectangle.Width / 2, 5);
+
+                }
+            }
+            if (Stunned)
+            {
                 PunchingRectangle.Width = 0;
                 PunchingRectangle.Height = 0;
+                Punching = false;
             }
         }
 
@@ -228,8 +455,64 @@ namespace ArcadeJump
             AnimationPunch();
             PunchCooldownTimer = PunchCooldown;
             PunchLifeTimer = (maxNrFrame * timePerFrame) / 2 - ((maxNrFrame * timePerFrame) / 5);
+            PunchingGraceTimer = PunchingGrace;
         }
         #endregion
+
+        #region KickingStuff
+        private void KickManager(GameTime GameTime)
+        {
+            if (Kicking)
+            {
+                if (KickDelayTimer <= 0)
+                {
+                    if (spriteEffect == SpriteEffects.None)
+                        KickingRectangle = new Rectangle(Hitbox.Center.X, Hitbox.Bottom - Hitbox.Height / 6, DrawRectangle.Width / 2, 5);
+                    else
+                        KickingRectangle = new Rectangle(Hitbox.Center.X - DrawRectangle.Width / 2, Hitbox.Bottom - Hitbox.Height / 6, DrawRectangle.Width / 2, 5);
+
+                    if (KickLifeTimer >= 0)
+                        KickLifeTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+                    else
+                        Kicking = false;
+                }
+                else
+                    KickDelayTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+            }
+            else
+            {
+                if (KickingGraceTimer <= 0)
+                {
+                    KickingRectangle.Width = 0;
+                    KickingRectangle.Height = 0;
+                }
+                else
+                {
+                    KickingGraceTimer -= GameTime.ElapsedGameTime.TotalSeconds;
+                    if (spriteEffect == SpriteEffects.None)
+                        KickingRectangle = new Rectangle(Hitbox.Center.X, Hitbox.Bottom - Hitbox.Height / 6, DrawRectangle.Width / 2, 5);
+                    else
+                        KickingRectangle = new Rectangle(Hitbox.Center.X - DrawRectangle.Width / 2, Hitbox.Bottom - Hitbox.Height / 6, DrawRectangle.Width / 2, 5);
+                }
+            }
+            if (Stunned)
+            {
+                PunchingRectangle.Width = 0;
+                PunchingRectangle.Height = 0;
+                Punching = false;
+            }
+        }
+
+        private void Kick()
+        {
+            Kicking = true;
+            AnimationKick();
+            KickCooldownTimer = KickCooldown;
+            KickLifeTimer = (maxNrFrame * timePerFrame) / 2 - ((maxNrFrame * timePerFrame) / 5);
+            KickingGraceTimer = KickingGrace;
+        }
+        #endregion
+
 
         #region AnimationStuff
         private void AnimationManager(GameTime GameTime)
@@ -392,8 +675,19 @@ namespace ArcadeJump
             AnimationTimer = maxNrFrame * timePerFrame;
             PunchDelayTimer = AnimationTimer / 2;
         }
+
+        private void AnimationKick()
+        {
+            timePerFrame = 0.05;
+            frameXOffset = 660;
+            frameYOffset = 110;
+            maxNrFrame = 10;
+            AnimationTimer = maxNrFrame * timePerFrame;
+            KickDelayTimer = AnimationTimer / 2;
+        }
         #endregion
         #endregion
+
         #endregion
     }
 }

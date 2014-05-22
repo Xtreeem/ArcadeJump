@@ -13,7 +13,7 @@ namespace ArcadeJump
         #region Variables
         public Vector2 velocity;
         public MovableGameObject SurfaceObject;
-        protected Rectangle DrawRectangle;
+        public Rectangle DrawRectangle;
 
         #endregion
 
@@ -46,6 +46,10 @@ namespace ArcadeJump
             DrawRectangle = new Rectangle((int)position.X, (int)position.Y, DrawRectangle.Width, DrawRectangle.Height);
             FallenOfScreenChecker();
         }
+
+        public override void Update(GameTime gametime, float SpeedModifier)
+        { }
+
         #endregion
 
         #region Private Method

@@ -59,7 +59,7 @@ namespace ArcadeJump
         public override void Draw(SpriteBatch spritebatch)
         {
             //spritebatch.Draw(HitBoXDebugTexture, Hitbox, textureRectangle, Color.Red * 0.5f, rotation, origin, spriteEffect, 0);    //Debug Line used to display hitbox
-            spritebatch.Draw(texture, DrawRectangle, textureRectangle, Color.White, rotation, origin, spriteEffect, 0);
+            spritebatch.Draw(texture, DrawRectangle, textureRectangle, color, rotation, origin, spriteEffect, 0);
         }
         #endregion
 

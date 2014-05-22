@@ -41,7 +41,7 @@ namespace ArcadeJump
             PowerUps = new List<PowerUp>();
             Players = new List<Player>();
             Platforms = new List<Platform>();
-            GUI = new GUI(ref Players);
+            GUI = new GUI(ref Players, Content);
             graphics.PreferMultiSampling = true;
             graphics.PreferredBackBufferHeight = 1080;
             graphics.PreferredBackBufferWidth = 1920;
