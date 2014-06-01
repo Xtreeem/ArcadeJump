@@ -45,6 +45,7 @@ namespace ArcadeJump
             graphics.PreferMultiSampling = true;
             graphics.PreferredBackBufferHeight = 1080;
             graphics.PreferredBackBufferWidth = 1920;
+            graphics.IsFullScreen = true;
             graphics.ApplyChanges();
             base.Initialize();
         }

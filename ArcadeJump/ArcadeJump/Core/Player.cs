@@ -284,25 +284,25 @@ namespace ArcadeJump
                     else if (velocity.X > 0)
                         velocity.X = (SurfaceObject != null) ? MathHelper.Clamp(velocity.X - SlowdownGround, 0, MaxXSpeed) : MathHelper.Clamp(velocity.X - SlowdownAir, 0, MaxXSpeed);
                     //Player Input to DropDown
-                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.W) : NewState.IsKeyDown(Keys.S))
+                    if ((InvertedControls) ? NewState.IsKeyDown(Keys.J) : NewState.IsKeyDown(Keys.S))
                     {
                         DropDown();
                     }
                     //Player Input to Jump
                     if (
-                        ((InvertedControls) ? NewState.IsKeyDown(Keys.S) : NewState.IsKeyDown(Keys.W)) &&
+                        ((InvertedControls) ? NewState.IsKeyDown(Keys.S) : NewState.IsKeyDown(Keys.J)) &&
                         (SurfaceObject != null) &&
-                        ((InvertedControls) ? !OldState.IsKeyDown(Keys.S) : !OldState.IsKeyDown(Keys.W))
+                        ((InvertedControls) ? !OldState.IsKeyDown(Keys.S) : !OldState.IsKeyDown(Keys.J))
                         )
                         Jump();
                     //Player Input to Punch
-                    if (NewState.IsKeyDown(Keys.V) && !OldState.IsKeyDown(Keys.V) && PunchCooldownTimer <= 0 && !Busy)
+                    if (NewState.IsKeyDown(Keys.N) && !OldState.IsKeyDown(Keys.N) && PunchCooldownTimer <= 0 && !Busy)
                     {
                         Punch();
                         Console.WriteLine("punch");
                     }
                     //Player Input to Kick
-                    if (NewState.IsKeyDown(Keys.B) && !OldState.IsKeyDown(Keys.B) && KickCooldownTimer <= 0 && !Busy)
+                    if (NewState.IsKeyDown(Keys.K) && !OldState.IsKeyDown(Keys.K) && KickCooldownTimer <= 0 && !Busy)
                     {
                         Kick();
                         Console.WriteLine("kick");
